@@ -229,15 +229,15 @@ def view_patients():
     return render_template('display_searched_patient.html',data = None)
 
 
-# issue medicines
-@app.route('/issue_medicines', methods=["GET","POST"])
-@app.route('/issue_medicines/<pid>', methods=["GET","POST"])
+# assign medicines
+@app.route('/assign_medicines', methods=["GET","POST"])
+@app.route('/assign_medicines/<pid>', methods=["GET","POST"])
 def assign_medicines(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
     if request.method == 'GET':
-        # if (pid == None or pid is None):
-        #     pid = request.args.get('pid')
+        if (pid == None or pid is None):
+            pid = request.args['pid']
         if (pid == None or pid is None) :
             flash("enter patient id", "danger")
             return render_template('display_searched_patient.html')
@@ -245,10 +245,9 @@ def assign_medicines(pid=None):
             helper_class = HelperCustomer()
             target_customer_object = helper_class.get_customer_for_update(pid)
             jdata = create_customer_account_dict(target_customer_object)
-            return render_template("transfer_medicines.html",url_for(assign_medicines/<pid=pid>))
-            # return render_template(url_for('assign_medicines',pid = pid)
+            return render_template('transfer_medicines.html',data=jdata)
 
-        return render_template("transfer_medicines.html",url_for(assign_medicines/<pid=pid>))
+        return redirect(url_for('assign_medicines',pid = pid))
 
 
     if request.method == 'POST':
@@ -263,15 +262,13 @@ def assign_medicines(pid=None):
 
         target_customer_object = helper_class.get_customer_for_update(pid)
         jdata = create_customer_account_dict(target_customer_object)
-        # medid = float(2001)
-        # med_object = helper_class.get_pharmacy_using_medid(2001)
         med_object = MasterPharmacy.objects(medicine_id = medicine_id).get()
         med_dict = create_medicine_dict(med_object)
 
         medicine_available = int(med_object.medicine_qty)
         if(medicine_available - medicine_qty <= 0):
             flash("medicine not available in sufficient quantity", "danger")
-            return render_template('transfer_medicines.html')
+            return redirect(url_for('assign_medicines',pid = pid))
         # issue_object = helper_class.get_issued_medicines_using_patid(pid)
         # issue_dict = create_issue_dict(issue_object)
 
