@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link nav-item" href="/">Home</a>
+                </li>
+                {% if session['username'] %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Patient</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/createpatient">Create Patient Record</a>
+                        <a class="dropdown-item" href="/update_customer">Update Patient Record</a>
+                        <a class="dropdown-item" href="/delete_customer">Delete Patient Record</a>
+                        <a class="dropdown-item" href="/delete_customer">View Patients Record</a>
+                        <a class="dropdown-item" href="/delete_customer">Search Patient </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/customer_status">Generate Bill</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Pharmacy</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/create_account">Patient Detail</a>
+                        <a class="dropdown-item" href="/delete_account">Issue Medicine</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">diagnosis</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/account_status">Patient Detail</a>
+                        <a class="dropdown-item" href="/customer_search">to be updated</a>
+                </li>
+                {% endif %}
+                <li><br></li>
+                <li></li>
+                {% if not session['username'] %}
+                <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link nav-item ">Login</a></li>
+                {% else %}
+                <li class="nav-item"><a href="{{ url_for('logout') }}" class="nav-link nav-item">Logout</a></li>
+                {% endif %}
+        </div>
+        </ul>
+    </div>
+    </div>
+</nav>

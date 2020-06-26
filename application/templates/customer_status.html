@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div>
+  <h1>Customer Status</h1>
+  <table class="table table-hover table-striped table-bordered">
+
+    <thead>
+      <tr class="bg-dark text-warning">
+        <th>Customer ID</th>
+        <th>Customer SSN ID</th>
+        <th>Status</th>
+        <th>Message</th>
+        <th>Last Updated</th>
+        <th>Operations</th>
+        <th>View Profile</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+
+      {%for key in data%}
+      <tr>
+        <td>{{key.CustomerID}}</td>
+        <td>{{key.SSNID}}</td>
+        <td>{{key.AccountStatus}}</td>
+        <td>{{key.Message}}</td>
+        <td>{{key.LastUpdated}}</td>
+        <td>
+          <a class="link" href="{{ url_for('custStatus') }}">Refresh</a>
+        </td>
+        <td>
+          <a class="link" href="{{ url_for('api', ssnid=key.SSNID ) }}">View Detail</a>
+        </td>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Welcome to Sigma Health Care Services.</h1>
+
+            {% if session['username'] %}
+                <h3 class="mb-3">Let's get started.</h3>
+            {% else %}
+                <p class="mb-3">Already registered? <a href="{{url_for('login') }}">Login</a></p>
+            {% endif %}
+
+            <div class="bg-dark text-light">
+                <br>
+                <h4>OUR VISSION </h4> 
+                <p>SIGMA's vision for the next phase of development is to "Bring a change in the Society"</p> <br></div><br>
+            {% if not session['username'] %}
+            <div style="text-align:left;">
+                <br>
+
+                <h2> SIGMA - Overview</h2> 
+                
+                <p>SIGMA HealthCare was established in June 2020 by Group of Engineers, renowned as the architect of modern healthcare in India. As the nation’s first online hospital, SIGMA Hospitals is acclaimed for pioneering the private healthcare revolution in the country.</p>
+
+                <p>SIGMA Hospitals has emerged as Asia’s foremost integrated healthcare services provider and has a robust presence across the healthcare ecosystem, including Hospitals, Pharmacies, Primary Care & Diagnostic Clinics and several retail health models.</p> 
+                <p>The cornerstones of SIGMA'S legacy are its unstinting focus on clinical excellence, affordable costs, modern technology and forward-looking research & academics. SIGMA Hospitals was among the first few hospitals in the world to leverage technology to facilitate seamless healthcare delivery. The organization embraced the rapid advancement in medical equipments across the world, and pioneered the introduction of several cutting edge innovations in India. </p>
+            <br>
+            <br>
+            </div>
+            {% else %}
+            <div class="bg-light text-success">
+                <h2>About Us</h2>
+                <p>Sigma is committed to managing our business in a socially responsible and ethical manner, and to contributing towards building healthy and sustainable communities.</p>
+                </div>
+                <div class="row">
+                    <div class="justify-content-left " style="align-content: left;">
+                <img  src="{{ url_for('static',filename='images/background1.png')}}">
+                <br>
+                <br>    
+            </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

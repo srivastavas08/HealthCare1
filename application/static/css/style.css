@@ -1,0 +1,48 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+html,body{
+    height: 100%;
+}
+
+fieldset{
+    text-align: center;
+    width: max-content;
+    margin: auto;
+}
+input, button, select{
+    margin-top: 5px;
+}
+sup{
+    color:red;
+}
+#sticky-footer {
+    flex-shrink: none;
+}
+.footbot{
+    background: black;
+    bottom: 0;
+}
+div.col-md-6.d-flex.mt-2.cont-right{
+    justify-content: right;
+}
+@media (max-width:768px){
+    div.col-md-6.d-flex.mt-2.cont-right{
+        justify-content: left;
+    }
+}
+
+/*---------------------------------------------------------------------------------------*/
+.error-message {
+    color :red;
+}
+
+.user {
+    float: right;
+    position: absolute;
+    font-size: 25px;
+    right: 10em;
+    top: 2em;
+}
