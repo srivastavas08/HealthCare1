@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="row justify-content-center mb-3">
+  <div class="col-md-6">
+  <h1 class="mb-4">Discharge Patient record</h1>
+  <form action="" method="POST">
+    <div class="form-row">
+    <div class="form-group row col-md-12">
+      <label for="pid" class="col-sm-4 col-form-label">Patient ID: <text class="text-danger">*</text></label>
+      {% if data %}
+      <div class="col-sm-8">
+        <input type="text" id="pid" name="PID"  class="form-control" disabled value= {{data["PID"]}}>
+        
+      {% endif %}
+    </div>
+    </div>
+    <div class="form-group row col-md-12">
+      <label for="customername" class="col-sm-4 col-form-label">Patient's Name: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+      <input id="customername" type="text" name="custName"  class="form-control"  disabled value={{ data["Name"] }}>
+    </div>
+    </div>    
+    <div class="form-group row col-md-12">
+      <label for="customername" class="col-sm-4 col-form-label">Patient's Age: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+      <input id="customername" type="text" name="" onkeypress="return /[a-z]/i.test(event.key)" class="form-control"  disabled value={{data["Age"]}}>
+    </div>
+    </div>
+    <div class="form-group row col-md-12">
+      <label for="customername" class="col-sm-4 col-form-label">Patient's Address: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+      <input id="customername" type="text" name="Address" onkeypress="return /[a-z]/i.test(event.key)" class="form-control"  disabled value={{data["Address"]}}>
+    </div>
+    </div>
+    <div class="form-group row col-md-12">
+      <label for="customername" class="col-sm-4 col-form-label">State: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+      <input id="customername" type="text" name="custName"  class="form-control"  disabled value={{ data["State"] }}>
+    </div>
+    </div> 
+    <div class="form-group row col-md-12">
+      <label for="customername" class="col-sm-4 col-form-label">City: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+      <input id="customername" type="text" name="custName"  class="form-control"  disabled value={{ data["City"] }}>
+    </div>
+    </div> 
+    <div class="form-group row col-md-12">
+      <label for="customername" class="col-sm-4 col-form-label">Bed Type: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+      <input id="customername" type="text" name="custName"  class="form-control"  disabled value={{ data["BedType"] }}>
+    </div>
+    </div>  
+    <div class="form-group row col-md-12">
+      <label for="customeraddress" class="col-sm-4 col-form-label"> Date of Admission: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+        <input id="datePickerId" type="text" name="dam" class="form-control"  disabled value={{data["dam"]}}>
+      </div>
+    </div>
+    <div  class=" col-md-6 mx-auto my-3">
+    <button type="submit" class="btn btn-warning ml-1">Discharge</button>
+    
+    </div>
+  </div>
+  </form>
+</div>
+</div>
+</div>
+<div>
+
+  <p>
+    {{msg}}
+  </p>
+</div>
+{% endblock %}

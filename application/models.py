@@ -47,12 +47,15 @@ class HelperCustomer(db.Document):
     def get_customer_for_delete(self, pid, aadhar, pname):
         delete_customer = NewPatient.objects(patient_id=ssnid, aadhar = aadhar, name = pname).get()
         return delete_customer
-    def get_customer_using_ssnid(self, pid):
+    def get_customer_using_pid(self, pid):
         update_customer = NewPatient.objects(patient_id=pid).get()
         return update_customer
-    def get_customer_using_custid(self, aadhar):
+    def get_customer_using_aadhar(self, aadhar):
         update_customer = NewPatient.objects(aadhar=aadhar).get()
         return update_customer
+
+    ###################################################################################################################
+
 
 
 

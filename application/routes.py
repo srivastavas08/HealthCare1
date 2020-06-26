@@ -100,13 +100,14 @@ def createpatient():
         state      = form.state.data
         city       = form.city.data
         bedtype = request.form.get('bedtype')
-        now_date = datetime.now(timezone.utc)
+        now_date = insert_now_time()
+        dam = request.form['dam']
         
     
         status      = 'Active'
            
         newpatient= NewPatient(aadhar=aadhar, patient_id=patient_id,bedtype=bedtype, name=name, age=age, address= address,
-         state=state, city=city, dam = now_date, status=status)
+         state=state, city=city, dam = dam, status=status)
         newpatient.save()
 
         flash("Patient record creation initiated successfully","success")
@@ -115,87 +116,118 @@ def createpatient():
 
 
 #UpdatePatient
-@app.route('/update_customer', methods=['GET', 'POST'])
-@app.route('/update_customer/', methods=['GET', 'POST'])
-@app.route('/update_customer/<pid>', methods=['GET', 'POST'])
+@app.route('/update_patient', methods=['GET', 'POST'])
+@app.route('/update_patient/', methods=['GET', 'POST'])
+@app.route('/update_patient/<pid>', methods=['GET', 'POST'])
 def UpdatePatient(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
-
     if request.method == 'GET':
-        helper_class = HelperCustomer()
-        target_customer_object = helper_class.get_customer_for_update(pid)
-        if pid==None :
-            jdata=target_customer_object
+        if (pid == None) :
+            flash("enter patient id", "danger")
+            return render_template('display_searched_patient.html')
         else:
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
             jdata=target_customer_object
             jdata = create_customer_account_dict(jdata)
-        return render_template('update_customer.html', data=jdata)
+        return render_template('update_patient.html', data=jdata)
     if request.method == 'POST':
         pid  = request.form['PID']
+        if (pid == None or pid is None) :
+            flash("enter patient id", "danger")
+            return render_template('display_searched_patient.html')
         helper_class = HelperCustomer()
         target_customer_object = helper_class.get_customer_for_update(pid)
+
+        jdata = create_customer_account_dict(target_customer_object)
         if(len(target_customer_object) > 0 and not None):
-            Name = request.form['Name']
-            Address = request.form['Address']
-            Age = request.form['Age']
+            Name = request.form['custName']
+            Address = request.form['custAddress']
+            bedtype =request.form.get('bedtype')
+            Age = request.form['custAge']
+            old_date = request.form['dam']
             
             try:
-                now_date = datetime.now(timezone.utc)
                 target_customer_object.update(
                     age = Age,
                     name = Name,
                     address = Address,
+                    bedtype = bedtype,
                     msg = "successfully updated",
-                    dam = now_date
+                    dam = old_date
                 )
                 target_customer_object.save()
-                # msg = 'success'
             except:
                 flash("Sorry! something went wrong", "danger")
-                # msg = 'Sorry! something went wrong'
-                return render_template('update_customer.html')
+                return render_template('update_patient.html',data=jdata)
         flash("update successful", "success")
-        return render_template('update_customer.html')
-        
-    return render_template('update_customer.html', data=jdata, UpdatePatient=True)
+        return render_template('update_patient.html', data=jdata)
+    return render_template('update_patient.html', data=jdata, UpdatePatient=True)
 
-
-@app.route("/api/")
-@app.route("/api/<pid>") #pid is patient id
-def api(pid): #if no data is passed to idx it will take none
+# display patients Records status
+@app.route('/view_record', methods=['GET','POST'])
+def view_record():
     if not session.get('username'):
         return redirect(url_for('index'))
-    helper_class = HelperCustomer()
-    target_customer_object = helper_class.get_customer_for_update(pid)
+    if request.method == "GET":
+        record = []
+        for x in NewPatient.objects():
+            tmp = create_customer_account_dict(x)
+            record.append(tmp)
+        print(record)
+    return render_template('view_record.html',data=record)
 
-    
-    
 
-  
-# delete customer
-@app.route('/delete_customer', methods=['GET', 'POST'])
-def deleteCust():
+
+# discharge patient
+@app.route('/delete_patient', methods=['GET', 'POST'])
+@app.route('/delete_patient/<pid>', methods=['GET', 'POST'])
+def DeletePatient(pid):
     if not session.get('username'):
         return redirect(url_for('index'))
-
     if request.method == 'GET':
-        return render_template('delete_customer.html')
+        if (pid == None) :
+            flash("enter patient id", "danger")
+            return render_template('display_searched_patient.html')
+        else:
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata=target_customer_object
+            jdata = create_customer_account_dict(jdata)
+            return render_template('delete_customer.html', data=jdata)
     if request.method == 'POST':
-        ssnid  = request.form['ssnID']
-        custid = request.form['custID']
-        custname = request.form['custName']
+        if (pid == None or pid is None) :
+            flash("enter patient id", "danger")
+            return render_template('delete_customer.html',data=jdata)
         helper_class = HelperCustomer()
-        target_customer_object = helper_class.get_customer_for_delete(ssnid, custid, custname)
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
         if(len(target_customer_object) > 0 and not None):
             try:
                 target_customer_object.delete()
                 flash("delete successful", "success")
             except:
                 flash("delete unsuccessful", "danger")
-                return render_template('delete_customer.html') 
-    return render_template('delete_customer.html')
+                return render_template('delete_customer.html', data=jdata) 
+    return render_template('delete_customer.html', data=jdata, DeletePatient=True)
 
+
+# display patients status
+@app.route('/search_patient', methods=['GET','POST'])
+def view_patients():
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        return render_template('display_searched_patient.html')
+    if request.method == 'POST':
+        pid  = request.form['pid']
+        helper_class = HelperCustomer()
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
+        if(len(target_customer_object) > 0 and not None):
+            return render_template('display_searched_patient.html',data = jdata)
+    return render_template('display_searched_patient.html',data = None)
 
 
 #############################################################################################
@@ -237,13 +269,23 @@ def create_customer_account_dict(target_customer_object):
     data_dict["State"] = target_customer_object.state
     data_dict["City"] = target_customer_object.city
     data_dict["BedType"] = target_customer_object.bedtype
-    data_dict["AccountStatus"] = "Active"
+    data_dict["Status"] = target_customer_object.status
     data_dict["Message"] = target_customer_object.msg 
+    data_dict["dam"] = target_customer_object.dam
     return data_dict
 
 def format_dates(date1):
     d1 = time.strptime(date1, "%Y-%m-%d")
     return d1
+def format_time(time1):
+    t1 = time.strptime(time1,"%H:%M:%S")
+    return t1
+def insert_now_time():
+    now_time = datetime.now(timezone.utc).replace(second=0,microsecond=0,hour=0,minute=0).strftime("%Y-%m-%d %H:%M")
+    return now_time
+def format_date_with_time(dam):
+    formatted_date_time = dam.replace(second=0,microsecond=0,hour=0,minute=0).strftime("%Y-%m-%d %H:%M")
+    return formatted_date_time
 
 
 ##############################################################################

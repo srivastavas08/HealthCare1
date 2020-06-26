@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="row justify-content-center mb-3">
+    <div class="col-md-6">
+        <h1>VIEW PATIENT RECORDS</h1>
+        
+    </div>
+</div>
+
+
+<div class="container">
+    <table class="table table-hover table-striped table-bordered">
+        {% if data %}
+        <thead>
+            <tr class="bg-dark text-warning">
+                <th>Name</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Status</th>
+                <th>Bed Type</th>
+                <th>Date of Admission</th>
+            </tr>
+        </thead>
+        {% for i in data%}
+        <tbody>
+            <tr>
+
+                <td>{{i.Name}}</td>
+                <td>{{i.Age}}</td>
+                <td>{{i.Address}}</td>
+                <td>{{i.City}}</td>
+                <td>{{i.Status}}</td>
+                <td>{{i.BedType}}</td>
+                <td>{{i.dam}}</td>
+
+
+
+            </tr>
+        </tbody>
+    
+    {% endfor %}
+</table>
+{% endif %}
+
+</div>
+
+{% endblock %}
