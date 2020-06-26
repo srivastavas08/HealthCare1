@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="row justify-content-center mb-3">
+  <div class="col-md-12">
+    <h1 class="mb-4">Account status</h1>
+    <table class="table table-hover table-striped table-bordered">
+      <thead>
+        <tr class="bg-dark text-warning">
+          <th>Customer ID</th>
+          <th>Account ID</th>
+          <th>Account Type</th>
+          <th>Status</th>
+          <th>Message</th>
+          <th>Last Updated</th>
+          <th>Operations</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {%for key in data%}
+        <tr>
+          <td>{{key.CustomerID}}</td>
+          <td>{{key.SSNID}}</td>
+          <td>{{key.AccountType}}</td>
+          <td>{{key.AccountStatus}}</td>
+          <td>{{key.Message}}</td>
+          <td>{{key.LastUpdated}}</td>
+          <td>
+            <a class="link" href="{{ url_for('accStatus') }}">Refresh</a>
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

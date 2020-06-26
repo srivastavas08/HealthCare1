@@ -1,6 +1,6 @@
 from application import app, db
 from flask import render_template, request, json, Response, redirect, flash, url_for, session
-from application.models import User, NewPatient, HelperCustomer
+from application.models import User, NewPatient, HelperCustomer, MasterDiagnosis, MasterPharmacy, PatientPharmacy
 import random
 from application.forms import LoginForm, RegisterForm, Patient
 from random import randint
@@ -113,7 +113,6 @@ def createpatient():
         flash("Patient record creation initiated successfully","success")
         return redirect(url_for('index'))
     return render_template('create_patient.html', title="New Patient", form=form, creatpatient=True)
-
 
 #UpdatePatient
 @app.route('/update_patient', methods=['GET', 'POST'])
@@ -230,6 +229,58 @@ def view_patients():
     return render_template('display_searched_patient.html',data = None)
 
 
+# issue medicines
+@app.route('/issue_medicines', methods=["GET","POST"])
+@app.route('/issue_medicines/<pid>', methods=["GET","POST"])
+def assign_medicines(pid=None):
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        # if (pid == None or pid is None):
+        #     pid = request.args.get('pid')
+        if (pid == None or pid is None) :
+            flash("enter patient id", "danger")
+            return render_template('display_searched_patient.html')
+        if (pid is not None):
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
+            return render_template("transfer_medicines.html",url_for(assign_medicines/<pid=pid>))
+            # return render_template(url_for('assign_medicines',pid = pid)
+
+        return render_template("transfer_medicines.html",url_for(assign_medicines/<pid=pid>))
+
+
+    if request.method == 'POST':
+        if (pid == None) :
+            flash("no patient id found", "danger")
+            return render_template('display_searched_patient.html')
+        # patient_id  = request.form['patient_id']
+        medicine_id = request.form.get('medicine_id', type = int)
+        medicine_qty = request.form.get('medicine_qty', type = int)
+
+        helper_class = HelperCustomer()
+
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
+        # medid = float(2001)
+        # med_object = helper_class.get_pharmacy_using_medid(2001)
+        med_object = MasterPharmacy.objects(medicine_id = medicine_id).get()
+        med_dict = create_medicine_dict(med_object)
+
+        medicine_available = int(med_object.medicine_qty)
+        if(medicine_available - medicine_qty <= 0):
+            flash("medicine not available in sufficient quantity", "danger")
+            return render_template('transfer_medicines.html')
+        # issue_object = helper_class.get_issued_medicines_using_patid(pid)
+        # issue_dict = create_issue_dict(issue_object)
+
+
+        if(len(target_customer_object) > 0 and not None):
+            return render_template('transfer_medicines.html',data = jdata, med_data = med_dict)#, issue_data = issue_dict)
+    return render_template('transfer_medicines.html',data = None)
+
+
 #############################################################################################
 ##############################################################################
                                 #FUNCTIONS
@@ -273,6 +324,24 @@ def create_customer_account_dict(target_customer_object):
     data_dict["Message"] = target_customer_object.msg 
     data_dict["dam"] = target_customer_object.dam
     return data_dict
+
+def create_medicine_dict(med_object):
+    data_dict = {}
+    data_dict['Name'] = med_object.medicine_name
+    data_dict['Medicine_ID'] = med_object.medicine_id
+    data_dict['Price'] = med_object.medicine_price
+    data_dict['Quantity_Available'] = med_object.medicine_qty
+    return data_dict
+
+def create_issue_dict(issue_object):
+    data_dict = {}
+    data_dict['Medicine_ID'] = issue_object.medicine_id
+    data_dict['Name'] = issue_object.medicine_name
+    data_dict['Price'] = issue_object.medicine_price
+    data_dict['Quantity_Issued'] = issue_object.medicine_qty
+    data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
+    return  data_dict
+
 
 def format_dates(date1):
     d1 = time.strptime(date1, "%Y-%m-%d")

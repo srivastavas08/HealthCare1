@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="row justify-content-center mb-3">
+  <div class="col-md-6">
+  <h1 class="mb-4">Deposit Money</h1>
+  <form action="" method="POST">
+    <div class="form-row">
+    <div class="form-group row col-md-12">
+      <label class="col-sm-4 col-form-label">Customer ID: </label>
+      <div class="col-sm-8">
+        <input id="custid" type="number" name="custid" onkeypress="return /[0-9]/i.test(event.key)" class="form-control"  required value={{request.form.custid}}>
+      </div>
+    </div>
+    <div class="form-group row col-md-12">
+      <label class="col-sm-4 col-form-label">Account ID: </label>
+      <div class="col-sm-8">
+        <input id="accid" type="number" name="accid" class="form-control"  required value={{request.form.accid}}>
+      </div>
+    </div>
+
+    <div class="form-group row col-md-12">
+      <label for="account type" class="col-sm-4 col-form-label">Account Type: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+        <select id="accounttype" name="accounttype" class="form-control" required>
+          <option disabled>Account type</option>
+          <option >Savings</option>
+          <option >Current</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row col-md-12">
+      <label for="depAmt" class="col-sm-4 col-form-label">Amount to Deposit: <text class="text-danger">*</text></label>
+      <div class="col-sm-8">
+        <input id="depAmt" type="number" name="depAmt" class="form-control"  required value={{request.form.depAmt}}>
+      </div>
+    </div>
+    <div class="col-md-12"><p class="text-danger">(*) Feilds are mendatory</p></div>
+    <div  class=" col-md-6 mx-auto my-3">
+    <button type="submit" class="btn btn-dark text-warning ml-1">Deposit</button>
+    </div>
+  </div>
+  </form>
+</div>
+</div>
+</div>
+{% endblock %}

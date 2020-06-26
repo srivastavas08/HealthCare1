@@ -20,8 +20,8 @@ class User(db.Document):
 class NewPatient(db.Document):
     patient_id     = db.IntField( unique=True )
     name           = db.StringField( max_length=50 )
-    age            = db.IntField( max_length=50 )
-    aadhar            = db.IntField( max_length=50, unique=True )
+    age            = db.IntField( max_length=3 )
+    aadhar            = db.IntField( max_length=12, unique=True )
     address        = db.StringField( max_length=30 )
     state          =  db.StringField( max_length=20 )
     city           = db.StringField( max_length=15 )
@@ -31,13 +31,21 @@ class NewPatient(db.Document):
     bedtype         = db.StringField()
     
 
-class BankTransfers(db.Document):
-    to_cust_id     = db.IntField()
-    from_cust_id   = db.IntField()
-    transaction_date = db.DateTimeField()
-    transaction_amt = db.FloatField()
-    transaction_type = db.StringField()
-    transaction_id = db.IntField(max_length=15)
+class MasterPharmacy(db.Document):
+    medicine_id     = db.IntField(max_length = 4)
+    medicine_name   = db.StringField()
+    medicine_qty = db.IntField()
+    medicine_price = db.FloatField()
+
+class MasterDiagnosis(db.Document):
+    test_id     = db.IntField(max_length = 4)
+    test_name   = db.StringField()
+    test_price = db.FloatField()
+
+class PatientPharmacy(db.Document):
+    patient_id = db.IntField()
+    medicine_id = db.IntField()
+    medicine_qty = db.IntField()
 
 
 class HelperCustomer(db.Document):
@@ -53,6 +61,12 @@ class HelperCustomer(db.Document):
     def get_customer_using_aadhar(self, aadhar):
         update_customer = NewPatient.objects(aadhar=aadhar).get()
         return update_customer
+    def get_pharmacy_using_medid(self, medid):
+        med_object = MasterPharmacy.objects(medicine_id = medid).get()
+        return med_object
+    def get_issued_medicines_using_patid(self,patid):
+        issue_object = PatientPharmacy.objects(patient_id = patid).get()
+        return issue_object
 
     ###################################################################################################################
 
