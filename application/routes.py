@@ -503,9 +503,13 @@ def BillGeneration(pid=None):
             issue_pharmacy = []
             for i in issue_object_pharmacy:
                 issue_dict_pharmacy = create_issue_dict(i)
-                issue_pharmacy.append(issue_dict)
+                issue_pharmacy.append(issue_dict_pharmacy)
+            
+            total_pharmacy_bill = get_total_pharmacy_bill(pid)
+        
+            total_diagnosis_bill = get_total_diagnosis_bill(pid)
 
-            return render_template('generate_bill.html',data=jdata, issue_data=issue_list, issue_pharmacy=issue_pharmacy)
+            return render_template('generate_bill.html',data=jdata, issue_data=issue_list, issue_pharmacy=issue_pharmacy, pharmacy_bill = total_pharmacy_bill, diagnosis_bill = total_diagnosis_bill)
 
         return redirect(url_for('generate_bill.html',pid = pid))
 
@@ -612,6 +616,81 @@ def insert_now_time():
 def format_date_with_time(dam):
     formatted_date_time = dam.replace(second=0,microsecond=0,hour=0,minute=0).strftime("%Y-%m-%d %H:%M")
     return formatted_date_time
+
+
+def get_total_pharmacy_bill(pid):
+    pid = int(pid)
+    pharmacy_bill = [ 
+    {
+        '$match': {
+            'patient_id': pid
+        }
+    },{
+      '$lookup': {
+            'from': 'master_pharmacy', 
+            'localField': 'medicine_id', 
+            'foreignField': 'medicine_id', 
+            'as': 'r1'
+        }
+    }, {
+        '$unwind': {
+            'path': '$r1', 
+            'preserveNullAndEmptyArrays': False
+        }
+    }, {
+      "$project": { 
+      "total_pharmacy": { "$multiply": [ "$medicine_qty", "$r1.medicine_price" ] }   
+    }
+    },{
+        '$group': {
+            '_id': '', 
+            'final_pharmacy': {
+                '$sum': '$total_pharmacy'
+            }
+        }
+    }
+    ]
+    pharmacy_bill_object = PatientPharmacy.objects().aggregate(pharmacy_bill)
+    pharmacy_bill_dict = {}
+    for i in pharmacy_bill_object:
+        pharmacy_bill_dict['Total_Bill'] = i['final_pharmacy']
+    return pharmacy_bill_dict
+
+
+def get_total_diagnosis_bill(pid):
+    pid = int(pid)
+    diagnosis_bill = [
+    {
+        '$match': {
+            'patient_id': pid
+        }
+    }, {
+        '$lookup': {
+            'from': 'master_diagnosis', 
+            'localField': 'test_id', 
+            'foreignField': 'test_id', 
+            'as': 'r1'
+        }
+    }, {
+        '$unwind': {
+            'path': '$r1', 
+            'preserveNullAndEmptyArrays': False
+        }
+    }, {
+        '$group': {
+            '_id': '', 
+            'total_diagnosis': {
+                '$sum': '$r1.test_price'
+            }
+        }
+    }
+    ]
+    total_diagnosis_object = PatientDiagnosis.objects().aggregate(diagnosis_bill)
+    pharmacy_bill_dict = {}
+    for i in total_diagnosis_object:
+        pharmacy_bill_dict['Total_Bill'] = i['total_diagnosis']
+    return pharmacy_bill_dict
+
 
 
 ##############################################################################
