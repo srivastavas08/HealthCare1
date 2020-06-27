@@ -35,6 +35,35 @@
     <table class="table table-hover table-striped table-bordered">
       <thead>
         <tr class="bg-dark text-warning">
+          <th>Patient ID</th>
+          <th>Medicine ID</th>
+          <th>Quantity Issued</th>
+          <th>Date of issue</th>
+        </tr>
+      </thead>
+      {% if issue_data %}
+      {% for i in issue_data %}
+      <tbody>
+        <tr>
+          
+          <td>{{i.Patient_ID}}</td>
+          <td>{{i.Medicine_ID}}</td>
+          <td>{{i.Quantity_Issued}}</td>
+          <td>{{i.das}}</td>
+          
+        </tr>
+      </tbody>
+      {% endfor %}
+      {% endif %}
+    </table>
+  </div>  
+ 
+</div> 
+
+  <div class="container">
+    <table class="table table-hover table-striped table-bordered">
+      <thead>
+        <tr class="bg-dark text-warning">
           <th>Medicine Name</th>
           <th>Medicine ID</th>
           <th>Quantity</th>
@@ -53,36 +82,6 @@
       {% endif %}
     </table>
   </div>  
-
-  <div class="container">
-    <table class="table table-hover table-striped table-bordered">
-      <thead>
-        <tr class="bg-dark text-warning">
-          <th>Patient ID</th>
-          <th>Medicine ID</th>
-          <th>Quantity Issued</th>
-          <th>Date of issue</th>
-        </tr>
-      </thead>
-      {% if issue_data %}
-      {%for i in issue_data%}
-      <tbody>
-        <tr>
-          
-          <td>{{i.Patient_ID}}</td>
-          <td>{{i.Medicine_ID}}</td>
-          <td>{{i.Quantity_Issued}}</td>
-          <td>{{i.das}}</td>
-          
-        </tr>
-      </tbody>
-      {% endfor %}
-      {% endif %}
-    </table>
-  </div>  
- 
-</div> 
-
 
 <div class="col-md-6">
   <h4 class="mb-4">Assign Medicines</h4>

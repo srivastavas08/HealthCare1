@@ -1,6 +1,6 @@
 from application import app, db
 from flask import render_template, request, json, Response, redirect, flash, url_for, session
-from application.models import User, NewPatient, HelperCustomer, MasterDiagnosis, MasterPharmacy, PatientPharmacy
+from application.models import User, NewPatient, HelperCustomer, MasterDiagnosis, MasterPharmacy, PatientPharmacy, PatientDiagnosis
 import random
 from application.forms import LoginForm, RegisterForm, Patient
 from random import randint
@@ -242,16 +242,23 @@ def assign_medicines(pid=None):
                 pid = request.args['pid']
             except:
                 flash("enter patient id", "danger")
-                return redirect(url_for('search_patient'))
+                return redirect(url_for('search_patient_pharmacy'))
 
         if (pid == None or pid is None) :
             flash("enter patient id", "danger")
-            return redirect(url_for('search_patient'))
+            return redirect(url_for('search_patient_pharmacy'))
         if (pid is not None):
             helper_class = HelperCustomer()
             target_customer_object = helper_class.get_customer_for_update(pid)
             jdata = create_customer_account_dict(target_customer_object)
-            return render_template('transfer_medicines.html',data=jdata)
+            
+            issue_object = PatientPharmacy.objects.filter(patient_id = pid).all()
+            issue_list = []
+            for i in issue_object:
+                issue_dict = create_issue_dict(i)
+                issue_list.append(issue_dict)
+
+            return render_template('transfer_medicines.html',data=jdata, issue_data=issue_list)
 
         return redirect(url_for('assign_medicines',pid = pid))
 
@@ -259,7 +266,7 @@ def assign_medicines(pid=None):
     # pid  = request.form['pid']
         if (pid == None) :
             flash("no patient id found", "danger")
-            return redirect(url_for('search_patient'))
+            return redirect(url_for('search_patient_pharmacy'))
 
         medicine_id = request.form.get('medicine_id', type = int)
         medicine_qty = request.form.get('medicine_qty', type = int)
@@ -293,7 +300,7 @@ def assign_medicines(pid=None):
                 med_object.save()
                 target_customer_object.save()
                 issue_object.save()
-                flash("update successful", "success")
+                flash("Medicine Issued to Patient successful", "success")
             except:
                 flash("update not successful", "danger")
                 return redirect(url_for('assign_medicines',pid = pid))
@@ -309,7 +316,138 @@ def assign_medicines(pid=None):
             return render_template('transfer_medicines.html',data = jdata, med_data = med_dict, issue_data = issue_list)
     return render_template('transfer_medicines.html',data = None)
 
+# display Available Medicine Records status
+@app.route('/stock_medicines', methods=['GET','POST'])
+def viewPharmacy():
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == "GET":
+        record = []
+        for x in MasterPharmacy.objects():
+            tmp = create_medicine_dict(x)
+            record.append(tmp)
+        print(record)
+    return render_template('view_pharmacy.html',data=record)
 
+
+# display patients status for pharmacy
+@app.route('/search_patient_pharmacy', methods=['GET','POST'])
+def search_patient_pharmacy():
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        return render_template('search_patient_pharmacy.html')
+    if request.method == 'POST':
+        pid  = request.form['pid']
+        helper_class = HelperCustomer()
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
+        if(len(target_customer_object) > 0 and not None):
+            return render_template('search_patient_pharmacy.html',data = jdata)
+    return render_template('search_patient_pharmacy.html',data = None)
+
+# display patients status for Diagnosis
+@app.route('/search_patient_diagnosis', methods=['GET','POST'])
+def search_patient_diagnosis():
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        return render_template('search_patient_diagnosis.html')
+    if request.method == 'POST':
+        pid  = request.form['pid']
+        helper_class = HelperCustomer()
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
+        if(len(target_customer_object) > 0 and not None):
+            return render_template('search_patient_diagnosis.html',data = jdata)
+    return render_template('search_patient_diagnosis.html',data = None)
+
+# refer test
+@app.route('/refer_test', methods=["GET","POST"])
+@app.route('/refer_test/', methods=["GET","POST"])
+@app.route('/refer_test/<pid>', methods=["GET","POST"])
+def refer_test(pid=None):
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        if (pid == None or pid is None):
+            try:
+                pid = request.args['pid']
+            except:
+                flash("enter patient id", "danger")
+                return redirect(url_for('search_patient_diagnosis'))
+
+        if (pid == None or pid is None) :
+            flash("enter patient id", "danger")
+            return redirect(url_for('search_patient_diagnosis'))
+        if (pid is not None):
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
+            
+            issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
+            issue_list = []
+            for i in issue_object:
+                issue_dict = create_refered_test_dict(i)
+                issue_list.append(issue_dict)
+
+            return render_template('refer_test.html',data=jdata, issue_data=issue_list)
+
+        return redirect(url_for('refer_test',pid = pid))
+
+    if request.method == 'POST':
+    # pid  = request.form['pid']
+        if (pid == None) :
+            flash("no patient id found", "danger")
+            return redirect(url_for('search_patient_diagnosis'))
+
+        test_id = request.form.get('test_id', type = int)
+        
+
+        helper_class = HelperCustomer()
+
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
+
+        test_object = MasterDiagnosis.objects(test_id = test_id).get()
+        test_dict = create_diag_dict(test_object)
+
+        try:
+            issue_object = PatientDiagnosis()
+            issue_object.das = insert_now_time()
+            issue_object.test_id = test_id
+            issue_object.patient_id = pid
+            target_customer_object.update(msg=msg)
+            test_object.save()
+            target_customer_object.save()
+            issue_object.save()
+            flash("Test reffered to Patient successful", "success")
+        except:
+            flash("update not successful", "danger")
+            return redirect(url_for('refer_test', pid = pid))
+        issue_object = PatientDiagnosis.objects.filter(patient_id= pid).all()
+
+        issue_list = []
+        for i in issue_object:
+            issue_dict = create_diag_dict(i)
+            issue_list.append(issue_dict)
+
+        if(len(target_customer_object) > 0 and not None):
+            return render_template('refer_test.html', data = jdata, med_data = med_dict, issue_data = issue_list)
+    return render_template('refer_test.html', data = None)
+
+# display Available Medicine Records status
+@app.route('/available_test', methods=['GET','POST'])
+def TestAvailable():
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == "GET":
+        record = []
+        for x in MasterDiagnosis.objects():
+            tmp = create_diag_dict(x)
+            record.append(tmp)
+        print(record)
+    return render_template('diagnosis.html',data=record)
 #############################################################################################
 ##############################################################################
                                 #FUNCTIONS
@@ -362,12 +500,29 @@ def create_medicine_dict(med_object):
     data_dict['Quantity_Available'] = med_object.medicine_qty
     return data_dict
 
+def create_diag_dict(diag_object):
+    data_dict = {}
+    data_dict['Name'] = diag_object.test_name
+    data_dict['Test_ID'] = diag_object.test_id
+    data_dict['Price'] = diag_object.test_price
+    return data_dict
+
 def create_issue_dict(issue_object):
     data_dict = {}
     data_dict['Medicine_ID'] = issue_object.medicine_id
     data_dict['Patient_ID'] = issue_object.patient_id
     data_dict['Message'] = issue_object.msg
     data_dict['Quantity_Issued'] = issue_object.medicine_qty
+    data_dict['das'] = issue_object.das
+
+    # data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
+    return  data_dict
+
+def create_refered_test_dict(issue_object):
+    data_dict = {}
+    data_dict['Test_ID'] = issue_object.test_id
+    data_dict['Patient_ID'] = issue_object.patient_id
+    data_dict['Message'] = issue_object.msg
     data_dict['das'] = issue_object.das
 
     # data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
