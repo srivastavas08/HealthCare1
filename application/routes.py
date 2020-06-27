@@ -493,23 +493,58 @@ def BillGeneration(pid=None):
             target_customer_object = helper_class.get_customer_for_update(pid)
             jdata = create_customer_account_dict(target_customer_object)
             
-            issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
-            issue_list = []
-            for i in issue_object:
-                issue_dict = create_patient_diag_dict(i)
-                issue_list.append(issue_dict)
+            # previous tested version
+            # issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
+            # issue_list = []
+            # for i in issue_object:
+            #     issue_dict = create_patient_diag_dict(i)
+            #     issue_list.append(issue_dict)
+        
+            # previous tested version
+            # issue_object_pharmacy = PatientPharmacy.objects.filter(patient_id = pid).all()
+            # issue_pharmacy = []
+            # for i in issue_object_pharmacy:
+            #     issue_dict_pharmacy = create_issue_dict(i)
+            #     issue_pharmacy.append(issue_dict_pharmacy)
+            
 
-            issue_object_pharmacy = PatientPharmacy.objects.filter(patient_id = pid).all()
+            # new join/merged methods used (unreviwed)
+            issue_object_diagnosis = make_patient_diagnosis_join(pid)
+            issue_diagnosis = []
+            for i in issue_object_diagnosis:
+                issue_diagnosis_dict = create_patient_diagnosis_dict(i)
+                issue_diagnosis.append(issue_diagnosis_dict)
+
+            # new join/merged methods used (unreviewed)
+            issue_object_pharmacy = make_patient_pharmacy_join(pid)
             issue_pharmacy = []
             for i in issue_object_pharmacy:
-                issue_dict_pharmacy = create_issue_dict(i)
+                issue_dict_pharmacy = create_patient_pharmacy_dict(i)
                 issue_pharmacy.append(issue_dict_pharmacy)
+
+            # new method to get patient used (unreviewed)
+            # target_patient = NewPatient.objects(patient_id = pid).get()
+            # target_patient_dict = create_customer_account_dict(target_patient)
+            
+            total_admission_bill = get_total_admission_bill(jdata)
+            if(total_admission_bill['Total_Bill'] <= 0):
+                flash("error generating bill", "danger")
+                return redirect(url_for('search_patient'))
             
             total_pharmacy_bill = get_total_pharmacy_bill(pid)
+            if(total_pharmacy_bill['Total_Bill'] <= 0):
+                flash("error generating bill", "danger")
+                return redirect(url_for('search_patient'))
         
             total_diagnosis_bill = get_total_diagnosis_bill(pid)
+            if(total_diagnosis_bill['Total_Bill'] <= 0):
+                flash("error generating bill", "danger")
+                return redirect(url_for('search_patient'))
 
-            return render_template('generate_bill.html',data=jdata, issue_data=issue_list, issue_pharmacy=issue_pharmacy, pharmacy_bill = total_pharmacy_bill, diagnosis_bill = total_diagnosis_bill)
+            grand_total_bill = total_admission_bill['Total_Bill'] +total_pharmacy_bill['Total_Bill'] +total_diagnosis_bill['Total_Bill']
+
+
+            return render_template('generate_bill.html',data=jdata, issue_diagnosis=issue_diagnosis, issue_pharmacy=issue_pharmacy, pharmacy_bill = total_pharmacy_bill, diagnosis_bill = total_diagnosis_bill, admission_bill = total_admission_bill, grand_bill = grand_total_bill)
 
         return redirect(url_for('generate_bill.html',pid = pid))
 
@@ -544,6 +579,7 @@ def generate_unique():
     rn = randint(10, 99)
     return rn
 
+# patient dict
 def create_customer_account_dict(target_customer_object):
     data_dict = {}
     data_dict["PID"] = target_customer_object.patient_id
@@ -559,6 +595,7 @@ def create_customer_account_dict(target_customer_object):
     data_dict["dam"] = target_customer_object.dam
     return data_dict
 
+# master pharmacy dict
 def create_medicine_dict(med_object):
     data_dict = {}
     data_dict['Name'] = med_object.medicine_name
@@ -567,6 +604,7 @@ def create_medicine_dict(med_object):
     data_dict['Quantity_Available'] = med_object.medicine_qty
     return data_dict
 
+# master diagnosis dict
 def create_diag_dict(diag_object):
     data_dict = {}
     data_dict['Name'] = diag_object.test_name
@@ -574,6 +612,7 @@ def create_diag_dict(diag_object):
     data_dict['Price'] = diag_object.test_price
     return data_dict
 
+# patient diagnosis dict to be merged
 def create_patient_diag_dict(diag_object):
     data_dict = {}
     data_dict['Name'] = diag_object.test_name
@@ -582,6 +621,7 @@ def create_patient_diag_dict(diag_object):
     data_dict['Date'] = diag_object.das
     return data_dict
 
+# patient medicine dict to be merged
 def create_issue_dict(issue_object):
     data_dict = {}
     data_dict['Medicine_ID'] = issue_object.medicine_id
@@ -593,6 +633,7 @@ def create_issue_dict(issue_object):
     # data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
     return  data_dict
 
+# patient diagnosis dict to be merged
 def create_refered_test_dict(issue_object):
     data_dict = {}
     data_dict['Test_ID'] = issue_object.test_id
@@ -691,6 +732,102 @@ def get_total_diagnosis_bill(pid):
         pharmacy_bill_dict['Total_Bill'] = i['total_diagnosis']
     return pharmacy_bill_dict
 
+# master pharmacy and patient_pharmacy merged
+def make_patient_pharmacy_join(pid):
+    pid = int(pid)
+    pharmacy_join = [
+    {
+        '$match': {
+            'patient_id': pid
+        }
+    }, {
+        '$lookup': {
+            'from': 'master_pharmacy', 
+            'localField': 'medicine_id', 
+            'foreignField': 'medicine_id', 
+            'as': 'r1'
+        }
+    }, {
+        '$unwind': {
+            'path': '$r1', 
+            'preserveNullAndEmptyArrays': False
+        }
+    }
+    ]
+    data_object = PatientPharmacy.objects().aggregate(pharmacy_join)
+    return data_object
 
+# master pharmacy and patient_pharmacy merged
+def create_patient_pharmacy_dict(patient_pharmacy_object):
+    data_dict = {}
+    data_dict['Quantity'] = patient_pharmacy_object['medicine_qty']
+    data_dict['Price'] = patient_pharmacy_object['r1']['medicine_price']
+    data_dict['Name'] = patient_pharmacy_object['r1']['medicine_name']
+    data_dict['Patient_ID'] = patient_pharmacy_object['patient_id']
+    data_dict['Medicine_ID'] = patient_pharmacy_object['r1']['medicine_id']
+    data_dict['das'] = patient_pharmacy_object['das']
+    return data_dict
+
+
+
+# master daignosis and patient_diagnosis merged
+def make_patient_diagnosis_join(pid):
+    pid = int(pid)
+    diagnosis_join = [
+    {
+        '$match': {
+            'patient_id': pid
+        }
+    }, {
+        '$lookup': {
+            'from': 'master_diagnosis', 
+            'localField': 'test_id', 
+            'foreignField': 'test_id', 
+            'as': 'r1'
+        }
+    }, {
+        '$unwind': {
+            'path': '$r1', 
+            'includeArrayIndex': 'limiter', 
+            'preserveNullAndEmptyArrays': False
+        }
+    }]
+    data_object = PatientDiagnosis.objects().aggregate(diagnosis_join)
+    return data_object
+
+# master diagnosis and patient_diagnosis merged
+def create_patient_diagnosis_dict(patient_diagnosis_object):
+    
+    data_dict = {}
+    data_dict['Price'] = patient_diagnosis_object['r1']['test_price']
+    data_dict['Name'] = patient_diagnosis_object['r1']['test_name']
+    data_dict['Patient_ID'] = patient_diagnosis_object['patient_id']
+    data_dict['Test_ID'] = patient_diagnosis_object['r1']['test_id']
+    data_dict['das'] = patient_diagnosis_object['das']
+    return data_dict
+
+# calculate admission bill wrt now date
+def get_total_admission_bill(patient_dict):
+    dam = patient_dict['dam']
+    bedtype = patient_dict['BedType'].strip().lower()
+    admission_bill_dict = {}
+
+    dam = dam.replace(tzinfo=None)
+    now_date = datetime.now(timezone.utc).replace(tzinfo=None)
+    days_admitted = now_date - dam
+    days_admitted = days_admitted.days
+
+    total_admission_bill = 1
+    if(bedtype == "generalward" or bedtype == "general ward"):
+        total_admission_bill = days_admitted*2000
+    elif(bedtype == "semisharing" or bedtype == "semi sharing"):
+        total_admission_bill = days_admitted*4000
+    elif(bedtype == "singleroom" or bedtype == "single room"):
+        total_admission_bill = days_admitted*8000
+    else:
+        total_admission_bill = 0
+    
+    admission_bill_dict['Total_Bill'] = int(total_admission_bill)
+    return admission_bill_dict
 
 ##############################################################################

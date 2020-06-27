@@ -30,13 +30,18 @@
             </tbody>
             {% endif %}
         </table>
-
+        {% if admission_bill %}
+        <p> Total Admissioon Bill = {{admission_bill.Total_Bill}}</p>
+        {% endif %} 
+    </div>
         <div class="container">
             <table class="table table-hover table-striped table-bordered">
                 <thead>
                     <tr class="bg-dark text-warning">
                         <th>Patient ID</th>
                         <th>Medicine ID</th>
+                        <th>Medicine Name</th>
+                        <th>Medicine Price</th>
                         <th>Quantity Issued</th>
                         <th>Date of issue</th>
                     </tr>
@@ -48,7 +53,9 @@
 
                         <td>{{i.Patient_ID}}</td>
                         <td>{{i.Medicine_ID}}</td>
-                        <td>{{i.Quantity_Issued}}</td>
+                        <td>{{i.Name}}</td>
+                        <td>{{i.Price}}</td>
+                        <td>{{i.Quantity}}</td>
                         <td>{{i.das}}</td>
 
                     </tr>
@@ -68,17 +75,19 @@
                 <tr class="bg-dark text-warning">
                     <th>Test Name</th>
                     <th>TEST ID</th>
+                    <th>TEST Price</th>
                     <th>Date of issue</th>
                 </tr>
             </thead>
-            {% if issue_data %}
-            {% for i in issue_data %}
+            {% if issue_diagnosis %}
+            {% for i in issue_diagnosis %}
             <tbody>
                 <tr>
 
                     <td>{{i.Name}}</td>
                     <td>{{i.Test_ID}}</td>
-                    <td>{{i.Date}}</td>
+                    <td>{{i.Price}}</td>
+                    <td>{{i.das}}</td>
 
                 </tr>
             </tbody>
@@ -89,7 +98,10 @@
             <p> Total Diagnosis Bill = {{diagnosis_bill.Total_Bill}}</p>
         {% endif %}
     </div>
-
+<div>
+    {% if grand_bill %}
+    <p> <h3>Grand Total = {{grand_bill}}</h3> </p>
+    {% endif %}
 </div>
 
 </div>
