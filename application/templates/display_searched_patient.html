@@ -11,8 +11,6 @@
           <input type="number" name="pid" onkeypress="return /[0-9]/i.test(event.key)" class="form-control" required value={{request.form.pid}}>
         </div>
         <button type="submit" class="btn btn-primary">View</button>
-
-        
       </div>
     </form>
   </div>
@@ -33,6 +31,7 @@
         <th>Date of Admission</th>
         <th>update Record</th>
         <th>Discharge Patient</th>
+        <th>Assign Medicines</th>
       </tr>
     </thead>
 
@@ -48,6 +47,7 @@
         <td>{{data.dam}}</td>
         <td><p><a href = "{{ url_for( 'UpdatePatient' ,pid=data.PID ) }}">update</a></p></td>
         <td><p><a href = "{{ url_for( 'DeletePatient' ,pid=data.PID ) }}">Dischare</a></p></td>
+        <td><p><a href = "{{ url_for( 'assign_medicines' ,pid=data.PID ) }}">assign medicines</a></p></td>
 
 
 

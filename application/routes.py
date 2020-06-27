@@ -214,7 +214,7 @@ def DeletePatient(pid):
 
 # display patients status
 @app.route('/search_patient', methods=['GET','POST'])
-def view_patients():
+def search_patient():
     if not session.get('username'):
         return redirect(url_for('index'))
     if request.method == 'GET':
@@ -231,16 +231,22 @@ def view_patients():
 
 # assign medicines
 @app.route('/assign_medicines', methods=["GET","POST"])
+@app.route('/assign_medicines/', methods=["GET","POST"])
 @app.route('/assign_medicines/<pid>', methods=["GET","POST"])
 def assign_medicines(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
-            pid = request.args['pid']
+            try:
+                pid = request.args['pid']
+            except:
+                flash("enter patient id", "danger")
+                return redirect(url_for('search_patient'))
+
         if (pid == None or pid is None) :
             flash("enter patient id", "danger")
-            return render_template('display_searched_patient.html')
+            return redirect(url_for('search_patient'))
         if (pid is not None):
             helper_class = HelperCustomer()
             target_customer_object = helper_class.get_customer_for_update(pid)
@@ -250,9 +256,10 @@ def assign_medicines(pid=None):
         return redirect(url_for('assign_medicines',pid = pid))
 
     if request.method == 'POST':
+    # pid  = request.form['pid']
         if (pid == None) :
             flash("no patient id found", "danger")
-            return render_template('display_searched_patient.html')
+            return redirect(url_for('search_patient'))
 
         medicine_id = request.form.get('medicine_id', type = int)
         medicine_qty = request.form.get('medicine_qty', type = int)
