@@ -412,11 +412,15 @@ def refer_test(pid=None):
         test_object = MasterDiagnosis.objects(test_id = test_id).get()
         test_dict = create_diag_dict(test_object)
 
+        msg = 'Refered test'
+        test_name = test_dict['Name']
+
         try:
             issue_object = PatientDiagnosis()
             issue_object.das = insert_now_time()
             issue_object.test_id = test_id
             issue_object.patient_id = pid
+            issue_object.test_name = test_name
             target_customer_object.update(msg=msg)
             test_object.save()
             target_customer_object.save()
@@ -429,11 +433,11 @@ def refer_test(pid=None):
 
         issue_list = []
         for i in issue_object:
-            issue_dict = create_diag_dict(i)
+            issue_dict = create_patient_diag_dict(i)
             issue_list.append(issue_dict)
 
         if(len(target_customer_object) > 0 and not None):
-            return render_template('refer_test.html', data = jdata, med_data = med_dict, issue_data = issue_list)
+            return render_template('refer_test.html', data = jdata, test_data = test_dict, issue_data = issue_list)
     return render_template('refer_test.html', data = None)
 
 # display Available Medicine Records status
@@ -505,6 +509,14 @@ def create_diag_dict(diag_object):
     data_dict['Name'] = diag_object.test_name
     data_dict['Test_ID'] = diag_object.test_id
     data_dict['Price'] = diag_object.test_price
+    return data_dict
+
+def create_patient_diag_dict(diag_object):
+    data_dict = {}
+    data_dict['Name'] = diag_object.test_name
+    data_dict['Test_ID'] = diag_object.test_id
+    data_dict['Message'] = diag_object.msg
+    data_dict['Date'] = diag_object.das
     return data_dict
 
 def create_issue_dict(issue_object):

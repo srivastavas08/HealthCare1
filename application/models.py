@@ -49,6 +49,7 @@ class PatientPharmacy(db.Document):
     das = db.DateTimeField()    #das = date of assignment
 
 class PatientDiagnosis(db.Document):
+    test_name = db.StringField()
     patient_id = db.IntField()
     test_id = db.IntField()
     msg = db.StringField()
