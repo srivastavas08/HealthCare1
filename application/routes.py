@@ -528,18 +528,18 @@ def BillGeneration(pid=None):
             
             total_admission_bill = get_total_admission_bill(jdata)
             if(total_admission_bill['Total_Bill'] <= 0):
-                flash("error generating bill", "danger")
+                flash("error generating admission bill", "danger")
                 return redirect(url_for('search_patient'))
             
             total_pharmacy_bill = get_total_pharmacy_bill(pid)
             if(total_pharmacy_bill['Total_Bill'] <= 0):
-                flash("error generating bill", "danger")
-                return redirect(url_for('search_patient'))
+                flash("error generating pharmacy bill", "danger")
+                # return redirect(url_for('search_patient'))
         
             total_diagnosis_bill = get_total_diagnosis_bill(pid)
             if(total_diagnosis_bill['Total_Bill'] <= 0):
-                flash("error generating bill", "danger")
-                return redirect(url_for('search_patient'))
+                flash("error generating diagnosis bill", "danger")
+                # return redirect(url_for('search_patient'))
 
             grand_total_bill = total_admission_bill['Total_Bill'] +total_pharmacy_bill['Total_Bill'] +total_diagnosis_bill['Total_Bill']
 
@@ -826,7 +826,6 @@ def get_total_admission_bill(patient_dict):
         total_admission_bill = days_admitted*8000
     else:
         total_admission_bill = 0
-    
     admission_bill_dict['Total_Bill'] = int(total_admission_bill)
     return admission_bill_dict
 
