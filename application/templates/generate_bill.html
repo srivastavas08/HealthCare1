@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="row justify-content-center mb-3">
+
+    <div class="container">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr class="bg-dark text-warning">
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th>Bed Type</th>
+                    <th>Date of Admission</th>
+                </tr>
+            </thead>
+            {% if data %}
+            <tbody>
+                <tr>
+                    <td>{{data.Name}}</td>
+                    <td>{{data.Age}}</td>
+                    <td>{{data.Address}}</td>
+                    <td>{{data.City}}</td>
+                    <td>{{data.Status}}</td>
+                    <td>{{data.BedType}}</td>
+                    <td>{{data.dam}}</td>
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+
+        <div class="container">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr class="bg-dark text-warning">
+                        <th>Patient ID</th>
+                        <th>Medicine ID</th>
+                        <th>Quantity Issued</th>
+                        <th>Date of issue</th>
+                    </tr>
+                </thead>
+                {% if issue_pharmacy %}
+                {% for i in issue_pharmacy %}
+                <tbody>
+                    <tr>
+
+                        <td>{{i.Patient_ID}}</td>
+                        <td>{{i.Medicine_ID}}</td>
+                        <td>{{i.Quantity_Issued}}</td>
+                        <td>{{i.das}}</td>
+
+                    </tr>
+                </tbody>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+
+    </div>
+    <div class="container">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr class="bg-dark text-warning">
+                    <th>Test Name</th>
+                    <th>TEST ID</th>
+                    <th>Date of issue</th>
+                </tr>
+            </thead>
+            {% if issue_data %}
+            {% for i in issue_data %}
+            <tbody>
+                <tr>
+
+                    <td>{{i.Name}}</td>
+                    <td>{{i.Test_ID}}</td>
+                    <td>{{i.Date}}</td>
+
+                </tr>
+            </tbody>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+
+</div>
+
+</div>
+{% endblock %}

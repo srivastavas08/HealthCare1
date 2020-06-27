@@ -388,7 +388,7 @@ def refer_test(pid=None):
             issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
             issue_list = []
             for i in issue_object:
-                issue_dict = create_refered_test_dict(i)
+                issue_dict = create_patient_diag_dict(i)
                 issue_list.append(issue_dict)
 
             return render_template('refer_test.html',data=jdata, issue_data=issue_list)
@@ -440,7 +440,7 @@ def refer_test(pid=None):
             return render_template('refer_test.html', data = jdata, test_data = test_dict, issue_data = issue_list)
     return render_template('refer_test.html', data = None)
 
-# display Available Medicine Records status
+# display Available test Records status
 @app.route('/available_test', methods=['GET','POST'])
 def TestAvailable():
     if not session.get('username'):
@@ -452,6 +452,65 @@ def TestAvailable():
             record.append(tmp)
         print(record)
     return render_template('diagnosis.html',data=record)
+
+# Generate Bill customer Search
+@app.route('/billing', methods=['GET','POST'])
+def BillGeneration_customer_screen():
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        return render_template('bill.html')
+    if request.method == 'POST':
+        pid  = request.form['pid']
+        helper_class = HelperCustomer()
+        target_customer_object = helper_class.get_customer_for_update(pid)
+        jdata = create_customer_account_dict(target_customer_object)
+        if(len(target_customer_object) > 0 and not None):
+            return render_template('bill.html',data = jdata)
+    return render_template('bill.html',data = None)
+
+
+#Bill Generation
+@app.route('/generate_bill', methods=["GET","POST"])
+@app.route('/generate_bill/', methods=["GET","POST"])
+@app.route('/generate_bill/<pid>', methods=["GET","POST"])
+def BillGeneration(pid=None):
+    if not session.get('username'):
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        if (pid == None or pid is None):
+            try:
+                pid = request.args['pid']
+            except:
+                flash("enter patient id", "danger")
+                return redirect(url_for('BillGeneration_customer_search'))
+
+        if (pid == None or pid is None) :
+            flash("enter patient id", "danger")
+            return redirect(url_for('BillGeneration_customer_search'))
+        if (pid is not None):
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
+            
+            issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
+            issue_list = []
+            for i in issue_object:
+                issue_dict = create_patient_diag_dict(i)
+                issue_list.append(issue_dict)
+
+            issue_object_pharmacy = PatientPharmacy.objects.filter(patient_id = pid).all()
+            issue_pharmacy = []
+            for i in issue_object_pharmacy:
+                issue_dict_pharmacy = create_issue_dict(i)
+                issue_pharmacy.append(issue_dict)
+
+            return render_template('generate_bill.html',data=jdata, issue_data=issue_list, issue_pharmacy=issue_pharmacy)
+
+        return redirect(url_for('generate_bill.html',pid = pid))
+
+    return render_template('generate_bill.html', data = None)
+
 #############################################################################################
 ##############################################################################
                                 #FUNCTIONS
