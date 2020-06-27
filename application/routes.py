@@ -249,12 +249,11 @@ def assign_medicines(pid=None):
 
         return redirect(url_for('assign_medicines',pid = pid))
 
-
     if request.method == 'POST':
         if (pid == None) :
             flash("no patient id found", "danger")
             return render_template('display_searched_patient.html')
-        # patient_id  = request.form['patient_id']
+
         medicine_id = request.form.get('medicine_id', type = int)
         medicine_qty = request.form.get('medicine_qty', type = int)
 
@@ -262,19 +261,45 @@ def assign_medicines(pid=None):
 
         target_customer_object = helper_class.get_customer_for_update(pid)
         jdata = create_customer_account_dict(target_customer_object)
+
         med_object = MasterPharmacy.objects(medicine_id = medicine_id).get()
         med_dict = create_medicine_dict(med_object)
+
+
 
         medicine_available = int(med_object.medicine_qty)
         if(medicine_available - medicine_qty <= 0):
             flash("medicine not available in sufficient quantity", "danger")
             return redirect(url_for('assign_medicines',pid = pid))
-        # issue_object = helper_class.get_issued_medicines_using_patid(pid)
-        # issue_dict = create_issue_dict(issue_object)
+        else:
+            new_qty = medicine_available - medicine_qty
+            msg = 'Assigned medicines'
+            try:
+                issue_object = PatientPharmacy()
+                issue_object.das = insert_now_time()
+                issue_object.medicine_id = medicine_id
+                issue_object.medicine_qty = medicine_qty
+                issue_object.patient_id = pid
+                target_customer_object.update(msg = msg)
+                med_object.update(medicine_qty = new_qty)
+
+                med_object.save()
+                target_customer_object.save()
+                issue_object.save()
+                flash("update successful", "success")
+            except:
+                flash("update not successful", "danger")
+                return redirect(url_for('assign_medicines',pid = pid))
+            issue_object = PatientPharmacy.objects.filter(patient_id = pid).all()
+
+            issue_list = []
+            for i in issue_object:
+                issue_dict = create_issue_dict(i)
+                issue_list.append(issue_dict)
 
 
         if(len(target_customer_object) > 0 and not None):
-            return render_template('transfer_medicines.html',data = jdata, med_data = med_dict)#, issue_data = issue_dict)
+            return render_template('transfer_medicines.html',data = jdata, med_data = med_dict, issue_data = issue_list)
     return render_template('transfer_medicines.html',data = None)
 
 
@@ -333,10 +358,12 @@ def create_medicine_dict(med_object):
 def create_issue_dict(issue_object):
     data_dict = {}
     data_dict['Medicine_ID'] = issue_object.medicine_id
-    data_dict['Name'] = issue_object.medicine_name
-    data_dict['Price'] = issue_object.medicine_price
+    data_dict['Patient_ID'] = issue_object.patient_id
+    data_dict['Message'] = issue_object.msg
     data_dict['Quantity_Issued'] = issue_object.medicine_qty
-    data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
+    data_dict['das'] = issue_object.das
+
+    # data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
     return  data_dict
 
 

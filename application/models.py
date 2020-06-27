@@ -29,7 +29,6 @@ class NewPatient(db.Document):
     dam             = db.DateTimeField()   #dam= date of admission
     status         = db.StringField()
     bedtype         = db.StringField()
-    
 
 class MasterPharmacy(db.Document):
     medicine_id     = db.IntField(max_length = 4)
@@ -46,9 +45,11 @@ class PatientPharmacy(db.Document):
     patient_id = db.IntField()
     medicine_id = db.IntField()
     medicine_qty = db.IntField()
+    msg = db.StringField()
+    das = db.DateTimeField()    #das = date of assignment
 
 
-class HelperCustomer(db.Document):
+class HelperCustomer():
     def get_customer_for_update(self, pid):
         update_customer = NewPatient.objects(patient_id=pid).get()
         return update_customer
@@ -64,9 +65,15 @@ class HelperCustomer(db.Document):
     def get_pharmacy_using_medid(self, medid):
         med_object = MasterPharmacy.objects(medicine_id = medid).get()
         return med_object
-    def get_issued_medicines_using_patid(self,patid):
-        issue_object = PatientPharmacy.objects(patient_id = patid).get()
-        return issue_object
+    # def get_issued_medicines_using_patid(self,patid):
+    #     patient_pharmacy_dict = {}
+    #     issue_object = PatientPharmacy.objects.filter(patient_id = patid).all()
+    #     # for i in range(len(issue_object)):
+    #     #     key = f'record_{i}'
+    #     #     patient_pharmacy_dict[key] = issue_object[i]
+
+    #     return issue_object
+
 
     ###################################################################################################################
 
