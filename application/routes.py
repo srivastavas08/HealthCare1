@@ -20,7 +20,7 @@ def index():
     return render_template("index.html", index=True)
 
 
-#Login
+# Login
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 
@@ -33,21 +33,19 @@ def login():
         password = form.password.data
 
         user = User.objects(email=email).first()
-        login_flag = check_if_pharmacist(email)
 
         if user and user.get_password(password):
             flash(f"{user.first_name}, You are successfully logged in", "success")
             session['user_id'] = user.user_id
             session['username'] = user.first_name
             session['email'] = user.email
-            session['login_flag'] = login_flag
             return redirect('/index')
         else:
             flash("Sorry! something went wrong", "danger")
     return render_template("login.html", title="Login", form=form, login=True)
 
 
-#Register new exective or pharmacist or diagnostic
+# Register new exective or pharmacist or diagnostic
 @app.route("/register", methods=['POST', 'GET'])
 def register():
 
@@ -73,7 +71,7 @@ def register():
     return render_template("register.html", title="Register", form=form, register=True)
 
 
-#Logout
+# Logout
 @app.route("/logout")
 def logout():
     session['user_id'] = False
@@ -81,12 +79,23 @@ def logout():
     return redirect(url_for('index'))
 
 
-#createPatient
+# createPatient
 @app.route('/createpatient', methods=['GET', 'POST'])
 def createpatient():
 
     if not session.get('username'):
         return redirect(url_for('index'))
+
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
+        return redirect(url_for('index'))
+
+    # flag = session.get('executive_flag')
+    # print(flag)
+    # if(flag != 1):
+    #     flash(f"unprivilaged access", "danger")
+    #     return redirect(url_for('index'))
 
     form = Patient()
     if form.validate_on_submit():
@@ -114,7 +123,7 @@ def createpatient():
         return redirect(url_for('index'))
     return render_template('create_patient.html', title="New Patient", form=form, creatpatient=True)
 
-#UpdatePatient
+# UpdatePatient
 
 
 @app.route('/update_patient', methods=['GET', 'POST'])
@@ -123,6 +132,12 @@ def createpatient():
 def UpdatePatient(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
+
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
+        return redirect(url_for('index'))
+
     if request.method == 'GET':
         if (pid == None):
             flash("enter patient id", "danger")
@@ -173,6 +188,10 @@ def UpdatePatient(pid=None):
 def view_record():
     if not session.get('username'):
         return redirect(url_for('index'))
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
+        return redirect(url_for('index'))
     if request.method == "GET":
         record = []
         for x in NewPatient.objects():
@@ -187,6 +206,10 @@ def view_record():
 @app.route('/delete_patient/<pid>', methods=['GET', 'POST'])
 def DeletePatient(pid):
     if not session.get('username'):
+        return redirect(url_for('index'))
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None):
@@ -220,6 +243,10 @@ def DeletePatient(pid):
 def search_patient():
     if not session.get('username'):
         return redirect(url_for('index'))
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
+        return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('display_searched_patient.html')
     if request.method == 'POST':
@@ -238,6 +265,10 @@ def search_patient():
 @app.route('/assign_medicines/<pid>', methods=["GET", "POST"])
 def assign_medicines(pid=None):
     if not session.get('username'):
+        return redirect(url_for('index'))
+    pharmacist_flag = check_if_pharmacist(session.get('email'))
+    if(pharmacist_flag != 1):
+        flash(f"unprivilaged access as pharmacist", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
@@ -323,6 +354,10 @@ def assign_medicines(pid=None):
 def viewPharmacy():
     if not session.get('username'):
         return redirect(url_for('index'))
+    pharmacist_flag = check_if_pharmacist(session.get('email'))
+    if(pharmacist_flag != 1):
+        flash(f"unprivilaged access as pharmacist", "danger")
+        return redirect(url_for('index'))
     if request.method == "GET":
         record = []
         for x in MasterPharmacy.objects():
@@ -336,6 +371,10 @@ def viewPharmacy():
 @app.route('/search_patient_pharmacy', methods=['GET', 'POST'])
 def search_patient_pharmacy():
     if not session.get('username'):
+        return redirect(url_for('index'))
+    pharmacist_flag = check_if_pharmacist(session.get('email'))
+    if(pharmacist_flag != 1):
+        flash(f"unprivilaged access as pharmacist", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('search_patient_pharmacy.html')
@@ -354,6 +393,10 @@ def search_patient_pharmacy():
 @app.route('/search_patient_diagnosis', methods=['GET', 'POST'])
 def search_patient_diagnosis():
     if not session.get('username'):
+        return redirect(url_for('index'))
+    diagnostic_flag = check_if_diagnostic(session.get('email'))
+    if(diagnostic_flag != 1):
+        flash(f"unprivilaged access as diagnostic", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('search_patient_diagnosis.html')
@@ -374,6 +417,10 @@ def search_patient_diagnosis():
 @app.route('/refer_test/<pid>', methods=["GET", "POST"])
 def refer_test(pid=None):
     if not session.get('username'):
+        return redirect(url_for('index'))
+    diagnostic_flag = check_if_diagnostic(session.get('email'))
+    if(diagnostic_flag != 1):
+        flash(f"unprivilaged access as diagnostic", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
@@ -453,6 +500,10 @@ def refer_test(pid=None):
 def TestAvailable():
     if not session.get('username'):
         return redirect(url_for('index'))
+    diagnostic_flag = check_if_diagnostic(session.get('email'))
+    if(diagnostic_flag != 1):
+        flash(f"unprivilaged access as diagnostic", "danger")
+        return redirect(url_for('index'))
     if request.method == "GET":
         record = []
         for x in MasterDiagnosis.objects():
@@ -468,6 +519,10 @@ def TestAvailable():
 def BillGeneration_customer_screen():
     if not session.get('username'):
         return redirect(url_for('index'))
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
+        return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('bill.html')
     if request.method == 'POST':
@@ -480,13 +535,16 @@ def BillGeneration_customer_screen():
     return render_template('bill.html', data=None)
 
 
-#Bill Generation
+# Bill Generation
 @app.route('/generate_bill', methods=["GET", "POST"])
 @app.route('/generate_bill/', methods=["GET", "POST"])
 @app.route('/generate_bill/<pid>', methods=["GET", "POST"])
 def BillGeneration(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
+    executive_flag = check_if_executive(session.get('email'))
+    if(executive_flag != 1):
+        flash(f"unprivilaged access as executive", "danger")
     if request.method == 'GET':
         if (pid == None or pid is None):
             try:
@@ -509,20 +567,6 @@ def BillGeneration(pid=None):
             days_admitted = days_admitted.days
             bedcharges = check_bedtype(bed)
 
-            # previous tested version
-            # issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
-            # issue_list = []
-            # for i in issue_object:
-            #     issue_dict = create_patient_diag_dict(i)
-            #     issue_list.append(issue_dict)
-
-            # previous tested version
-            # issue_object_pharmacy = PatientPharmacy.objects.filter(patient_id = pid).all()
-            # issue_pharmacy = []
-            # for i in issue_object_pharmacy:
-            #     issue_dict_pharmacy = create_issue_dict(i)
-            #     issue_pharmacy.append(issue_dict_pharmacy)
-
             # new join/merged methods used (unreviwed)
             issue_object_diagnosis = make_patient_diagnosis_join(pid)
             issue_diagnosis = []
@@ -537,24 +581,28 @@ def BillGeneration(pid=None):
                 issue_dict_pharmacy = create_patient_pharmacy_dict(i)
                 issue_pharmacy.append(issue_dict_pharmacy)
 
-            # new method to get patient used (unreviewed)
-            # target_patient = NewPatient.objects(patient_id = pid).get()
-            # target_patient_dict = create_customer_account_dict(target_patient)
-
             total_admission_bill = get_total_admission_bill(jdata)
             if(total_admission_bill['Total_Bill'] <= 0):
                 flash("error generating admission bill", "danger")
                 return redirect(url_for('search_patient'))
 
             total_pharmacy_bill = get_total_pharmacy_bill(pid)
-            if(total_pharmacy_bill['Total_Bill'] < 0):
-                flash("error generating pharmacy bill", "danger")
-                # return redirect(url_for('search_patient'))
+            if('Total_Bill' not in total_pharmacy_bill):
+                total_pharmacy_bill['Total_Bill'] = 0
+                try:
+                    if(total_pharmacy_bill['Total_Bill'] < 0):
+                        flash("error generating pharmacy bill", "danger")
+                except:
+                    flash("error generating pharmacy bill", "danger")
 
             total_diagnosis_bill = get_total_diagnosis_bill(pid)
-            if(total_diagnosis_bill['Total_Bill'] < 0):
-                flash("error generating diagnosis bill", "danger")
-                # return redirect(url_for('search_patient'))
+            if('Total_Bill' not in total_diagnosis_bill):
+                total_diagnosis_bill['Total_Bill'] = 0
+                try:
+                    if(total_diagnosis_bill['Total_Bill'] < 0):
+                        flash("error generating diagnosis bill", "danger")
+                except:
+                    flash("error generating diagnosis bill", "danger")
 
             grand_total_bill = total_admission_bill['Total_Bill'] + \
                 total_pharmacy_bill['Total_Bill'] + \
@@ -568,7 +616,18 @@ def BillGeneration(pid=None):
 
 #############################################################################################
 ##############################################################################
-    #FUNCTIONS
+    # FUNCTIONS
+
+
+def check_if_executive(email):
+    is_login_flag = 0
+    email = str(email).strip().lower()
+    email = email.split('@')[1]
+    email = email.split('.')[0]
+    if (email == 'executive'):
+        # print('YES')
+        is_login_flag = 1
+    return is_login_flag
 
 
 def check_if_pharmacist(email):
@@ -576,7 +635,7 @@ def check_if_pharmacist(email):
     email = str(email).strip().lower()
     email = email.split('@')[1]
     email = email.split('.')[0]
-    if (email == 'pharmacy'):
+    if (email == 'pharmacy' or email == 'executive'):
         # print('YES')
         is_login_flag = 1
     return is_login_flag
@@ -587,7 +646,7 @@ def check_if_diagnostic(email):
     email = str(email).strip().lower()
     email = email.split('@')[1]
     email = email.split('.')[0]
-    if (email == 'diagnosis'):
+    if (email == 'diagnostic' or email == 'executive'):
         # print('YES')
         is_login_flag = 1
     return is_login_flag
