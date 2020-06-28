@@ -1,7 +1,6 @@
-from application import app, db
-from flask import render_template, request, json, Response, redirect, flash, url_for, session
+from application import app
+from flask import render_template, request, redirect, flash, url_for, session
 from application.models import User, NewPatient, HelperCustomer, MasterDiagnosis, MasterPharmacy, PatientPharmacy, PatientDiagnosis
-import random
 from application.forms import LoginForm, RegisterForm, Patient
 from random import randint
 from datetime import datetime, timezone
@@ -121,7 +120,7 @@ def createpatient():
 
         flash("Patient record creation initiated successfully", "success")
         return redirect(url_for('index'))
-    return render_template('create_patient.html', title="New Patient", form=form, creatpatient=True)
+    return render_template('create_patient.html', title="Admit New Patient", form=form, creatpatient=True)
 
 # UpdatePatient
 
