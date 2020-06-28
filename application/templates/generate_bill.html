@@ -4,10 +4,11 @@
 <div class="row justify-content-center mb-3">
 
     <div class="container">
-        <h1>Patient Details</h1>
+        <h1 class="my-3 text-center">Generate Bill</h1>
+        <h2 class="mt-5 mb-2">Patient Details</h2>
         <table class="table table-hover table-striped table-bordered">
             <thead>
-                <tr class="bg-dark text-warning">
+                <tr class="text-dark bg-warning">
                     <th>Name</th>
                     <th>Age</th>
                     <th>Address</th>
@@ -29,72 +30,40 @@
                     <th>{{now_date}}</th>
                 </tr>
             </tbody>
-            
+
         </table>
         {% if admission_bill %}
-        <p>Number of Days = {{days_admitted}}  </p>
-        <p>Bed Charge for Single Day = {{bedcharges}}</p>
-        <p>Hospitality Charges = {{admission_bill.Total_Bill}}</p>
-        {% endif %} 
-    </div>
-        <div class="container">
-            <h1>Pharmacy Charges</h1>
-            <table class="table table-hover table-striped table-bordered">
-                <thead>
-                    <tr class="bg-dark text-warning">
-                        <th>Patient ID</th>
-                        <th>Medicine ID</th>
-                        <th>Medicine Name</th>
-                        <th>Medicine Price</th>
-                        <th>Quantity Issued</th>
-                        <th>Amount</th>
-                        <th>Date of issue</th>
-
-                    </tr>
-                </thead>
-                {% if issue_pharmacy %}
-                {% for i in issue_pharmacy %}
-                <tbody>
-                    <tr>
-
-                        <td>{{i.Patient_ID}}</td>
-                        <td>{{i.Medicine_ID}}</td>
-                        <td>{{i.Name}}</td>
-                        <td>{{i.Price}}</td>
-                        <td>{{i.Quantity}}</td>
-                        <td>{{i.Quantity * i.Price}}</td>
-                        <td>{{i.das}}</td>
-
-                    </tr>
-                </tbody>
-                {% endfor %}
-                {% endif %}
-            </table>
-            {% if pharmacy_bill %}
-            <p> Total Pharmacy Bill = {{pharmacy_bill.Total_Bill}}</p>
-            {% endif %}  
-        </div>
-
+        <p class=" mt-2 text-right pr-3">Bed occupation = {{days_admitted}} Days</p>
+        <p class="text-right pr-3">Bed Charge for Single Day = ₹{{bedcharges}}</p>
+        <h5 class="text-right text-danger py-2 bg-light pr-3">Hospitality Charges = ₹{{admission_bill.Total_Bill}}</h5>
+        {% endif %}
     </div>
     <div class="container">
+        <h2 class="mt-5 mb-3">Pharmacy Charges</h2>
         <table class="table table-hover table-striped table-bordered">
-            <h1>Diagnostic Charges</h1>
             <thead>
-                <tr class="bg-dark text-warning">
-                    <th>Test Name</th>
-                    <th>TEST ID</th>
-                    <th>TEST Price</th>
+                <tr class="text-dark bg-warning">
+                    <th>Patient ID</th>
+                    <th>Medicine ID</th>
+                    <th>Medicine Name</th>
+                    <th>Medicine Price</th>
+                    <th>Quantity Issued</th>
+                    <th>Amount</th>
                     <th>Date of issue</th>
+
                 </tr>
             </thead>
-            {% if issue_diagnosis %}
-            {% for i in issue_diagnosis %}
+            {% if issue_pharmacy %}
+            {% for i in issue_pharmacy %}
             <tbody>
                 <tr>
 
+                    <td>{{i.Patient_ID}}</td>
+                    <td>{{i.Medicine_ID}}</td>
                     <td>{{i.Name}}</td>
-                    <td>{{i.Test_ID}}</td>
-                    <td>{{i.Price}}</td>
+                    <td>₹{{i.Price}}</td>
+                    <td>{{i.Quantity}}</td>
+                    <td>₹{{i.Quantity * i.Price}}</td>
                     <td>{{i.das}}</td>
 
                 </tr>
@@ -102,18 +71,51 @@
             {% endfor %}
             {% endif %}
         </table>
-        {% if diagnosis_bill %}
-            <p> Total Diagnosis Bill = {{diagnosis_bill.Total_Bill}}</p>
+        {% if pharmacy_bill %}
+        <h5 class="text-right text-danger py-2 bg-light pr-3"> Total Pharmacy Bill = ₹ {{pharmacy_bill.Total_Bill}}</h5>
         {% endif %}
     </div>
-<div class=" col-md-6 mx-auto my-3">
-    <form>
-    {% if grand_bill %}
-    <p> <h3>Grand Total = {{grand_bill}}</h3> </p>
+
+</div>
+<div class="container">
+    <table class="table table-hover table-striped table-bordered">
+        <h2 class="mt-5 mb-3">Diagnostic Charges</h2>
+        <thead>
+            <tr class="text-dark bg-warning">
+                <th>Test Name</th>
+                <th>TEST ID</th>
+                <th>TEST Price</th>
+                <th>Date of issue</th>
+            </tr>
+        </thead>
+        {% if issue_diagnosis %}
+        {% for i in issue_diagnosis %}
+        <tbody>
+            <tr>
+
+                <td>{{i.Name}}</td>
+                <td>{{i.Test_ID}}</td>
+                <td>₹{{i.Price}}</td>
+                <td>{{i.das}}</td>
+
+            </tr>
+        </tbody>
+        {% endfor %}
+        {% endif %}
+    </table>
+    {% if diagnosis_bill %}
+    <h5 class="text-right text-danger py-2 bg-light pr-3"> Total Diagnosis Bill = ₹{{diagnosis_bill.Total_Bill}}</h5>
     {% endif %}
-     action="{{ url_for( 'DeletePatient' ,pid=data.PID ) }}">
-        <button type="submit">Discharge</button>
-     </form>
+
+    {% if grand_bill %}
+    <h4 class="text-danger my-5 text-right py-2 bg-light pr-3">Grand Total = ₹{{grand_bill}} </h4>
+    {% endif %}
+
+</div>
+<div class=" col-md-6 mx-auto my-3 text-center">
+    <form action="{{ url_for( 'DeletePatient' ,pid=data.PID ) }}">
+        <button type="submit" class="btn btn-lg btn-dark text-warning my-4 mx-5">Discharge Patient</button>
+    </form>
 </div>
 {% endif %}
 </div>
