@@ -1,101 +1,112 @@
-[{
-  "_id": {
-    "$oid": "5ef65b61435997c8a18add26"
+[
+  {
+    "_id": {
+      "$oid": "5ef65b61435997c8a18add26"
+    },
+    "medicine_id": 2001,
+    "medicine_name": "ALPRAZOLAM 0.5MG",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "30.00"
+    }
   },
-  "medicine_id": 2001,
-  "medicine_name": "ALPRAZOLAM 0.5MG",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "30.00"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65efc8c66bc246433720d"
+  {
+    "_id": {
+      "$oid": "5ef65efc8c66bc246433720d"
+    },
+    "medicine_id": 2002,
+    "medicine_name": "AMETHOCAINE",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "300.00"
+    }
   },
-  "medicine_id": 2002,
-  "medicine_name": "AMETHOCAINE",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "300.00"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65efc8c66bc246433720e"
+  {
+    "_id": {
+      "$oid": "5ef65efc8c66bc246433720e"
+    },
+    "medicine_id": 2003,
+    "medicine_name": "AMLODIPINE 10MG",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "80.00"
+    }
   },
-  "medicine_id": 2003,
-  "medicine_name": "AMLODIPINE 10MG",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "80.00"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65efc8c66bc246433720f"
+  {
+    "_id": {
+      "$oid": "5ef65efc8c66bc246433720f"
+    },
+    "medicine_id": 2004,
+    "medicine_name": "RAMIPRIL 10MG",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "780.00"
+    }
   },
-  "medicine_id": 2004,
-  "medicine_name": "RAMIPRIL 10MG",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "780.00"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65efc8c66bc2464337210"
+  {
+    "_id": {
+      "$oid": "5ef65efc8c66bc2464337210"
+    },
+    "medicine_id": 2005,
+    "medicine_name": "TENOFOVIR 300MG",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "520.00"
+    }
   },
-  "medicine_id": 2005,
-  "medicine_name": "TENOFOVIR 300MG",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "520.00"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65ff08c66bc2464337211"
+  {
+    "_id": {
+      "$oid": "5ef65ff08c66bc2464337211"
+    },
+    "medicine_id": 2006,
+    "medicine_name": "Saridon",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "10"
+    }
   },
-  "medicine_id": 2006,
-  "medicine_name": "Saridon",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "10"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65ff08c66bc2464337212"
+  {
+    "_id": {
+      "$oid": "5ef65ff08c66bc2464337212"
+    },
+    "medicine_id": 2007,
+    "medicine_name": "Zentac",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "38"
+    }
   },
-  "medicine_id": 2007,
-  "medicine_name": "Zentac",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "38"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65ff08c66bc2464337213"
+  {
+    "_id": {
+      "$oid": "5ef65ff08c66bc2464337213"
+    },
+    "medicine_id": 2008,
+    "medicine_name": "Histac",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "18"
+    }
   },
-  "medicine_id": 2008,
-  "medicine_name": "Histac",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "18"
-  }
-},{
-  "_id": {
-    "$oid": "5ef65ff08c66bc2464337214"
+  {
+    "_id": {
+      "$oid": "5ef65ff08c66bc2464337214"
+    },
+    "medicine_id": 2009,
+    "medicine_name": "calpol",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "100"
+    }
   },
-  "medicine_id": 2009,
-  "medicine_name": "calpol",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "100"
+  {
+    "_id": {
+      "$oid": "5ef65ff08c66bc2464337215"
+    },
+    "medicine_id": 2010,
+    "medicine_name": "Vicks",
+    "medicine_qty": 1000,
+    "medicine_price": {
+      "$numberDecimal": "24"
+    }
   }
-},{
-  "_id": {
-    "$oid": "5ef65ff08c66bc2464337215"
-  },
-  "medicine_id": 2010,
-  "medicine_name": "Vicks",
-  "medicine_qty": 1000,
-  "medicine_price": {
-    "$numberDecimal": "24"
-  }
-}]
+]

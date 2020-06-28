@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>SIGMA-Health-Care-Services</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}"/>
-    
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}" />
+
 </head>
+
 <body>
 
-<div class="container-fluid text-center top-container bg-light">
-    <img src="{{ url_for('static',filename='images/logo.png')}}">
-</div>
+    <div class="container-fluid text-center top-container bg-light">
+        <img src="{{ url_for('static',filename='images/logo.png')}}">
+    </div>
 
     {% include "includes/nav.html" %}
 
@@ -21,36 +23,37 @@
     {% endif %}
 
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{category}}">
-                    <p>{{ message }}</p>
-                </div>
-            {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{category}}">
+        <p>{{ message }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
     {% endwith %}
-<div class="container">
-    {% block content %}
-    {% endblock %}
-    {% block body %}
-    {% endblock %}
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+        {% block body %}
+        {% endblock %}
 
 
-</div>
+    </div>
     {% include "includes/_footer.html" %}
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-<script language="javascript">print_state("sts");</script>
-<script>
-    function onlyNumberKey(evt) {
-      // Only ASCII charactar in that range allowed 
-      var ASCIICode = (evt.which) ? evt.which : evt.keyCode
-      if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
-        return false;
-      return true;
-    } 
-  </script>
+    <script language="javascript">print_state("sts");</script>
+    <script>
+        function onlyNumberKey(evt) {
+            // Only ASCII charactar in that range allowed 
+            var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        } 
+    </script>
 </body>
-</html>    
+
+</html>
