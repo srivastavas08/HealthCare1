@@ -3,67 +3,67 @@
 {% block body %}
 <div class="row justify-content-center mb-3">
 
-<div class="container">
-  <table class="table table-hover table-striped table-bordered">
-    <h2 class="mt-5 mb-3">Patient Records</h2>
-    
-    <thead>
-      <tr class="text-dark bg-warning">
-        <th>Name</th>
-        <th>Age</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>Status</th>
-        <th>Bed Type</th>
-        <th>Date of Admission</th>
-      </tr>
-    </thead>
-    {% if data %}
-    <tbody>
-      <tr>
-        <td>{{data.Name}}</td>
-        <td>{{data.Age}}</td>
-        <td>{{data.Address}}</td>
-        <td>{{data.City}}</td>
-        <td>{{data.Status}}</td>
-        <td>{{data.BedType}}</td>
-        <td>{{data.dam}}</td>
-      </tr>
-    </tbody>
-   
-  </table>
-
   <div class="container">
     <table class="table table-hover table-striped table-bordered">
-      <h2 class="mt-5 mb-3">Issued Test to {{data.Name}}</h2>
+      <h2 class="mt-5 mb-3">Patient Records</h2>
+
       <thead>
         <tr class="text-dark bg-warning">
-          <th>Test Name</th>
-          <th>TEST ID</th>
-          <th>Date of issue</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>Status</th>
+          <th>Bed Type</th>
+          <th>Date of Admission</th>
         </tr>
       </thead>
-      {% if issue_data %}
-      {% for i in issue_data %}
+      {% if data %}
       <tbody>
         <tr>
-          <td>{{i.Name}}</td>
-          <td>{{i.Test_ID}}</td>
-          <td>{{i.Date}}</td>
+          <td>{{data.Name}}</td>
+          <td>{{data.Age}}</td>
+          <td>{{data.Address}}</td>
+          <td>{{data.City}}</td>
+          <td>{{data.Status}}</td>
+          <td>{{data.BedType}}</td>
+          <td>{{data.dam}}</td>
         </tr>
       </tbody>
-      {% endfor %}
-      {% endif %}
+
     </table>
-    {% endif %}
-  </div>  
- 
-</div> 
+
+    <div class="container">
+      <table class="table table-hover table-striped table-bordered">
+        <h2 class="mt-5 mb-3">Issued Test to {{data.Name}}</h2>
+        <thead>
+          <tr class="text-dark bg-warning">
+            <th>Test Name</th>
+            <th>TEST ID</th>
+            <th>Date of issue</th>
+          </tr>
+        </thead>
+        {% if issue_data %}
+        {% for i in issue_data %}
+        <tbody>
+          <tr>
+            <td>{{i.Name}}</td>
+            <td>{{i.Test_ID}}</td>
+            <td>{{i.Date}}</td>
+          </tr>
+        </tbody>
+        {% endfor %}
+        {% endif %}
+      </table>
+      {% endif %}
+    </div>
+
+  </div>
 
   <div class="container">
     <table class="table table-hover table-striped table-bordered">
       <h2 class="mt-5 mb-3">Issuing Diagnosis Details</h2>
-      
+
       <thead>
         <tr class="text-dark bg-warning">
           <th>Test Name</th>
@@ -81,25 +81,28 @@
       </tbody>
       {% endif %}
     </table>
-  </div>  
-
-<div class="col-md-6">
-  <h4 class="mb-4">Refer Test</h4>
-  <form action="" method="POST">
-    <div class="form-row">
-    <div class="form-group row col-md-12">
-      <label for="cid" class="col-sm-5 col-form-label">Test ID:</label>
-      <div class="col-sm-7">
-        <input type="number" id="cid" name="test_id" onkeypress="return /[0-9]/i.test(event.key)" class="form-control"  value={{request.form.test_id}}>
-      </div>
-    </div>
-    <div class="col-md-12"><p class="text-danger">(*) Feilds are mendatory</p></div>
-    <div  class=" col-md-6 mx-auto my-3">
-    <button type="submit" class="btn btn-dark text-warning ml-1">Refer Test</button>
-    </div>
   </div>
-  </form>
-</div>
+
+  <div class="col-md-6">
+    <h4 class="mb-4">Refer Test</h4>
+    <form action="" method="POST">
+      <div class="form-row">
+        <div class="form-group row col-md-12">
+          <label for="cid" class="col-sm-5 col-form-label">Test ID:</label>
+          <div class="col-sm-7">
+            <input type="number" id="cid" name="test_id" onkeypress="return /[0-9]/i.test(event.key)"
+              class="form-control" value={{request.form.test_id}}>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <p class="text-danger">(*) Feilds are mendatory</p>
+        </div>
+        <div class=" col-md-6 mx-auto my-3">
+          <button type="submit" class="btn btn-dark text-warning ml-1">Refer Test</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
 
 

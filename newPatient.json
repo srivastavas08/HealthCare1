@@ -1,85 +1,91 @@
-[{
-  "_id": {
-    "$oid": "5ef6253beab3b6fbb05e8ee9"
+[
+  {
+    "_id": {
+      "$oid": "5ef6253beab3b6fbb05e8ee9"
+    },
+    "patient_id": 100000002,
+    "name": "tested",
+    "age": 13,
+    "aadhar": 12345678,
+    "address": "tested1",
+    "state": "test1",
+    "city": "test1",
+    "dam": {
+      "$date": "2020-06-29T00:00:00Z"
+    },
+    "status": "Active",
+    "bedtype": "Semi Sharing",
+    "msg": "Assigned medicines"
   },
-  "patient_id": 100000002,
-  "name": "tested",
-  "age": 13,
-  "aadhar": 12345678,
-  "address": "tested1",
-  "state": "test1",
-  "city": "test1",
-  "dam": {
-    "$date": "2020-06-29T00:00:00Z"
+  {
+    "_id": {
+      "$oid": "5ef62578eab3b6fbb05e8eea"
+    },
+    "patient_id": 100000003,
+    "name": "tester",
+    "age": 13,
+    "aadhar": 789456123,
+    "address": "test2",
+    "state": "test2",
+    "city": "test2",
+    "dam": {
+      "$date": "2020-06-27T00:00:00Z"
+    },
+    "status": "Active",
+    "bedtype": "General Ward",
+    "msg": "Refered test"
   },
-  "status": "Active",
-  "bedtype": "Semi Sharing",
-  "msg": "Assigned medicines"
-},{
-  "_id": {
-    "$oid": "5ef62578eab3b6fbb05e8eea"
+  {
+    "_id": {
+      "$oid": "5ef625a0eab3b6fbb05e8eeb"
+    },
+    "patient_id": 100000004,
+    "name": "testt",
+    "age": 12,
+    "aadhar": 456123741,
+    "address": "test3",
+    "state": "test3",
+    "city": "test3",
+    "dam": {
+      "$date": "2020-07-10T00:00:00Z"
+    },
+    "status": "Active",
+    "bedtype": "General Ward",
+    "msg": "Refered test"
   },
-  "patient_id": 100000003,
-  "name": "tester",
-  "age": 13,
-  "aadhar": 789456123,
-  "address": "test2",
-  "state": "test2",
-  "city": "test2",
-  "dam": {
-    "$date": "2020-06-27T00:00:00Z"
+  {
+    "_id": {
+      "$oid": "5ef8356b4135123120ea9368"
+    },
+    "patient_id": 100000005,
+    "name": "mongob",
+    "age": 12,
+    "aadhar": 789065897896,
+    "address": "punjab",
+    "state": "UP",
+    "city": "Lucknow",
+    "dam": {
+      "$date": "2020-06-04T00:00:00Z"
+    },
+    "status": "Active",
+    "bedtype": "Single Room",
+    "msg": "Assigned medicines"
   },
-  "status": "Active",
-  "bedtype": "General Ward",
-  "msg": "Refered test"
-},{
-  "_id": {
-    "$oid": "5ef625a0eab3b6fbb05e8eeb"
-  },
-  "patient_id": 100000004,
-  "name": "testt",
-  "age": 12,
-  "aadhar": 456123741,
-  "address": "test3",
-  "state": "test3",
-  "city": "test3",
-  "dam": {
-    "$date": "2020-07-10T00:00:00Z"
-  },
-  "status": "Active",
-  "bedtype": "General Ward",
-  "msg": "Refered test"
-},{
-  "_id": {
-    "$oid": "5ef8356b4135123120ea9368"
-  },
-  "patient_id": 100000005,
-  "name": "mongob",
-  "age": 12,
-  "aadhar": 789065897896,
-  "address": "punjab",
-  "state": "UP",
-  "city": "Lucknow",
-  "dam": {
-    "$date": "2020-06-04T00:00:00Z"
-  },
-  "status": "Active",
-  "bedtype": "Single Room",
-  "msg": "Assigned medicines"
-},{
-  "_id": {
-    "$oid": "5ef83b644135123120ea936c"
-  },
-  "patient_id": 100000006,
-  "name": "computer",
-  "age": 78,
-  "aadhar": 741852963,
-  "address": "qwerty",
-  "state": "UP",
-  "city": "qwerty",
-  "dam": {
-    "$date": "2020-06-01T00:00:00Z"
-  },
-  "status": "Active",
-  "bedtype": "General Ward"
-}]
+  {
+    "_id": {
+      "$oid": "5ef83b644135123120ea936c"
+    },
+    "patient_id": 100000006,
+    "name": "computer",
+    "age": 78,
+    "aadhar": 741852963,
+    "address": "qwerty",
+    "state": "UP",
+    "city": "qwerty",
+    "dam": {
+      "$date": "2020-06-01T00:00:00Z"
+    },
+    "status": "Active",
+    "bedtype": "General Ward"
+  }
+]

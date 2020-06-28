@@ -1,91 +1,102 @@
-[{
-  "_id": {
-    "$oid": "5ef661c08c66bc2464337216"
+[
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc2464337216"
+    },
+    "test_id": 3001,
+    "test_name": "Mediacal Test",
+    "test_price": {
+      "$numberDecimal": "3000"
+    }
   },
-  "test_id": 3001,
-  "test_name": "Mediacal Test",
-  "test_price": {
-    "$numberDecimal": "3000"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc2464337217"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc2464337217"
+    },
+    "test_id": 3002,
+    "test_name": "Blood Test",
+    "test_price": {
+      "$numberDecimal": "180"
+    }
   },
-  "test_id": 3002,
-  "test_name": "Blood Test",
-  "test_price": {
-    "$numberDecimal": "180"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc2464337218"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc2464337218"
+    },
+    "test_id": 3003,
+    "test_name": "Biopsy",
+    "test_price": {
+      "$numberDecimal": "250"
+    }
   },
-  "test_id": 3003,
-  "test_name": "Biopsy",
-  "test_price": {
-    "$numberDecimal": "250"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc2464337219"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc2464337219"
+    },
+    "test_id": 3004,
+    "test_name": "Pathalogy",
+    "test_price": {
+      "$numberDecimal": "1000"
+    }
   },
-  "test_id": 3004,
-  "test_name": "Pathalogy",
-  "test_price": {
-    "$numberDecimal": "1000"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc246433721a"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc246433721a"
+    },
+    "test_id": 3005,
+    "test_name": "Physical Examination",
+    "test_price": {
+      "$numberDecimal": "4500"
+    }
   },
-  "test_id": 3005,
-  "test_name": "Physical Examination",
-  "test_price": {
-    "$numberDecimal": "4500"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc246433721b"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc246433721b"
+    },
+    "test_id": 3006,
+    "test_name": "X-Ray",
+    "test_price": {
+      "$numberDecimal": "500"
+    }
   },
-  "test_id": 3006,
-  "test_name": "X-Ray",
-  "test_price": {
-    "$numberDecimal": "500"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc246433721c"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc246433721c"
+    },
+    "test_id": 3007,
+    "test_name": "Endoscopy",
+    "test_price": {
+      "$numberDecimal": "800"
+    }
   },
-  "test_id": 3007,
-  "test_name": "Endoscopy",
-  "test_price": {
-    "$numberDecimal": "800"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc246433721d"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc246433721d"
+    },
+    "test_id": 3008,
+    "test_name": "Radiology",
+    "test_price": {
+      "$numberDecimal": "5000"
+    }
   },
-  "test_id": 3008,
-  "test_name": "Radiology",
-  "test_price": {
-    "$numberDecimal": "5000"
-  }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc246433721e"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc246433721e"
+    },
+    "test_id": 3009,
+    "test_name": "Genetic Testing",
+    "test_price": {
+      "$numberDecimal": "1500"
+    }
   },
-  "test_id": 3009,
-  "test_name": "Genetic Testing",
-  "test_price": {
-    "$numberDecimal": "1500"
+  {
+    "_id": {
+      "$oid": "5ef661c08c66bc246433721f"
+    },
+    "test_id": 3010,
+    "test_name": "Colposcopy",
+    "test_price": {
+      "$numberDecimal": "2500"
+    }
   }
-},{
-  "_id": {
-    "$oid": "5ef661c08c66bc246433721f"
-  },
-  "test_id": 3010,
-  "test_name": "Colposcopy",
-  "test_price": {
-    "$numberDecimal": "2500"
-  }
-}]
+]
