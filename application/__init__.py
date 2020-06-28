@@ -8,7 +8,9 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 client = MongoClient("mongodb://db:27017")
-db = client.UTA_Enrollment
+db = client.Health_Care
 db = MongoEngine()
 db.init_app(app)
+
+
 from application import routes
