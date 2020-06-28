@@ -27,7 +27,7 @@
           <label for="customername" class="col-sm-4 col-form-label">Patient's Age: <text
               class="text-danger">*</text></label>
           <div class="col-sm-8">
-            <input id="customername" type="text" name="" onkeypress="return /[a-z]/i.test(event.key)"
+            <input id="customername" type="text" name="" onkeypress="return /^[a-zA-Z\s]+$/i.test(event.key)"
               class="form-control" disabled value={{data["Age"]}}>
           </div>
         </div>
@@ -35,7 +35,7 @@
           <label for="customername" class="col-sm-4 col-form-label">Patient's Address: <text
               class="text-danger">*</text></label>
           <div class="col-sm-8">
-            <input id="customername" type="text" name="Address" onkeypress="return /[a-z]/i.test(event.key)"
+            <input id="customername" type="text" name="Address" onkeypress="return /^[a-zA-Z\s]+$/i.test(event.key)"
               class="form-control" disabled value={{data["Address"]}}>
           </div>
         </div>

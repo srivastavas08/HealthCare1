@@ -1,22 +1,26 @@
-{% extends 'layout.html' %}
-
-{% block body %}
+{% extends 'layout.html' %} {% block body %}
 <div class="row justify-content-center mb-3">
   <div class="col-md-6">
-    <h1>Search Patient Records</h1>
+    <h2 class="text-center mt-5">Search Patient Records For Diagnosis</h2>
     <form action="" method="POST">
-      <div class="form-row">
+      <div class="form-row my-5">
         <div class="form-group col-md-12">
-          <label>Patient ID</label>
-          <input type="number" name="pid" onkeypress="return /[0-9]/i.test(event.key)" class="form-control" required
-            value={{request.form.pid}}>
+          <div class="input-group mb-3">
+            <label for="inputid" class="col-md-4 col-form-label">Enter Patient ID:</label>
+            <input type="number" name="pid" onkeypress="return /[0-9]/i.test(event.key)" class="form-control"
+              placeholder="Patient ID" required value="{{request.form.pid}}" id="inputid"
+              aria-describedby="button-addon2" />
+            <div class="input-group-append">
+              <button class="btn btn-dark text-warning" type="submit" id="button-addon2">
+                View Patient
+              </button>
+            </div>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary">View</button>
       </div>
     </form>
   </div>
 </div>
-
 
 <div class="container">
   <table class="table table-hover table-striped table-bordered">
@@ -35,7 +39,6 @@
 
     <tbody>
       <tr>
-
         <td>{{data.Name}}</td>
         <td>{{data.Age}}</td>
         <td>{{data.Address}}, {{data.City}}, {{data.State}}</td>
@@ -43,16 +46,14 @@
         <td>{{data.BedType}}</td>
         <td>{{data.dam}}</td>
         <td>
-          <p><a href="{{ url_for( 'refer_test' ,pid=data.PID ) }}">Refer Test</a></p>
+          <p>
+            <a href="{{ url_for( 'refer_test' ,pid=data.PID ) }}">Refer Test</a>
+          </p>
         </td>
-
-
-
       </tr>
     </tbody>
     {% endif %}
   </table>
-
 </div>
 
 {% endblock %}

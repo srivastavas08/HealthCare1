@@ -12,15 +12,29 @@
 
 <body>
 
-    <div class="container-fluid text-center top-container bg-light">
-        <img src="{{ url_for('static',filename='images/logo.png')}}">
+    <div class="container-fluid bg-light">
+        <div class="container">
+            <div class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ url_for('static',filename='images/logo.png')}}" width="50" height="50"
+                        class="d-inline-block align-middle" alt="" loading="lazy">
+                        Sigma Health Care Services
+                </a>
+                {% if session['username'] %}
+                <h4 class="text-right vertical-middle">Welcome, {{ session['username'] }}</h4>
+                {% endif %}
+            </div>
+            <!--<div class="text-center">
+            <img src="{{ url_for('static',filename='images/logo.png')}}">
+        </div>-->
+        </div>
     </div>
+
+
 
     {% include "includes/nav.html" %}
 
-    {% if session['username'] %}
-    <span class="user">Welcome, {{ session['username'] }}</span>
-    {% endif %}
+
 
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}

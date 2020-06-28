@@ -39,6 +39,7 @@ div.col-md-6.d-flex.mt-2.cont-right{
     color :red;
 }
 
+/*
 .user {
     float: right;
     position: absolute;
@@ -46,6 +47,7 @@ div.col-md-6.d-flex.mt-2.cont-right{
     right: 10em;
     top: 2em;
 }
+*/
 
 .image-banner{
     height: auto;

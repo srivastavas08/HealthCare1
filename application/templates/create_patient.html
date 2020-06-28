@@ -12,7 +12,8 @@
                         {{ form.aadhar.label }}<text class="text-danger">*</text>
                     </div>
                     <div class="col-sm-8">
-                        {{ form.aadhar(class_="form-control", onkeypress="return /[0-9]/i.test(event.key)") }}</div>
+                        
+                        {{ form.aadhar(class_="form-control", onkeypress="return /[0-9]{1,12}/i.test(event.key)") }}</div>
                     {% for error in form.aadhar.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
@@ -22,7 +23,7 @@
                         {{ form.name.label }}<text class="text-danger">*</text>
                     </div>
                     <div class="col-sm-8">
-                        {{ form.name(class_="form-control", onkeypress="return /[a-z]/i.test(event.key)") }}</div>
+                        {{ form.name(class_="form-control", onkeypress="return /^[a-zA-Z\s]+$/i.test(event.key)") }}</div>
                     {% for error in form.name.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
@@ -33,7 +34,7 @@
                         {{ form.age.label }}<text class="text-danger">*</text>
                     </div>
                     <div class="col-sm-8">
-                        {{ form.age(class_="form-control", onkeypress="return /[0-9]/i.test(event.key)") }}</div>
+                        {{ form.age(class_="form-control", onkeypress="return /^[0-9]{1,3}$/i.test(event.key)") }}</div>
                     {% for error in form.age.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
@@ -52,7 +53,7 @@
                     <div class="col-sm-4 col-form-label">
                         {{ form.city.label }}<text class="text-danger">*</text>
                     </div>
-                    <div class="col-sm-8">{{ form.city(class_="form-control") }}</div>
+                    <div class="col-sm-8">{{ form.city(class_="form-control", onkeypress="return /^[a-zA-Z\s]+$/i.test(event.key)") }}</div>
                     {% for error in form.city.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
@@ -61,7 +62,7 @@
                     <div class="col-sm-4 col-form-label">
                         {{ form.state.label }}<text class="text-danger">*</text>
                     </div>
-                    <div class="col-sm-8">{{ form.state(class_="form-control") }}</div>
+                    <div class="col-sm-8">{{ form.state(class_="form-control", onkeypress="return /^[a-zA-Z\s]+$/i.test(event.key)") }}</div>
                     {% for error in form.state.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}

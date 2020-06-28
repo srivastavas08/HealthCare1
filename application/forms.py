@@ -32,10 +32,10 @@ class RegisterForm(FlaskForm):
 
 
 class Patient(FlaskForm):
-    aadhar = IntegerField("Aadhar No.", validators=[DataRequired()])
+    aadhar = StringField("Aadhar No.", validators=[DataRequired(), Length(min=12, max=12)])
     name = StringField("Name", validators=[DataRequired()])
     address = StringField("Address", validators=[DataRequired()])
-    age = IntegerField("Age", validators=[DataRequired()])
+    age = StringField("Age", validators=[DataRequired(), Length(min=1, max=3)])
     #date = DateTimeField("Date of Admit", format="%d-%m-%Y")
     state = StringField("State", validators=[DataRequired()])
     bedtype = StringField("Bed Type", validators=[DataRequired()])
