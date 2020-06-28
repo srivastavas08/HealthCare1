@@ -31,7 +31,9 @@ def login():
         password = form.password.data
 
         user = User.objects(email=email).first()
-        login_flag = check_if_pharmacist(email)
+        pharmacist_flag = check_if_pharmacist(email)
+        diagnostic_flag = check_if_diagnostic(email)
+
 
         if user and user.get_password(password):
             flash(f"{user.first_name}, You are successfully logged in", "success")
@@ -84,6 +86,9 @@ def logout():
 def createpatient():
     
     if not session.get('username'):
+        return redirect(url_for('index'))
+    if(cashier_flag != 1):
+        flash(f"unprivilaged access, login with cashier/teller account", "danger")
         return redirect(url_for('index'))
 
     form = Patient()
@@ -497,22 +502,7 @@ def BillGeneration(pid=None):
             now_date = datetime.now(timezone.utc).replace(tzinfo=None)
             days_admitted = now_date - dam
             days_admitted = days_admitted.days
-            bedcharges = check_bedtype(bed)
-            
-            # previous tested version
-            # issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
-            # issue_list = []
-            # for i in issue_object:
-            #     issue_dict = create_patient_diag_dict(i)
-            #     issue_list.append(issue_dict)
-        
-            # previous tested version
-            # issue_object_pharmacy = PatientPharmacy.objects.filter(patient_id = pid).all()
-            # issue_pharmacy = []
-            # for i in issue_object_pharmacy:
-            #     issue_dict_pharmacy = create_issue_dict(i)
-            #     issue_pharmacy.append(issue_dict_pharmacy)
-            
+            bedcharges = check_bedtype(bed)            
 
             # new join/merged methods used (unreviwed)
             issue_object_diagnosis = make_patient_diagnosis_join(pid)
@@ -527,25 +517,40 @@ def BillGeneration(pid=None):
             for i in issue_object_pharmacy:
                 issue_dict_pharmacy = create_patient_pharmacy_dict(i)
                 issue_pharmacy.append(issue_dict_pharmacy)
-
-            # new method to get patient used (unreviewed)
-            # target_patient = NewPatient.objects(patient_id = pid).get()
-            # target_patient_dict = create_customer_account_dict(target_patient)
             
+
             total_admission_bill = get_total_admission_bill(jdata)
             if(total_admission_bill['Total_Bill'] <= 0):
                 flash("error generating admission bill", "danger")
                 return redirect(url_for('search_patient'))
             
+
             total_pharmacy_bill = get_total_pharmacy_bill(pid)
-            if(total_pharmacy_bill['Total_Bill'] < 0):
-                flash("error generating pharmacy bill", "danger")
-                # return redirect(url_for('search_patient'))
+            if('Total_Bill' not in total_pharmacy_bill):
+                total_pharmacy_bill['Total_Bill'] = 0
+                try:
+                    if(total_pharmacy_bill['Total_Bill'] < 0):
+                        flash("error generating pharmacy bill", "danger")
+                except:
+                    flash("error generating pharmacy bill", "danger")
         
+
             total_diagnosis_bill = get_total_diagnosis_bill(pid)
-            if(total_diagnosis_bill['Total_Bill'] < 0):
-                flash("error generating diagnosis bill", "danger")
-                # return redirect(url_for('search_patient'))
+            if('Total_Bill' not in total_diagnosis_bill):
+                total_diagnosis_bill['Total_Bill'] = 0
+                try:
+                    if(total_diagnosis_bill['Total_Bill'] < 0):
+                        flash("error generating diagnosis bill", "danger")
+                except:
+                    flash("error generating diagnosis bill", "danger")
+            
+            
+            # try:
+            #     if(total_diagnosis_bill['Total_Bill'] < 0):
+            #         flash("error generating diagnosis bill", "danger")
+            # except:
+            #     flash("error generating diagnosis bill", "danger")
+            #     # return redirect(url_for('search_patient'))
 
             grand_total_bill = total_admission_bill['Total_Bill'] +total_pharmacy_bill['Total_Bill'] +total_diagnosis_bill['Total_Bill']
 
