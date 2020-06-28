@@ -635,7 +635,7 @@ def check_if_pharmacist(email):
     email = str(email).strip().lower()
     email = email.split('@')[1]
     email = email.split('.')[0]
-    if (email == 'pharmacy' or email == 'executive'):
+    if (email == 'pharmacist' or email == 'executive'):
         # print('YES')
         is_login_flag = 1
     return is_login_flag
