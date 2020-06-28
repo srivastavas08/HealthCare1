@@ -5,6 +5,7 @@
 
 <div class="container">
   <table class="table table-hover table-striped table-bordered">
+    <h1>Patient Records</h1>
     <thead>
       <tr class="bg-dark text-warning">
         <th>Name</th>
@@ -28,11 +29,12 @@
         <td>{{data.dam}}</td>
       </tr>
     </tbody>
-    {% endif %}
+   
   </table>
 
   <div class="container">
     <table class="table table-hover table-striped table-bordered">
+      <h1>Issued Test to {{data.Name}}</h1>
       <thead>
         <tr class="bg-dark text-warning">
           <th>Test Name</th>
@@ -52,12 +54,14 @@
       {% endfor %}
       {% endif %}
     </table>
+    {% endif %}
   </div>  
  
 </div> 
 
   <div class="container">
     <table class="table table-hover table-striped table-bordered">
+      <h1>Issuing Diagnosis Details</h1>
       <thead>
         <tr class="bg-dark text-warning">
           <th>Test Name</th>
@@ -65,12 +69,12 @@
           <th>Rate</th>
         </tr>
       </thead>
-      {% if med_data%}
+      {% if test_data%}
       <tbody>
         <tr>
-          <td>{{med_data.Name}}</td>
-          <td>{{med_data.Test_ID}}</td>
-          <td>{{med_data.Price}}</td>
+          <td>{{test_data.Name}}</td>
+          <td>{{test_data.Test_ID}}</td>
+          <td>{{test_data.Price}}</td>
         </tr>
       </tbody>
       {% endif %}

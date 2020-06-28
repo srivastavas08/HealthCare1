@@ -14,6 +14,7 @@
         {% if data %}
         <thead>
             <tr class="bg-dark text-warning">
+                <th>Patient ID</th>
                 <th>Name</th>
                 <th>Age</th>
                 <th>Address</th>
@@ -26,7 +27,7 @@
         {% for i in data%}
         <tbody>
             <tr>
-
+                <td>{{i.PID}}</td>
                 <td>{{i.Name}}</td>
                 <td>{{i.Age}}</td>
                 <td>{{i.Address}}</td>

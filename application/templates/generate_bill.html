@@ -4,6 +4,7 @@
 <div class="row justify-content-center mb-3">
 
     <div class="container">
+        <h1>Patient Details</h1>
         <table class="table table-hover table-striped table-bordered">
             <thead>
                 <tr class="bg-dark text-warning">
@@ -31,10 +32,11 @@
             {% endif %}
         </table>
         {% if admission_bill %}
-        <p> Total Admissioon Bill = {{admission_bill.Total_Bill}}</p>
+        <p> Hospitality Charges = {{admission_bill.Total_Bill}}</p>
         {% endif %} 
     </div>
         <div class="container">
+            <h1>Pharmacy Charges</h1>
             <table class="table table-hover table-striped table-bordered">
                 <thead>
                     <tr class="bg-dark text-warning">
@@ -71,6 +73,7 @@
     </div>
     <div class="container">
         <table class="table table-hover table-striped table-bordered">
+            <h1>Diagnostic Charges</h1>
             <thead>
                 <tr class="bg-dark text-warning">
                     <th>Test Name</th>
