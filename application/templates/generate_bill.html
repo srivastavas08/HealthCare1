@@ -11,10 +11,10 @@
                     <th>Name</th>
                     <th>Age</th>
                     <th>Address</th>
-                    <th>City</th>
                     <th>Status</th>
                     <th>Bed Type</th>
                     <th>Date of Admission</th>
+                    <th>Date of Discharge</th>
                 </tr>
             </thead>
             {% if data %}
@@ -22,17 +22,19 @@
                 <tr>
                     <td>{{data.Name}}</td>
                     <td>{{data.Age}}</td>
-                    <td>{{data.Address}}</td>
-                    <td>{{data.City}}</td>
+                    <td>{{data.Address}}, {{data.City}}, {{data.State}}</td>
                     <td>{{data.Status}}</td>
                     <td>{{data.BedType}}</td>
                     <td>{{data.dam}}</td>
+                    <th>{{now_date}}</th>
                 </tr>
             </tbody>
-            {% endif %}
+            
         </table>
         {% if admission_bill %}
-        <p> Hospitality Charges = {{admission_bill.Total_Bill}}</p>
+        <p>Number of Days = {{days_admitted}}  </p>
+        <p>Bed Charge for Single Day = {{bedcharges}}</p>
+        <p>Hospitality Charges = {{admission_bill.Total_Bill}}</p>
         {% endif %} 
     </div>
         <div class="container">
@@ -45,7 +47,9 @@
                         <th>Medicine Name</th>
                         <th>Medicine Price</th>
                         <th>Quantity Issued</th>
+                        <th>Amount</th>
                         <th>Date of issue</th>
+
                     </tr>
                 </thead>
                 {% if issue_pharmacy %}
@@ -58,6 +62,7 @@
                         <td>{{i.Name}}</td>
                         <td>{{i.Price}}</td>
                         <td>{{i.Quantity}}</td>
+                        <td>{{i.Quantity * i.Price}}</td>
                         <td>{{i.das}}</td>
 
                     </tr>
@@ -101,11 +106,15 @@
             <p> Total Diagnosis Bill = {{diagnosis_bill.Total_Bill}}</p>
         {% endif %}
     </div>
-<div>
+<div class=" col-md-6 mx-auto my-3">
+    <form>
     {% if grand_bill %}
     <p> <h3>Grand Total = {{grand_bill}}</h3> </p>
     {% endif %}
+     action="{{ url_for( 'DeletePatient' ,pid=data.PID ) }}">
+        <button type="submit">Discharge</button>
+     </form>
 </div>
-
+{% endif %}
 </div>
 {% endblock %}

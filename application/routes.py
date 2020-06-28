@@ -492,6 +492,12 @@ def BillGeneration(pid=None):
             helper_class = HelperCustomer()
             target_customer_object = helper_class.get_customer_for_update(pid)
             jdata = create_customer_account_dict(target_customer_object)
+            dam = jdata['dam']
+            bed = jdata['BedType']
+            now_date = datetime.now(timezone.utc).replace(tzinfo=None)
+            days_admitted = now_date - dam
+            days_admitted = days_admitted.days
+            bedcharges = check_bedtype(bed)
             
             # previous tested version
             # issue_object = PatientDiagnosis.objects.filter(patient_id = pid).all()
@@ -532,19 +538,19 @@ def BillGeneration(pid=None):
                 return redirect(url_for('search_patient'))
             
             total_pharmacy_bill = get_total_pharmacy_bill(pid)
-            if(total_pharmacy_bill['Total_Bill'] <= 0):
+            if(total_pharmacy_bill['Total_Bill'] < 0):
                 flash("error generating pharmacy bill", "danger")
                 # return redirect(url_for('search_patient'))
         
             total_diagnosis_bill = get_total_diagnosis_bill(pid)
-            if(total_diagnosis_bill['Total_Bill'] <= 0):
+            if(total_diagnosis_bill['Total_Bill'] < 0):
                 flash("error generating diagnosis bill", "danger")
                 # return redirect(url_for('search_patient'))
 
             grand_total_bill = total_admission_bill['Total_Bill'] +total_pharmacy_bill['Total_Bill'] +total_diagnosis_bill['Total_Bill']
 
 
-            return render_template('generate_bill.html',data=jdata, issue_diagnosis=issue_diagnosis, issue_pharmacy=issue_pharmacy, pharmacy_bill = total_pharmacy_bill, diagnosis_bill = total_diagnosis_bill, admission_bill = total_admission_bill, grand_bill = grand_total_bill)
+            return render_template('generate_bill.html',data=jdata, issue_diagnosis=issue_diagnosis, issue_pharmacy=issue_pharmacy, pharmacy_bill = total_pharmacy_bill, diagnosis_bill = total_diagnosis_bill, admission_bill = total_admission_bill, grand_bill = grand_total_bill, now_date=now_date, days_admitted=days_admitted, bedcharges=bedcharges)
 
         return redirect(url_for('generate_bill.html',pid = pid))
 
@@ -828,5 +834,16 @@ def get_total_admission_bill(patient_dict):
         total_admission_bill = 0
     admission_bill_dict['Total_Bill'] = int(total_admission_bill)
     return admission_bill_dict
+
+def check_bedtype(bedtype):
+    bedtype = bedtype.lower()
+    bed_price = 1
+    if(bedtype == "generalward" or bedtype == "general ward"):
+        bed_price = 2000
+    elif(bedtype == "semisharing" or bedtype == "semi sharing"):
+        bed_price = 4000
+    elif(bedtype == "singleroom" or bedtype == "single room"):
+        bed_price = 8000
+    return bed_price
 
 ##############################################################################
