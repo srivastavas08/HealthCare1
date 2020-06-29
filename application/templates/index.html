@@ -2,16 +2,16 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-12 text-center">
+    <div class="col-md-12 text-center mt-5 mb-3">
         <h1>Welcome to Sigma Health Care Services.</h1>
 
         {% if session['username'] %}
-        <h3 class="mb-3">Let's get started.</h3>
+        <h3 class="mb-3 mt-3">Let's get started.</h3>
         {% else %}
         <p class="mb-3">Already registered? <a href="{{url_for('login') }}">Login</a></p>
         {% endif %}
 
-        <div class="bg-dark text-light">
+        <div class="bg-dark text-light mt-3 mb-3">
             <br>
             <h4>OUR VISION </h4>
             <p>SIGMA's vision for the next phase of development is to "Bring a change in the Society"</p> <br>

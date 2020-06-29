@@ -1,20 +1,22 @@
+import time
+from datetime import datetime, timezone
+from random import randint
+from application.forms import LoginForm, RegisterForm, Patient
 from application import app
 from flask import render_template, request, redirect, flash, url_for, session
-from application.models import User, NewPatient, HelperCustomer, MasterDiagnosis, MasterPharmacy, PatientPharmacy, PatientDiagnosis
-from application.forms import LoginForm, RegisterForm, Patient
-from random import randint
-from datetime import datetime, timezone
-import time
+from application.models import User, NewPatient, HelperCustomer  
+from application.models import MasterDiagnosis, MasterPharmacy, PatientPharmacy, PatientDiagnosis
 
-########################################################################################
-#routes
+#################################################################################################################################################
+                                                # routes
 
-#INDEX
+# INDEX
 
 
 @app.route("/")
-@app.route("/index")  # all these will redirect to a single function index
+@app.route("/index")
 @app.route("/home")
+# all these will redirect to a single function index
 def index():
     return render_template("index.html", index=True)
 
@@ -22,10 +24,10 @@ def index():
 # Login
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-
+    # for checking active session
     if session.get('username'):
         return redirect(url_for('index'))
-
+    # Login form to take input data
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -50,9 +52,10 @@ def register():
 
     if session.get('username'):
         return redirect(url_for('index'))
-
+    # Register Form kept only for personal use to register new executive, pharmacist or diagnostic
     form = RegisterForm()
     if form.validate_on_submit():
+        # for creating unique user id
         user_id = User.objects.count()
         user_id += 1
 
@@ -90,15 +93,10 @@ def createpatient():
         flash(f"unprivilaged access as executive", "danger")
         return redirect(url_for('index'))
 
-    # flag = session.get('executive_flag')
-    # print(flag)
-    # if(flag != 1):
-    #     flash(f"unprivilaged access", "danger")
-    #     return redirect(url_for('index'))
-
+    # Taking Input from Patient form
     form = Patient()
     if form.validate_on_submit():
-
+        # Generating 9 digit unique patient id
         patient_id = NewPatient.objects.count() + 100000001
         patient_id += 1
 
@@ -122,9 +120,8 @@ def createpatient():
         return redirect(url_for('index'))
     return render_template('create_patient.html', title="Admit New Patient", form=form, creatpatient=True)
 
+
 # UpdatePatient
-
-
 @app.route('/update_patient', methods=['GET', 'POST'])
 @app.route('/update_patient/', methods=['GET', 'POST'])
 @app.route('/update_patient/<pid>', methods=['GET', 'POST'])
@@ -132,6 +129,7 @@ def UpdatePatient(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
 
+    # To validate session only for executive
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
         flash(f"unprivilaged access as executive", "danger")
@@ -142,6 +140,7 @@ def UpdatePatient(pid=None):
             flash("enter patient id", "danger")
             return render_template('display_searched_patient.html')
         else:
+            # Helper class is used to ead data from database
             helper_class = HelperCustomer()
             target_customer_object = helper_class.get_customer_for_update(pid)
             jdata = target_customer_object
@@ -180,9 +179,8 @@ def UpdatePatient(pid=None):
         return render_template('update_patient.html', data=jdata)
     return render_template('update_patient.html', data=jdata, UpdatePatient=True)
 
+
 # display patients Records status
-
-
 @app.route('/view_record', methods=['GET', 'POST'])
 def view_record():
     if not session.get('username'):
@@ -230,9 +228,9 @@ def DeletePatient(pid):
         if(len(target_customer_object) > 0 and not None):
             try:
                 target_customer_object.delete()
-                flash("delete successful", "success")
+                flash("Patient is successfully Discharged", "success")
             except:
-                flash("delete unsuccessful", "danger")
+                flash("Patient cannot be discharged", "danger")
                 return render_template('delete_customer.html', data=jdata)
     return render_template('delete_customer.html', data=jdata, DeletePatient=True)
 
@@ -265,6 +263,8 @@ def search_patient():
 def assign_medicines(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
+
+    # To Validate session only for executive and pharmacist
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
         flash(f"unprivilaged access as pharmacist", "danger")
@@ -296,7 +296,6 @@ def assign_medicines(pid=None):
         return redirect(url_for('assign_medicines', pid=pid))
 
     if request.method == 'POST':
-        # pid  = request.form['pid']
         if (pid == None):
             flash("no patient id found", "danger")
             return redirect(url_for('search_patient_pharmacy'))
@@ -346,9 +345,8 @@ def assign_medicines(pid=None):
             return render_template('transfer_medicines.html', data=jdata, med_data=med_dict, issue_data=issue_list)
     return render_template('transfer_medicines.html', data=None)
 
+
 # display Available Medicine Records status
-
-
 @app.route('/stock_medicines', methods=['GET', 'POST'])
 def viewPharmacy():
     if not session.get('username'):
@@ -386,13 +384,14 @@ def search_patient_pharmacy():
             return render_template('search_patient_pharmacy.html', data=jdata)
     return render_template('search_patient_pharmacy.html', data=None)
 
+
 # display patients status for Diagnosis
-
-
 @app.route('/search_patient_diagnosis', methods=['GET', 'POST'])
 def search_patient_diagnosis():
     if not session.get('username'):
         return redirect(url_for('index'))
+
+    #To validate session only for executive and diagnostic    
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
         flash(f"unprivilaged access as diagnostic", "danger")
@@ -408,8 +407,8 @@ def search_patient_diagnosis():
             return render_template('search_patient_diagnosis.html', data=jdata)
     return render_template('search_patient_diagnosis.html', data=None)
 
-# refer test
 
+# For adding Diagnostic
 
 @app.route('/refer_test', methods=["GET", "POST"])
 @app.route('/refer_test/', methods=["GET", "POST"])
@@ -449,7 +448,7 @@ def refer_test(pid=None):
         return redirect(url_for('refer_test', pid=pid))
 
     if request.method == 'POST':
-        # pid  = request.form['pid']
+        
         if (pid == None):
             flash("no patient id found", "danger")
             return redirect(url_for('search_patient_diagnosis'))
@@ -492,8 +491,8 @@ def refer_test(pid=None):
             return render_template('refer_test.html', data=jdata, test_data=test_dict, issue_data=issue_list)
     return render_template('refer_test.html', data=None)
 
-# display Available test Records status
 
+# display Available test Records status
 
 @app.route('/available_test', methods=['GET', 'POST'])
 def TestAvailable():
@@ -511,8 +510,8 @@ def TestAvailable():
         print(record)
     return render_template('diagnosis.html', data=record)
 
-# Generate Bill customer Search
 
+# Generate Bill customer Search
 
 @app.route('/billing', methods=['GET', 'POST'])
 def BillGeneration_customer_screen():
@@ -566,14 +565,14 @@ def BillGeneration(pid=None):
             days_admitted = days_admitted.days
             bedcharges = check_bedtype(bed)
 
-            # new join/merged methods used (unreviwed)
+            # new join/merged methods used (reviwed)
             issue_object_diagnosis = make_patient_diagnosis_join(pid)
             issue_diagnosis = []
             for i in issue_object_diagnosis:
                 issue_diagnosis_dict = create_patient_diagnosis_dict(i)
                 issue_diagnosis.append(issue_diagnosis_dict)
 
-            # new join/merged methods used (unreviewed)
+            # new join/merged methods used (reviewed)
             issue_object_pharmacy = make_patient_pharmacy_join(pid)
             issue_pharmacy = []
             for i in issue_object_pharmacy:
@@ -607,16 +606,20 @@ def BillGeneration(pid=None):
                 total_pharmacy_bill['Total_Bill'] + \
                 total_diagnosis_bill['Total_Bill']
 
-            return render_template('generate_bill.html', data=jdata, issue_diagnosis=issue_diagnosis, issue_pharmacy=issue_pharmacy, pharmacy_bill=total_pharmacy_bill, diagnosis_bill=total_diagnosis_bill, admission_bill=total_admission_bill, grand_bill=grand_total_bill, now_date=now_date, days_admitted=days_admitted, bedcharges=bedcharges)
+            return render_template('generate_bill.html', data=jdata, issue_diagnosis=issue_diagnosis,
+                issue_pharmacy=issue_pharmacy, pharmacy_bill=total_pharmacy_bill, diagnosis_bill=total_diagnosis_bill,
+                admission_bill=total_admission_bill, grand_bill=grand_total_bill, now_date=now_date,
+                 days_admitted=days_admitted, bedcharges=bedcharges)
 
         return redirect(url_for('generate_bill.html', pid=pid))
 
     return render_template('generate_bill.html', data=None)
 
-#############################################################################################
-##############################################################################
-    # FUNCTIONS
+########################################################################################################################################3
+##########################################################################################################################################
+                                            # HELPER FUNCTIONS
 
+#To check session for executive
 
 def check_if_executive(email):
     is_login_flag = 0
@@ -628,6 +631,7 @@ def check_if_executive(email):
         is_login_flag = 1
     return is_login_flag
 
+#To check session for pharmacist and Executive
 
 def check_if_pharmacist(email):
     is_login_flag = 0
@@ -640,6 +644,8 @@ def check_if_pharmacist(email):
     return is_login_flag
 
 
+#To check session for Diagnostic and Executive
+
 def check_if_diagnostic(email):
     is_login_flag = 0
     email = str(email).strip().lower()
@@ -651,12 +657,14 @@ def check_if_diagnostic(email):
     return is_login_flag
 
 
+#Used for generating unique patient id
+
 def generate_unique():
     rn = randint(10, 99)
     return rn
 
-# patient dict
 
+# patient dict
 
 def create_customer_account_dict(target_customer_object):
     data_dict = {}
@@ -673,8 +681,8 @@ def create_customer_account_dict(target_customer_object):
     data_dict["dam"] = target_customer_object.dam
     return data_dict
 
-# master pharmacy dict
 
+# master pharmacy dict
 
 def create_medicine_dict(med_object):
     data_dict = {}
@@ -686,7 +694,6 @@ def create_medicine_dict(med_object):
 
 # master diagnosis dict
 
-
 def create_diag_dict(diag_object):
     data_dict = {}
     data_dict['Name'] = diag_object.test_name
@@ -695,7 +702,6 @@ def create_diag_dict(diag_object):
     return data_dict
 
 # patient diagnosis dict to be merged
-
 
 def create_patient_diag_dict(diag_object):
     data_dict = {}
@@ -707,7 +713,6 @@ def create_patient_diag_dict(diag_object):
 
 # patient medicine dict to be merged
 
-
 def create_issue_dict(issue_object):
     data_dict = {}
     data_dict['Medicine_ID'] = issue_object.medicine_id
@@ -715,12 +720,9 @@ def create_issue_dict(issue_object):
     data_dict['Message'] = issue_object.msg
     data_dict['Quantity_Issued'] = issue_object.medicine_qty
     data_dict['das'] = issue_object.das
-
-    # data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
     return data_dict
 
 # patient diagnosis dict to be merged
-
 
 def create_refered_test_dict(issue_object):
     data_dict = {}
@@ -728,32 +730,35 @@ def create_refered_test_dict(issue_object):
     data_dict['Patient_ID'] = issue_object.patient_id
     data_dict['Message'] = issue_object.msg
     data_dict['das'] = issue_object.das
-
-    # data_dict['Total_Amount'] = issue_object.medicine_qty*issue_object.medicine_price
     return data_dict
 
+#To format input date format 
 
 def format_dates(date1):
     d1 = time.strptime(date1, "%Y-%m-%d")
     return d1
 
+#To format input time format 
 
 def format_time(time1):
     t1 = time.strptime(time1, "%H:%M:%S")
     return t1
 
+#To format input time format 
 
 def insert_now_time():
     now_time = datetime.now(timezone.utc).replace(
         second=0, microsecond=0, hour=0, minute=0).strftime("%Y-%m-%d %H:%M")
     return now_time
 
+#To format input date format 
 
 def format_date_with_time(dam):
     formatted_date_time = dam.replace(
         second=0, microsecond=0, hour=0, minute=0).strftime("%Y-%m-%d %H:%M")
     return formatted_date_time
 
+#Aggregation pharmacy Bill Pipeline to read pharmacy bill
 
 def get_total_pharmacy_bill(pid):
     pid = int(pid)
@@ -793,6 +798,7 @@ def get_total_pharmacy_bill(pid):
         pharmacy_bill_dict['Total_Bill'] = i['final_pharmacy']
     return pharmacy_bill_dict
 
+#Aggregation Diagnosis Bill Pipeline to read Diagnosis bill
 
 def get_total_diagnosis_bill(pid):
     pid = int(pid)
@@ -828,8 +834,8 @@ def get_total_diagnosis_bill(pid):
         pharmacy_bill_dict['Total_Bill'] = i['total_diagnosis']
     return pharmacy_bill_dict
 
-# master pharmacy and patient_pharmacy merged
 
+# master pharmacy and patient_pharmacy merged
 
 def make_patient_pharmacy_join(pid):
     pid = int(pid)
@@ -855,8 +861,8 @@ def make_patient_pharmacy_join(pid):
     data_object = PatientPharmacy.objects().aggregate(pharmacy_join)
     return data_object
 
-# master pharmacy and patient_pharmacy merged
 
+# master pharmacy and patient_pharmacy merged
 
 def create_patient_pharmacy_dict(patient_pharmacy_object):
     data_dict = {}
@@ -870,6 +876,7 @@ def create_patient_pharmacy_dict(patient_pharmacy_object):
 
 
 # master daignosis and patient_diagnosis merged
+
 def make_patient_diagnosis_join(pid):
     pid = int(pid)
     diagnosis_join = [
@@ -894,8 +901,8 @@ def make_patient_diagnosis_join(pid):
     data_object = PatientDiagnosis.objects().aggregate(diagnosis_join)
     return data_object
 
-# master diagnosis and patient_diagnosis merged
 
+# master diagnosis and patient_diagnosis merged
 
 def create_patient_diagnosis_dict(patient_diagnosis_object):
 
@@ -907,8 +914,8 @@ def create_patient_diagnosis_dict(patient_diagnosis_object):
     data_dict['das'] = patient_diagnosis_object['das']
     return data_dict
 
-# calculate admission bill wrt now date
 
+# calculate admission bill wrt now date
 
 def get_total_admission_bill(patient_dict):
     dam = patient_dict['dam']
@@ -932,6 +939,7 @@ def get_total_admission_bill(patient_dict):
     admission_bill_dict['Total_Bill'] = int(total_admission_bill)
     return admission_bill_dict
 
+#Return Charges for BedType in Bill
 
 def check_bedtype(bedtype):
     bedtype = bedtype.lower()
