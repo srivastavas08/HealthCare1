@@ -34,14 +34,14 @@ class NewPatient(db.Document):
 
 #For Available Medicines
 class MasterPharmacy(db.Document):
-    medicine_id = db.IntField(max_length=4)
+    medicine_id = db.IntField(max_length=4, unique=True)
     medicine_name = db.StringField()
     medicine_qty = db.IntField()
     medicine_price = db.FloatField()
 
 #For Available Diagnosis
 class MasterDiagnosis(db.Document):
-    test_id = db.IntField(max_length=4)
+    test_id = db.IntField(max_length=4, unique=True)
     test_name = db.StringField()
     test_price = db.FloatField()
 

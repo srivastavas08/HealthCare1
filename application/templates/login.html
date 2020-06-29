@@ -13,7 +13,7 @@
                     <div class="col-sm-4 col-form-label">
                         {{ form.email.label }}<text class="text-danger">*</text>
                     </div>
-                    <div class="col-sm-8">{{ form.email(size=35, class_="form-control") }}</div>
+                    <div class="col-sm-8">{{ form.email(size=35, class_="form-control", placeholder="Enter User Id here") }}</div>
                     {% for error in form.email.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
@@ -22,7 +22,7 @@
                     <div class="col-sm-4 col-form-label">
                         {{ form.password.label }}<text class="text-danger">*</text>
                     </div>
-                    <div class="col-sm-8">{{ form.password(size=35, class_="form-control") }}</div>
+                    <div class="col-sm-8">{{ form.password(size=35, class_="form-control", placeholder="Enter Password here") }}</div>
                     {% for error in form.password.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
