@@ -366,7 +366,6 @@ def viewPharmacy():
         return redirect(url_for('index'))
        
     if request.method == "GET":
-        print('inside get')
         record = []
         for x in MasterPharmacy.objects():
             tmp = create_medicine_dict(x)
@@ -374,7 +373,6 @@ def viewPharmacy():
         return render_template('view_pharmacy.html', data=record)
     
     if request.method == 'POST':
-        print('inside post')
         medicine_id = request.form.get('medicine_id', type=int)
         record = []
         for x in MasterPharmacy.objects():
@@ -546,7 +544,23 @@ def TestAvailable():
             tmp = create_diag_dict(x)
             record.append(tmp)
         print(record)
-    return render_template('diagnosis.html', data=record)
+        return render_template('diagnosis.html', data=record)
+    
+    try:
+        if request.method == "POST":
+            record = []
+            for x in MasterDiagnosis.objects():
+                tmp = create_diag_dict(x)
+                record.append(tmp)
+
+            test_id = request.form.get('test_id', type=int)
+
+            test_object = MasterDiagnosis.objects(test_id=test_id).get()
+            test_dict = create_diag_dict(test_object)
+            return render_template('diagnosis.html', test_dict=test_dict, data=record)
+    except:
+        flash(f"Invalid Test ID", "danger")
+        return redirect(url_for('TestAvailable'))
 
 
 # Generate Bill customer Search
