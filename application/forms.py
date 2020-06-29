@@ -36,7 +36,6 @@ class Patient(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     address = StringField("Address", validators=[DataRequired()])
     age = StringField("Age", validators=[DataRequired(), Length(min=1, max=3)])
-    #date = DateTimeField("Date of Admit", format="%d-%m-%Y")
     state = StringField("State", validators=[DataRequired()])
     bedtype = StringField("Bed Type", validators=[DataRequired()])
     city = StringField("City", validators=[DataRequired()])

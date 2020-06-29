@@ -11,13 +11,14 @@ class User(db.Document):
     email = db.StringField(max_length=30, unique=True)
     password = db.StringField()
 
+    #For Generating password Hash
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def get_password(self, password):
         return check_password_hash(self.password, password)
 
-
+#For Creating New Patient Records
 class NewPatient(db.Document):
     patient_id = db.IntField(unique=True)
     name = db.StringField(max_length=50)
@@ -31,20 +32,20 @@ class NewPatient(db.Document):
     status = db.StringField()
     bedtype = db.StringField()
 
-
+#For Available Medicines
 class MasterPharmacy(db.Document):
     medicine_id = db.IntField(max_length=4)
     medicine_name = db.StringField()
     medicine_qty = db.IntField()
     medicine_price = db.FloatField()
 
-
+#For Available Diagnosis
 class MasterDiagnosis(db.Document):
     test_id = db.IntField(max_length=4)
     test_name = db.StringField()
     test_price = db.FloatField()
 
-
+#For Assigned Medicines
 class PatientPharmacy(db.Document):
     patient_id = db.IntField()
     medicine_id = db.IntField()
@@ -52,7 +53,7 @@ class PatientPharmacy(db.Document):
     msg = db.StringField()
     das = db.DateTimeField()  # das = date of assignment
 
-
+#For Assigned Test
 class PatientDiagnosis(db.Document):
     test_name = db.StringField()
     patient_id = db.IntField()
@@ -61,6 +62,7 @@ class PatientDiagnosis(db.Document):
     das = db.DateTimeField()  # das = date of assignment
 
 
+#HelperClass to read values from database
 class HelperCustomer():
     def get_customer_for_update(self, pid):
         update_customer = NewPatient.objects(patient_id=pid).get()

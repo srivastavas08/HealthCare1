@@ -4,11 +4,11 @@ from random import randint
 from application.forms import LoginForm, RegisterForm, Patient
 from application import app
 from flask import render_template, request, redirect, flash, url_for, session
-from application.models import User, NewPatient, HelperCustomer  
+from application.models import User, NewPatient, HelperCustomer
 from application.models import MasterDiagnosis, MasterPharmacy, PatientPharmacy, PatientDiagnosis
 
 #################################################################################################################################################
-                                                # routes
+# routes
 
 # INDEX
 
@@ -391,7 +391,7 @@ def search_patient_diagnosis():
     if not session.get('username'):
         return redirect(url_for('index'))
 
-    #To validate session only for executive and diagnostic    
+    #To validate session only for executive and diagnostic
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
         flash(f"unprivilaged access as diagnostic", "danger")
@@ -448,7 +448,7 @@ def refer_test(pid=None):
         return redirect(url_for('refer_test', pid=pid))
 
     if request.method == 'POST':
-        
+
         if (pid == None):
             flash("no patient id found", "danger")
             return redirect(url_for('search_patient_diagnosis'))
@@ -607,9 +607,9 @@ def BillGeneration(pid=None):
                 total_diagnosis_bill['Total_Bill']
 
             return render_template('generate_bill.html', data=jdata, issue_diagnosis=issue_diagnosis,
-                issue_pharmacy=issue_pharmacy, pharmacy_bill=total_pharmacy_bill, diagnosis_bill=total_diagnosis_bill,
-                admission_bill=total_admission_bill, grand_bill=grand_total_bill, now_date=now_date,
-                 days_admitted=days_admitted, bedcharges=bedcharges)
+                                   issue_pharmacy=issue_pharmacy, pharmacy_bill=total_pharmacy_bill, diagnosis_bill=total_diagnosis_bill,
+                                   admission_bill=total_admission_bill, grand_bill=grand_total_bill, now_date=now_date,
+                                   days_admitted=days_admitted, bedcharges=bedcharges)
 
         return redirect(url_for('generate_bill.html', pid=pid))
 
@@ -617,9 +617,10 @@ def BillGeneration(pid=None):
 
 ########################################################################################################################################3
 ##########################################################################################################################################
-                                            # HELPER FUNCTIONS
+    # HELPER FUNCTIONS
 
 #To check session for executive
+
 
 def check_if_executive(email):
     is_login_flag = 0
@@ -632,6 +633,7 @@ def check_if_executive(email):
     return is_login_flag
 
 #To check session for pharmacist and Executive
+
 
 def check_if_pharmacist(email):
     is_login_flag = 0
@@ -694,6 +696,7 @@ def create_medicine_dict(med_object):
 
 # master diagnosis dict
 
+
 def create_diag_dict(diag_object):
     data_dict = {}
     data_dict['Name'] = diag_object.test_name
@@ -702,6 +705,7 @@ def create_diag_dict(diag_object):
     return data_dict
 
 # patient diagnosis dict to be merged
+
 
 def create_patient_diag_dict(diag_object):
     data_dict = {}
@@ -712,6 +716,7 @@ def create_patient_diag_dict(diag_object):
     return data_dict
 
 # patient medicine dict to be merged
+
 
 def create_issue_dict(issue_object):
     data_dict = {}
@@ -724,6 +729,7 @@ def create_issue_dict(issue_object):
 
 # patient diagnosis dict to be merged
 
+
 def create_refered_test_dict(issue_object):
     data_dict = {}
     data_dict['Test_ID'] = issue_object.test_id
@@ -732,26 +738,30 @@ def create_refered_test_dict(issue_object):
     data_dict['das'] = issue_object.das
     return data_dict
 
-#To format input date format 
+#To format input date format
+
 
 def format_dates(date1):
     d1 = time.strptime(date1, "%Y-%m-%d")
     return d1
 
-#To format input time format 
+#To format input time format
+
 
 def format_time(time1):
     t1 = time.strptime(time1, "%H:%M:%S")
     return t1
 
-#To format input time format 
+#To format input time format
+
 
 def insert_now_time():
     now_time = datetime.now(timezone.utc).replace(
         second=0, microsecond=0, hour=0, minute=0).strftime("%Y-%m-%d %H:%M")
     return now_time
 
-#To format input date format 
+#To format input date format
+
 
 def format_date_with_time(dam):
     formatted_date_time = dam.replace(
@@ -759,6 +769,7 @@ def format_date_with_time(dam):
     return formatted_date_time
 
 #Aggregation pharmacy Bill Pipeline to read pharmacy bill
+
 
 def get_total_pharmacy_bill(pid):
     pid = int(pid)
@@ -799,6 +810,7 @@ def get_total_pharmacy_bill(pid):
     return pharmacy_bill_dict
 
 #Aggregation Diagnosis Bill Pipeline to read Diagnosis bill
+
 
 def get_total_diagnosis_bill(pid):
     pid = int(pid)
@@ -940,6 +952,7 @@ def get_total_admission_bill(patient_dict):
     return admission_bill_dict
 
 #Return Charges for BedType in Bill
+
 
 def check_bedtype(bedtype):
     bedtype = bedtype.lower()
