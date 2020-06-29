@@ -384,7 +384,6 @@ def viewPharmacy():
         med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
         med_dict = create_medicine_dict(med_object)
         if(len(med_object) > 0 and not None):
-            print('inside post render')
             return render_template('view_pharmacy.html', med_dict=med_dict, data=record)
     
     return render_template('view_pharmacy.html')
