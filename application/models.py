@@ -70,7 +70,7 @@ class HelperCustomer():
 
     def get_customer_for_delete(self, pid, aadhar, pname):
         delete_customer = NewPatient.objects(
-            patient_id=ssnid, aadhar=aadhar, name=pname).get()
+            patient_id=pid, aadhar=aadhar, name=pname).get()
         return delete_customer
 
     def get_customer_using_pid(self, pid):
