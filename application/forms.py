@@ -6,7 +6,7 @@ import datetime
 
 
 class LoginForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
+    email = StringField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[
                              DataRequired(), Length(min=6, max=15)])
     remember_me = BooleanField("Remember Me")
@@ -14,11 +14,11 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
+    email = StringField("Email", validators=[DataRequired(), Length(min=8)])
     password = PasswordField("Password", validators=[
-                             DataRequired(), Length(min=6, max=15)])
+                             DataRequired(), Length(min=10, max=15)])
     password_confirm = PasswordField("Confirm Password", validators=[
-                                     DataRequired(), Length(min=6, max=15), EqualTo('password')])
+                                     DataRequired(), Length(min=10, max=15), EqualTo('password')])
     first_name = StringField("First Name", validators=[
                              DataRequired(), Length(min=2, max=55)])
     last_name = StringField("Last Name", validators=[

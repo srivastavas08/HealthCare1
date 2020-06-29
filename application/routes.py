@@ -244,15 +244,19 @@ def search_patient():
     if(executive_flag != 1):
         flash(f"unprivilaged access as executive", "danger")
         return redirect(url_for('index'))
-    if request.method == 'GET':
-        return render_template('display_searched_patient.html')
-    if request.method == 'POST':
-        pid = request.form['pid']
-        helper_class = HelperCustomer()
-        target_customer_object = helper_class.get_customer_for_update(pid)
-        jdata = create_customer_account_dict(target_customer_object)
-        if(len(target_customer_object) > 0 and not None):
-            return render_template('display_searched_patient.html', data=jdata)
+    try:
+        if request.method == 'GET':
+            return render_template('display_searched_patient.html')
+        if request.method == 'POST':
+            pid = request.form['pid']
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
+            if(len(target_customer_object) > 0 and not None):
+                return render_template('display_searched_patient.html', data=jdata)
+    except:
+        flash(f"Invalid Patient ID", "danger")
+        return redirect(url_for('search_patient'))
     return render_template('display_searched_patient.html', data=None)
 
 
@@ -295,74 +299,92 @@ def assign_medicines(pid=None):
 
         return redirect(url_for('assign_medicines', pid=pid))
 
-    if request.method == 'POST':
-        if (pid == None):
-            flash("no patient id found", "danger")
-            return redirect(url_for('search_patient_pharmacy'))
+    try:
+        if request.method == 'POST':
+            if (pid == None):
+                flash("no patient id found", "danger")
+                return redirect(url_for('search_patient_pharmacy'))
 
-        medicine_id = request.form.get('medicine_id', type=int)
-        medicine_qty = request.form.get('medicine_qty', type=int)
+            medicine_id = request.form.get('medicine_id', type=int)
+            medicine_qty = request.form.get('medicine_qty', type=int)
 
-        helper_class = HelperCustomer()
+            helper_class = HelperCustomer()
 
-        target_customer_object = helper_class.get_customer_for_update(pid)
-        jdata = create_customer_account_dict(target_customer_object)
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
 
-        med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
-        med_dict = create_medicine_dict(med_object)
+            med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
+            med_dict = create_medicine_dict(med_object)
 
-        medicine_available = int(med_object.medicine_qty)
-        if(medicine_available - medicine_qty <= 0):
-            flash("medicine not available in sufficient quantity", "danger")
-            return redirect(url_for('assign_medicines', pid=pid))
-        else:
-            new_qty = medicine_available - medicine_qty
-            msg = 'Assigned medicines'
-            try:
-                issue_object = PatientPharmacy()
-                issue_object.das = insert_now_time()
-                issue_object.medicine_id = medicine_id
-                issue_object.medicine_qty = medicine_qty
-                issue_object.patient_id = pid
-                target_customer_object.update(msg=msg)
-                med_object.update(medicine_qty=new_qty)
-
-                med_object.save()
-                target_customer_object.save()
-                issue_object.save()
-                flash("Medicine Issued to Patient successful", "success")
-            except:
-                flash("update not successful", "danger")
+            medicine_available = int(med_object.medicine_qty)
+            if(medicine_available - medicine_qty <= 0):
+                flash("medicine not available in sufficient quantity", "danger")
                 return redirect(url_for('assign_medicines', pid=pid))
-            issue_object = PatientPharmacy.objects.filter(patient_id=pid).all()
+            else:
+                new_qty = medicine_available - medicine_qty
+                msg = 'Assigned medicines'
+                try:
+                    issue_object = PatientPharmacy()
+                    issue_object.das = insert_now_time()
+                    issue_object.medicine_id = medicine_id
+                    issue_object.medicine_qty = medicine_qty
+                    issue_object.patient_id = pid
+                    target_customer_object.update(msg=msg)
+                    med_object.update(medicine_qty=new_qty)
 
-            issue_list = []
-            for i in issue_object:
-                issue_dict = create_issue_dict(i)
-                issue_list.append(issue_dict)
+                    med_object.save()
+                    target_customer_object.save()
+                    issue_object.save()
+                    flash("Medicine Issued to Patient successful", "success")
+                except:
+                    flash("update not successful", "danger")
+                    return redirect(url_for('assign_medicines', pid=pid))
+                issue_object = PatientPharmacy.objects.filter(patient_id=pid).all()
 
-        if(len(target_customer_object) > 0 and not None):
-            return render_template('transfer_medicines.html', data=jdata, med_data=med_dict, issue_data=issue_list)
+                issue_list = []
+                for i in issue_object:
+                    issue_dict = create_issue_dict(i)
+                    issue_list.append(issue_dict)
+
+            if(len(target_customer_object) > 0 and not None):
+                return render_template('transfer_medicines.html', data=jdata, med_data=med_dict, issue_data=issue_list)
+    except:
+        flash("Invalid Medicine ID", "danger")
+        return redirect(url_for('assign_medicines', pid=pid))
     return render_template('transfer_medicines.html', data=None)
 
 
 # display Available Medicine Records status
 @app.route('/stock_medicines', methods=['GET', 'POST'])
-def viewPharmacy():
+@app.route('/stock_medicines/', methods=['GET', 'POST'])
+@app.route('/stock_medicines/<pid>', methods=['GET', 'POST'])
+def viewPharmacy(pid=None):
     if not session.get('username'):
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
         flash(f"unprivilaged access as pharmacist", "danger")
         return redirect(url_for('index'))
+       
     if request.method == "GET":
         record = []
         for x in MasterPharmacy.objects():
             tmp = create_medicine_dict(x)
             record.append(tmp)
-        print(record)
-    return render_template('view_pharmacy.html', data=record)
+    return render_template('view_pharmacy.html', data=record)    
+    
+    if request.method == 'POST':
+        medicine_id = request.form.get('medicine_id', type=int)
+    
+        helper_class = HelperCustomer()
 
+        med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
+        med_dict = create_medicine_dict(med_object)
+        if(len(med_object) > 0 and not None):
+            return render_template('view_pharmacy.html', med_dict=med_dict)
+    
+    return render_template('view_pharmacy.html')
+    
 
 # display patients status for pharmacy
 @app.route('/search_patient_pharmacy', methods=['GET', 'POST'])
@@ -373,15 +395,19 @@ def search_patient_pharmacy():
     if(pharmacist_flag != 1):
         flash(f"unprivilaged access as pharmacist", "danger")
         return redirect(url_for('index'))
-    if request.method == 'GET':
-        return render_template('search_patient_pharmacy.html')
-    if request.method == 'POST':
-        pid = request.form['pid']
-        helper_class = HelperCustomer()
-        target_customer_object = helper_class.get_customer_for_update(pid)
-        jdata = create_customer_account_dict(target_customer_object)
-        if(len(target_customer_object) > 0 and not None):
-            return render_template('search_patient_pharmacy.html', data=jdata)
+    try:    
+        if request.method == 'GET':
+            return render_template('search_patient_pharmacy.html')
+        if request.method == 'POST':
+            pid = request.form['pid']
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
+            if(len(target_customer_object) > 0 and not None):
+                return render_template('search_patient_pharmacy.html', data=jdata)
+    except:
+        flash(f"Invalid Patient ID", "danger")
+        return redirect(url_for('search_patient_pharmacy'))            
     return render_template('search_patient_pharmacy.html', data=None)
 
 
@@ -396,15 +422,19 @@ def search_patient_diagnosis():
     if(diagnostic_flag != 1):
         flash(f"unprivilaged access as diagnostic", "danger")
         return redirect(url_for('index'))
-    if request.method == 'GET':
-        return render_template('search_patient_diagnosis.html')
-    if request.method == 'POST':
-        pid = request.form['pid']
-        helper_class = HelperCustomer()
-        target_customer_object = helper_class.get_customer_for_update(pid)
-        jdata = create_customer_account_dict(target_customer_object)
-        if(len(target_customer_object) > 0 and not None):
-            return render_template('search_patient_diagnosis.html', data=jdata)
+    try:
+        if request.method == 'GET':
+            return render_template('search_patient_diagnosis.html')
+        if request.method == 'POST':
+            pid = request.form['pid']
+            helper_class = HelperCustomer()
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
+            if(len(target_customer_object) > 0 and not None):
+                return render_template('search_patient_diagnosis.html', data=jdata)
+    except:
+        flash(f"Invalid Patient ID", "danger")
+        return redirect(url_for('search_patient_diagnosis'))
     return render_template('search_patient_diagnosis.html', data=None)
 
 
@@ -447,48 +477,52 @@ def refer_test(pid=None):
 
         return redirect(url_for('refer_test', pid=pid))
 
-    if request.method == 'POST':
+    try:
+        if request.method == 'POST':
 
-        if (pid == None):
-            flash("no patient id found", "danger")
-            return redirect(url_for('search_patient_diagnosis'))
+            if (pid == None):
+                flash("no patient id found", "danger")
+                return redirect(url_for('search_patient_diagnosis'))
 
-        test_id = request.form.get('test_id', type=int)
+            test_id = request.form.get('test_id', type=int)
 
-        helper_class = HelperCustomer()
+            helper_class = HelperCustomer()
 
-        target_customer_object = helper_class.get_customer_for_update(pid)
-        jdata = create_customer_account_dict(target_customer_object)
+            target_customer_object = helper_class.get_customer_for_update(pid)
+            jdata = create_customer_account_dict(target_customer_object)
 
-        test_object = MasterDiagnosis.objects(test_id=test_id).get()
-        test_dict = create_diag_dict(test_object)
+            test_object = MasterDiagnosis.objects(test_id=test_id).get()
+            test_dict = create_diag_dict(test_object)
 
-        msg = 'Refered test'
-        test_name = test_dict['Name']
+            msg = 'Refered test'
+            test_name = test_dict['Name']
 
-        try:
-            issue_object = PatientDiagnosis()
-            issue_object.das = insert_now_time()
-            issue_object.test_id = test_id
-            issue_object.patient_id = pid
-            issue_object.test_name = test_name
-            target_customer_object.update(msg=msg)
-            test_object.save()
-            target_customer_object.save()
-            issue_object.save()
-            flash("Test reffered to Patient successful", "success")
-        except:
-            flash("update not successful", "danger")
-            return redirect(url_for('refer_test', pid=pid))
-        issue_object = PatientDiagnosis.objects.filter(patient_id=pid).all()
+            try:
+                issue_object = PatientDiagnosis()
+                issue_object.das = insert_now_time()
+                issue_object.test_id = test_id
+                issue_object.patient_id = pid
+                issue_object.test_name = test_name
+                target_customer_object.update(msg=msg)
+                test_object.save()
+                target_customer_object.save()
+                issue_object.save()
+                flash("Test reffered to Patient successful", "success")
+            except:
+                flash("update not successful", "danger")
+                return redirect(url_for('refer_test', pid=pid))
+            issue_object = PatientDiagnosis.objects.filter(patient_id=pid).all()
 
-        issue_list = []
-        for i in issue_object:
-            issue_dict = create_patient_diag_dict(i)
-            issue_list.append(issue_dict)
+            issue_list = []
+            for i in issue_object:
+                issue_dict = create_patient_diag_dict(i)
+                issue_list.append(issue_dict)
 
-        if(len(target_customer_object) > 0 and not None):
-            return render_template('refer_test.html', data=jdata, test_data=test_dict, issue_data=issue_list)
+            if(len(target_customer_object) > 0 and not None):
+                return render_template('refer_test.html', data=jdata, test_data=test_dict, issue_data=issue_list)
+    except:
+        flash("Invalid Test ID", "danger")
+        return redirect(url_for('refer_test', pid=pid))
     return render_template('refer_test.html', data=None)
 
 
@@ -625,8 +659,6 @@ def BillGeneration(pid=None):
 def check_if_executive(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    email = email.split('@')[1]
-    email = email.split('.')[0]
     if (email == 'executive'):
         # print('YES')
         is_login_flag = 1
@@ -638,8 +670,6 @@ def check_if_executive(email):
 def check_if_pharmacist(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    email = email.split('@')[1]
-    email = email.split('.')[0]
     if (email == 'pharmacist' or email == 'executive'):
         # print('YES')
         is_login_flag = 1
@@ -651,8 +681,6 @@ def check_if_pharmacist(email):
 def check_if_diagnostic(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    email = email.split('@')[1]
-    email = email.split('.')[0]
     if (email == 'diagnostic' or email == 'executive'):
         # print('YES')
         is_login_flag = 1
