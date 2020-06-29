@@ -357,8 +357,7 @@ def assign_medicines(pid=None):
 # display Available Medicine Records status
 @app.route('/stock_medicines', methods=['GET', 'POST'])
 @app.route('/stock_medicines/', methods=['GET', 'POST'])
-@app.route('/stock_medicines/<pid>', methods=['GET', 'POST'])
-def viewPharmacy(pid=None):
+def viewPharmacy():
     if not session.get('username'):
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
@@ -367,21 +366,26 @@ def viewPharmacy(pid=None):
         return redirect(url_for('index'))
        
     if request.method == "GET":
+        print('inside get')
         record = []
         for x in MasterPharmacy.objects():
             tmp = create_medicine_dict(x)
             record.append(tmp)
-    return render_template('view_pharmacy.html', data=record)    
+        return render_template('view_pharmacy.html', data=record)
     
     if request.method == 'POST':
+        print('inside post')
         medicine_id = request.form.get('medicine_id', type=int)
-    
-        helper_class = HelperCustomer()
+        record = []
+        for x in MasterPharmacy.objects():
+            tmp = create_medicine_dict(x)
+            record.append(tmp)
 
         med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
         med_dict = create_medicine_dict(med_object)
         if(len(med_object) > 0 and not None):
-            return render_template('view_pharmacy.html', med_dict=med_dict)
+            print('inside post render')
+            return render_template('view_pharmacy.html', med_dict=med_dict, data=record)
     
     return render_template('view_pharmacy.html')
     
