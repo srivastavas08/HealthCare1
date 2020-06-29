@@ -1,6 +1,57 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+
+<div class="row justify-content-center mb-3">
+  <div class="col-md-6">
+    <h2 class="text-center mt-5">Search Medicine Records</h2>
+    <form action="" method="POST">
+      <div class="form-row my-5">
+        <div class="form-group col-md-12">
+          <div class="input-group mb-3">
+            <label for="inputid" class="col-md-4 col-form-label">Enter Medicine ID:</label>
+            <input type="number" name="medicine_id" onkeypress="return /[0-9]/i.test(event.key)" class="form-control"
+              placeholder="Medicine ID" required value="{{request.form.medicine_id}}" id="inputid"
+              aria-describedby="button-addon2" />
+            <div class="input-group-append">
+              <button class="btn btn-dark text-warning" type="submit" id="button-addon2">
+                View Medicine Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="container">
+    <table class="table table-hover table-striped table-bordered">
+        {% if med_dict %}
+        <thead>
+            <tr class="text-dark bg-warning">
+                <th>MEDICINE ID</th>
+                <th>NAME</th>
+                <th>QUANTITY AVAILABLE</th>
+                <th>PRICE</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{med_dict.Medicine_ID}}</td>
+                <td>{{med_dict.Name}}</td>
+                <td>{{med_dict.Quantity_Available}}</td>
+                <td>{{med_dict.Price}}</td>
+            </tr>
+        </tbody>
+
+
+    </table>
+    {% endif %}
+
+</div>
+
+
 <div class="row justify-content-center mb-3">
     <div class="col-md-6">
         <h2 class="text-center mt-5">VIEW PHARMACY RECORDS</h2>

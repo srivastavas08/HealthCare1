@@ -2,42 +2,93 @@
 
 {% block body %}
 <div class="row justify-content-center mb-3">
-    <div class="col-md-8 mx-auto">
+  <div class="col-md-6">
+    <h2 class="text-center mt-5">Search Medicine Records</h2>
+    <form action="" method="POST">
+      <div class="form-row my-5">
+        <div class="form-group col-md-12">
+          <div class="input-group mb-3">
+            <label for="inputid" class="col-md-4 col-form-label">Enter Diagnostics ID:</label>
+            <input type="number" name="test_id" onkeypress="return /[0-9]/i.test(event.key)" class="form-control"
+              placeholder="Diagnostics ID" required value="{{request.form.test_id}}" id="inputid"
+              aria-describedby="button-addon2" />
+            <div class="input-group-append">
+              <button class="btn btn-dark text-warning" type="submit" id="button-addon2">
+                View Diagnostic Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="container">
+  <table class="table table-hover table-striped table-bordered">
+    {% if test_dict %}
+    <thead>
+      <tr class="text-dark bg-warning">
+        <th>TEST ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
 
-        <h2 class="text-center mt-5">VIEW DIAGNOSTICS AVAILABLE</h2>
+      </tr>
+    </thead>
 
-    </div>
+    <tbody>
+      <tr>
+
+        <td>{{test_dict.Test_ID}}</td>
+        <td>{{test_dict.Name}}</td>
+        <td>{{test_dict.Price}}</td>
+
+
+
+
+      </tr>
+    </tbody>
+
+
+  </table>
+  {% endif %}
+</div>
+<div class="row justify-content-center mb-3">
+  <div class="col-md-8 mx-auto">
+
+    <h2 class="text-center mt-5">VIEW DIAGNOSTICS AVAILABLE</h2>
+
+  </div>
 </div>
 
 
 <div class="container">
-    <table class="table table-hover table-striped table-bordered">
-        {% if data %}
-        <thead>
-            <tr class="text-dark bg-warning">
-                <th>TEST ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
+  <table class="table table-hover table-striped table-bordered">
+    {% if data %}
+    <thead>
+      <tr class="text-dark bg-warning">
+        <th>TEST ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
 
-            </tr>
-        </thead>
-        {% for i in data%}
-        <tbody>
-            <tr>
+      </tr>
+    </thead>
+    {% for i in data%}
+    <tbody>
+      <tr>
 
-                <td>{{i.Test_ID}}</td>
-                <td>{{i.Name}}</td>
-                <td>{{i.Price}}</td>
-
-
+        <td>{{i.Test_ID}}</td>
+        <td>{{i.Name}}</td>
+        <td>{{i.Price}}</td>
 
 
-            </tr>
-        </tbody>
 
-        {% endfor %}
-    </table>
-    {% endif %}
+
+      </tr>
+    </tbody>
+
+    {% endfor %}
+  </table>
+  {% endif %}
 
 </div>
 
