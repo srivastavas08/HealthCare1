@@ -370,7 +370,7 @@ def viewPharmacy():
         for x in MasterPharmacy.objects():
             tmp = create_medicine_dict(x)
             record.append(tmp)
-        return render_template('view_pharmacy.html', data=record)
+            return render_template('view_pharmacy.html', data=record)
     
     if request.method == 'POST':
         medicine_id = request.form.get('medicine_id', type=int)
