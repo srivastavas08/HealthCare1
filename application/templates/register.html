@@ -41,7 +41,7 @@
                         {{ form.password.label }}<text class="text-danger">*</text>
                     </div>
                     <div class="col-sm-8">
-                        {{ form.password(id="password", class="form-control", pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z 0-9]).{8,20}") }}
+                        {{ form.password(id="password", class="form-control", pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z 0-9]).{10,20}") }}
                     </div>
                     {% for error in form.password.errors %}
                     <span class="error-message">{{ error }}</span>
@@ -56,7 +56,7 @@
                         <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
                         <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
                         <p id="number" class="invalid">A <b>number</b></p>
-                        <p id="length" class="invalid">Min <b>8  characters</b> and Max <b>20 characters</b></p>
+                        <p id="length" class="invalid">Min <b>10  characters</b> and Max <b>20 characters</b></p>
                         <p id="special" class="invalid">Atleast <b>one special </b>character</p>
                     </div>
                 </div>
@@ -165,7 +165,7 @@
         }
 
         // Validate length
-        if (myInput.value.length >= 8 && myInput.value.length <= 20) {
+        if (myInput.value.length >= 10 && myInput.value.length <= 20) {
             length.classList.remove("invalid");
             length.classList.add("valid");
         } else {
