@@ -39,7 +39,7 @@
         <th>update Record</th>
         <th>Discharge Patient</th>
         <th>Assign Medicines</th>
-        <th>Refer Test</th>
+        <th>Add Diagnostics</th>
         <th>Generate Bill</th>
 
       </tr>
@@ -64,7 +64,7 @@
           <p><a href="{{ url_for( 'assign_medicines' ,pid=data.PID ) }}">Assign medicines</a></p>
         </td>
         <td>
-          <p><a href="{{ url_for( 'refer_test' ,pid=data.PID ) }}">Refer Test</a></p>
+          <p><a href="{{ url_for( 'refer_test' ,pid=data.PID ) }}">Add Diagnostics</a></p>
         </td>
         <td>
           <p><a href="{{ url_for( 'BillGeneration' ,pid=data.PID ) }}">Generate Bill</a></p>
