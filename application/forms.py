@@ -6,7 +6,7 @@ import datetime
 import re
 
 class LoginForm(FlaskForm):
-    email = StringField("User Id", validators=[DataRequired()])
+    username = StringField("User Name", validators=[DataRequired()])
     password = PasswordField("Password", validators=[
                              DataRequired(), Length(min=6, max=15)])
     remember_me = BooleanField("Remember Me")
@@ -14,21 +14,22 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Length(min=8)])
+    username = StringField("User Id", validators=[DataRequired(), Length(min=8)])
+    email = StringField("Designation", validators=[DataRequired()])
     password = PasswordField("Password", validators=[
-                             DataRequired(), Length(min=10, max=15)])
+                             DataRequired(), Length(min=1, max=15)])
     password_confirm = PasswordField("Confirm Password", validators=[
-                                     DataRequired(), Length(min=10, max=15), EqualTo('password')])
+                                     DataRequired(), Length(min=1, max=15), EqualTo('password')])
     first_name = StringField("First Name", validators=[
                              DataRequired(), Length(min=2, max=20)])
     last_name = StringField("Last Name", validators=[
                             DataRequired(), Length(min=2, max=20)])
     submit = SubmitField("Register Now")
 
-    def validate_email(self, email):
-        user = User.objects(email=email.data).first()
+    def validate_userid(self, username):
+        user = User.objects(username=username.data).first()
         if user:
-            raise ValidationError("Email is already in use. Pick another one.")
+            raise ValidationError("User ID is already in use. Pick another one.")
               
     
 

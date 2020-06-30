@@ -7,8 +7,22 @@
         <fieldset class="form-group">
             <legend>{{title}}</legend>
             {{ form.hidden_tag() }}
-            <p> {{ form.email.label }}</br>
-                {{ form.email }}
+            <p> {{ form.username.label }}</br>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </p>
+           
+            <p>{{ form.email.label }}
+                
+                    <select id="email" name="email" class="form-control" required value = {{ form.email }}>
+                        <option disabled>Designation</option>
+                        <option>executive</option>
+                        <option>pharmacist</option>
+                        <option>diagnostic</option>
+                    </select>
+              
                 {% for error in form.email.errors %}
                 <span class="error-message">{{ error }}</span>
                 {% endfor %}

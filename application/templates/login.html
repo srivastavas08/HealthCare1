@@ -11,10 +11,10 @@
 
                 <div class="form-group row col-md-12">
                     <div class="col-sm-4 col-form-label">
-                        {{ form.email.label }}<text class="text-danger">*</text>
+                        {{ form.username.label }}<text class="text-danger">*</text>
                     </div>
-                    <div class="col-sm-8">{{ form.email(size=35, class_="form-control", placeholder="Enter User Id here") }}</div>
-                    {% for error in form.email.errors %}
+                    <div class="col-sm-8">{{ form.username(size=35, class_="form-control", placeholder="Enter User Name here") }}</div>
+                    {% for error in form.username.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
                 </div>
@@ -27,16 +27,6 @@
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
                 </div>
-
-                <!--<div class="form-group row col-md-12">
-                        <div class="col-sm-4 col-form-label">
-                            {{ form.password.label }}<text class="text-danger">*</text>
-                        </div>
-                        <div class="col-sm-8">{{ form.password(size=35) }}</div>
-                        {% for error in form.password.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div> -->
 
                 <div class=" col-md-2 mx-auto my-3">
                     {{ form.submit(class_="btn btn-warning text-dark mr-0") }}
