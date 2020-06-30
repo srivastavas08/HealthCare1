@@ -677,7 +677,12 @@ def BillGeneration(pid=None):
 def check_if_executive(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    if (email == 'executive'):
+    if(email == 'executive'):
+        is_login_flag = 1
+        return is_login_flag
+    word = email.split('@')[1]
+    word = word.split('.')[0]
+    if (email == 'executive' or word == 'executive'):
         # print('YES')
         is_login_flag = 1
     return is_login_flag
@@ -688,7 +693,12 @@ def check_if_executive(email):
 def check_if_pharmacist(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    if (email == 'pharmacist' or email == 'executive'):
+    if(email == 'executive'):
+        is_login_flag = 1
+        return is_login_flag
+    word = email.split('@')[1]
+    word = word.split('.')[0]
+    if (word == 'pharmacist' or email == 'executive' or word == 'executive'):
         # print('YES')
         is_login_flag = 1
     return is_login_flag
@@ -699,7 +709,12 @@ def check_if_pharmacist(email):
 def check_if_diagnostic(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    if (email == 'diagnostic' or email == 'executive'):
+    if(email == 'executive'):
+        is_login_flag = 1
+        return is_login_flag
+    word = email.split('@')[1]
+    word = word.split('.')[0]
+    if (word == 'diagnostic' or email == 'executive' or word == 'executive'):
         # print('YES')
         is_login_flag = 1
     return is_login_flag
