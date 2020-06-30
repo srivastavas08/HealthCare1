@@ -195,7 +195,6 @@ def view_record():
         for x in NewPatient.objects():
             tmp = create_customer_account_dict(x)
             record.append(tmp)
-        print(record)
     return render_template('view_record.html', data=record)
 
 
@@ -546,7 +545,6 @@ def TestAvailable():
         for x in MasterDiagnosis.objects():
             tmp = create_diag_dict(x)
             record.append(tmp)
-        print(record)
         return render_template('diagnosis.html', data=record)
     
     try:
@@ -681,7 +679,6 @@ def check_if_executive(email):
     is_login_flag = 0
     email = str(email).strip().lower()
     if (email == 'executive'):
-        # print('YES')
         is_login_flag = 1
     return is_login_flag
 
@@ -692,7 +689,6 @@ def check_if_pharmacist(email):
     is_login_flag = 0
     email = str(email).strip().lower()
     if (email == 'pharmacist' or email == 'executive'):
-        # print('YES')
         is_login_flag = 1
     return is_login_flag
 
@@ -703,7 +699,6 @@ def check_if_diagnostic(email):
     is_login_flag = 0
     email = str(email).strip().lower()
     if (email == 'diagnostic' or email == 'executive'):
-        # print('YES')
         is_login_flag = 1
     return is_login_flag
 
