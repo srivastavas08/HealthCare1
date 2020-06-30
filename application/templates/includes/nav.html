@@ -42,7 +42,9 @@
                 <li><br></li>
                 <li></li>
                 {% if not session['username'] %}
+                <li class="nav-item"><a href="{{ url_for('register') }}" class="nav-link nav-item">Register</a></li>
                 <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link nav-item ">Login</a></li>
+                
                 {% else %}
                 <li class="nav-item"><a href="{{ url_for('logout') }}" class="nav-link nav-item">Logout</a></li>
                 {% endif %}
