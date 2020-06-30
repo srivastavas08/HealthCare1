@@ -370,20 +370,22 @@ def viewPharmacy():
         for x in MasterPharmacy.objects():
             tmp = create_medicine_dict(x)
             record.append(tmp)
-            return render_template('view_pharmacy.html', data=record)
-    
-    if request.method == 'POST':
-        medicine_id = request.form.get('medicine_id', type=int)
-        record = []
-        for x in MasterPharmacy.objects():
-            tmp = create_medicine_dict(x)
-            record.append(tmp)
+        return render_template('view_pharmacy.html', data=record)
+    try:
+        if request.method == 'POST':
+            medicine_id = request.form.get('medicine_id', type=int)
+            record = []
+            for x in MasterPharmacy.objects():
+                tmp = create_medicine_dict(x)
+                record.append(tmp)
 
-        med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
-        med_dict = create_medicine_dict(med_object)
-        if(len(med_object) > 0 and not None):
-            print('inside post render')
-            return render_template('view_pharmacy.html', med_dict=med_dict, data=record)
+            med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
+            med_dict = create_medicine_dict(med_object)
+            if(len(med_object) > 0 and not None):
+                return render_template('view_pharmacy.html', med_dict=med_dict, data=record)
+    except:
+        flash(f"Invalid Medicine Id", "danger")
+        return redirect(url_for('viewPharmacy'))
     
     return render_template('view_pharmacy.html')
     
