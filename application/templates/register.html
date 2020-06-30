@@ -7,9 +7,9 @@
         <fieldset class="form-group">
             <legend>{{title}}</legend>
             {{ form.hidden_tag() }}
-            <p> {{ form.username.label }}</br>
-                {{ form.username }}
-                {% for error in form.username.errors %}
+            <p> {{ form.user_name.label }}</br>
+                {{ form.user_name }}
+                {% for error in form.user_name.errors %}
                 <span class="error-message">{{ error }}</span>
                 {% endfor %}
             </p>

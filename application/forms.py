@@ -6,15 +6,15 @@ import datetime
 import re
 
 class LoginForm(FlaskForm):
-    username = StringField("User Name", validators=[DataRequired()])
+    user_name = StringField("User Name", validators=[DataRequired()])
     password = PasswordField("Password", validators=[
-                             DataRequired(), Length(min=6, max=15)])
+                             DataRequired()])
     remember_me = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
 
 class RegisterForm(FlaskForm):
-    username = StringField("User Id", validators=[DataRequired(), Length(min=8)])
+    user_name = StringField("User Id", validators=[DataRequired(), Length(min=8)])
     email = StringField("Designation", validators=[DataRequired()])
     password = PasswordField("Password", validators=[
                              DataRequired(), Length(min=1, max=15)])
@@ -26,8 +26,8 @@ class RegisterForm(FlaskForm):
                             DataRequired(), Length(min=2, max=20)])
     submit = SubmitField("Register Now")
 
-    def validate_userid(self, username):
-        user = User.objects(username=username.data).first()
+    def validate_userid(self, user_name):
+        user = User.objects(user_name=user_name.data).first()
         if user:
             raise ValidationError("User ID is already in use. Pick another one.")
               

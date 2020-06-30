@@ -30,16 +30,17 @@ def login():
     # Login form to take input data
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
+        user_name = form.user_name.data
         password = form.password.data
 
-        user = User.objects(username=username).first()
+        user = User.objects(user_name=user_name).first()
 
         if user and user.get_password(password):
             flash(f"{user.first_name}, You are successfully logged in", "success")
             session['user_id'] = user.user_id
             session['username'] = user.first_name
             session['email'] = user.email
+            session['user_name'] = user.user_name
             return redirect('/index')
         else:
             flash("Sorry! something went wrong", "danger")
@@ -58,13 +59,13 @@ def register():
         # for creating unique user id
         user_id = User.objects.count()
         user_id += 1
-        username = form.username.data
+        user_name = form.user_name.data
         email = form.email.data
         password = form.password.data
         first_name = form.first_name.data
         last_name = form.last_name.data
 
-        user = User(user_id=user_id, username=username, email=email,
+        user = User(user_id=user_id, user_name=user_name, email=email,
                     first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save()

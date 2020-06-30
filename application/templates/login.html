@@ -11,10 +11,10 @@
 
                 <div class="form-group row col-md-12">
                     <div class="col-sm-4 col-form-label">
-                        {{ form.username.label }}<text class="text-danger">*</text>
+                        {{ form.user_name.label }}<text class="text-danger">*</text>
                     </div>
-                    <div class="col-sm-8">{{ form.username(size=35, class_="form-control", placeholder="Enter User Name here") }}</div>
-                    {% for error in form.username.errors %}
+                    <div class="col-sm-8">{{ form.user_name(size=35, class_="form-control", placeholder="Enter User Name here") }}</div>
+                    {% for error in form.user_name.errors %}
                     <span class="error-message">{{ error }}</span>
                     {% endfor %}
                 </div>
