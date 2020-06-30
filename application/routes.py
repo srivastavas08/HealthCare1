@@ -105,7 +105,7 @@ def createpatient():
     form = Patient()
     if form.validate_on_submit():
         # Generating 9 digit unique patient id
-        patient_id = NewPatient.objects.count() + 100000001
+        patient_id = NewPatient.objects.count() + 100000001 + generate_unique()
         patient_id += 1
 
         name = form.name.data
