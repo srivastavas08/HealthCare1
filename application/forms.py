@@ -26,7 +26,7 @@ class RegisterForm(FlaskForm):
                             DataRequired(), Length(min=2, max=20)])
     submit = SubmitField("Register Now")
 
-    def validate_userid(self, user_name):
+    def validate_user_name(self, user_name):
         user = User.objects(user_name=user_name.data).first()
         if user:
             raise ValidationError("User ID is already in use. Pick another one.")

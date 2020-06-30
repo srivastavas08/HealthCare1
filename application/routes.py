@@ -12,7 +12,6 @@ from application.models import MasterDiagnosis, MasterPharmacy, PatientPharmacy,
 
 # INDEX
 
-
 @app.route("/")
 @app.route("/index")
 @app.route("/home")
@@ -28,23 +27,27 @@ def login():
     if session.get('username'):
         return redirect(url_for('index'))
     # Login form to take input data
-    form = LoginForm()
-    if form.validate_on_submit():
-        user_name = form.user_name.data
-        password = form.password.data
+    try:    
+        form = LoginForm()
+        if form.validate_on_submit():
+            user_name = form.user_name.data
+            password = form.password.data
 
-        user = User.objects(user_name=user_name).first()
+            user = User.objects(user_name=user_name).first()
 
-        if user and user.get_password(password):
-            flash(f"{user.first_name}, You are successfully logged in", "success")
-            session['user_id'] = user.user_id
-            session['username'] = user.first_name
-            session['email'] = user.email
-            session['user_name'] = user.user_name
-            return redirect('/index')
-        else:
-            flash("Sorry! incorrect username or password", "danger")
-    return render_template("login.html", title="Login", form=form, login=True)
+            if user and user.get_password(password):
+                flash(f"{user.first_name}, You are successfully logged in", "success")
+                session['user_id'] = user.user_id
+                session['username'] = user.first_name
+                session['email'] = user.email
+                session['user_name'] = user.user_name
+                return redirect('/index')
+            else:
+                flash("Sorry! incorrect username or password", "danger")
+        return render_template("login.html", title="Login", form=form, login=True)
+    except:
+        flash("Sorry Something went wrong", "danger")
+        return redirect(url_for('login'))
 
 
 # Register new exective or pharmacist or diagnostic
@@ -54,24 +57,28 @@ def register():
     if session.get('username'):
         return redirect(url_for('index'))
     # Register Form kept only for personal use to register new executive, pharmacist or diagnostic
-    form = RegisterForm()
-    if form.validate_on_submit():
-        # for creating unique user id
-        user_id = User.objects.count()
-        user_id += 1
-        user_name = form.user_name.data
-        email = form.email.data
-        password = form.password.data
-        first_name = form.first_name.data
-        last_name = form.last_name.data
+    try:    
+        form = RegisterForm()
+        if form.validate_on_submit():
+            # for creating unique user id
+            user_id = User.objects.count()
+            user_id += 1
+            user_name = form.user_name.data
+            email = form.email.data
+            password = form.password.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
 
-        user = User(user_id=user_id, user_name=user_name, email=email,
-                    first_name=first_name, last_name=last_name)
-        user.set_password(password)
-        user.save()
-        flash("You are successfully registered!", "success")
-        return redirect(url_for('index'))
-    return render_template("register.html", title="Register", form=form, register=True)
+            user = User(user_id=user_id, user_name=user_name, email=email,
+                        first_name=first_name, last_name=last_name)
+            user.set_password(password)
+            user.save()
+            flash("You are successfully registered!", "success")
+            return redirect(url_for('index'))
+        return render_template("register.html", title="Register", form=form, register=True)
+    except:
+        flash("Sorry Something went wrong", "danger")
+        return redirect(url_for('register'))
 
 
 # Logout
