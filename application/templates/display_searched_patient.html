@@ -55,13 +55,13 @@
         <td>{{data.BedType}}</td>
         <td>{{data.dam}}</td>
         <td>
-          <p><a href="{{ url_for( 'UpdatePatient' ,pid=data.PID ) }}">update</a></p>
+          <p><a href="{{ url_for( 'UpdatePatient' ,pid=data.PID ) }}">Update</a></p>
         </td>
         <td>
           <p><a href="{{ url_for( 'DeletePatient' ,pid=data.PID ) }}">Dischare</a></p>
         </td>
         <td>
-          <p><a href="{{ url_for( 'assign_medicines' ,pid=data.PID ) }}">assign medicines</a></p>
+          <p><a href="{{ url_for( 'assign_medicines' ,pid=data.PID ) }}">Assign medicines</a></p>
         </td>
         <td>
           <p><a href="{{ url_for( 'refer_test' ,pid=data.PID ) }}">Refer Test</a></p>
