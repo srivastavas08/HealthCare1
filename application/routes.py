@@ -43,7 +43,7 @@ def login():
             session['user_name'] = user.user_name
             return redirect('/index')
         else:
-            flash("Sorry! something went wrong", "danger")
+            flash("Sorry! incorrect username or password", "danger")
     return render_template("login.html", title="Login", form=form, login=True)
 
 
@@ -91,7 +91,7 @@ def createpatient():
 
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
 
     # Taking Input from Patient form
@@ -133,7 +133,7 @@ def UpdatePatient(pid=None):
     # To validate session only for executive
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
 
     if request.method == 'GET':
@@ -188,7 +188,7 @@ def view_record():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     if request.method == "GET":
         record = []
@@ -207,7 +207,7 @@ def DeletePatient(pid):
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None):
@@ -243,7 +243,7 @@ def search_patient():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     try:
         if request.method == 'GET':
@@ -272,7 +272,7 @@ def assign_medicines(pid=None):
     # To Validate session only for executive and pharmacist
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"unprivilaged access as pharmacist", "danger")
+        flash(f"you cannot access pharmacist roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
@@ -363,7 +363,7 @@ def viewPharmacy():
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"unprivilaged access as pharmacist", "danger")
+        flash(f"you cannot access pharmacist roles", "danger")
         return redirect(url_for('index'))
        
     if request.method == "GET":
@@ -398,7 +398,7 @@ def search_patient_pharmacy():
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"unprivilaged access as pharmacist", "danger")
+        flash(f"you cannot access pharmacist roles", "danger")
         return redirect(url_for('index'))
     try:    
         if request.method == 'GET':
@@ -425,7 +425,7 @@ def search_patient_diagnosis():
     #To validate session only for executive and diagnostic
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"unprivilaged access as diagnostic", "danger")
+        flash(f"you cannot access diagnostic roles", "danger")
         return redirect(url_for('index'))
     try:
         if request.method == 'GET':
@@ -453,7 +453,7 @@ def refer_test(pid=None):
         return redirect(url_for('index'))
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"unprivilaged access as diagnostic", "danger")
+        flash(f"you cannot access diagnostic roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
@@ -539,7 +539,7 @@ def TestAvailable():
         return redirect(url_for('index'))
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"unprivilaged access as diagnostic", "danger")
+        flash(f"you cannot access diagnostic roles", "danger")
         return redirect(url_for('index'))
     if request.method == "GET":
         record = []
@@ -574,7 +574,7 @@ def BillGeneration_customer_screen():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('bill.html')
@@ -597,7 +597,7 @@ def BillGeneration(pid=None):
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
     if request.method == 'GET':
         if (pid == None or pid is None):
             try:
