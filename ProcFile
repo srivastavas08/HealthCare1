@@ -1,1 +1,1 @@
-web: gunicorn -k geventwebsocket.gunicorn.workers -w 1 wsgi:app
+web: gunicorn -b :$PORT app:app
