@@ -61,7 +61,7 @@ def register():
         form = RegisterForm()
         if form.validate_on_submit():
             # for creating unique user id
-            user_id = User.objects.count()
+            user_id = User.objects.count() + generate_unique()
             user_id += 1
             user_name = form.user_name.data
             email = form.email.data
