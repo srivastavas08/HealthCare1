@@ -202,7 +202,7 @@ def UpdatePatient(pid=None):
             except:
                 flash("Sorry! Something Went Wrong", "danger")
                 return render_template('update_patient.html', data=jdata)
-        flash("update successful", "success")
+        flash("Update Successful", "success")
         return render_template('update_patient.html', data=jdata)
     return render_template('update_patient.html', data=jdata, UpdatePatient=True)
 
