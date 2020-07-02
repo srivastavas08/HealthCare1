@@ -1,0 +1,40 @@
+#%%
+# Login html dashboard -- done
+/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmeter -n -t \
+    /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_tests/LoginTest.jmx \
+    -JcsvFilePath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/LoginTest.csv \
+    -JgraphFolderPath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/graph_results/LoginTest \
+    -l /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/LoginTest.csv \
+    -e -o /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/html_dashboard/LoginTest
+#%%
+# Logout html dashboard -- 
+/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmeter -n -t \
+    /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_tests/Logout.jmx \
+    -JcsvFilePath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/LogoutTest.csv \
+    -JgraphFolderPath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/graph_results/LogoutTest \
+    -l /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/LogoutTest.csv \
+    -e -o /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/html_dashboard/LogoutTest
+#%%
+# issue medicine html dashboard
+/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmeter -n -t \
+    /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_tests/IssueMedicine.jmx \
+    -JcsvFilePath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/IssueMedicine.csv \
+    -JgraphFolderPath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/graph_results/IssueMedicine \
+    -l /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/IssueMedicine.csv \
+    -e -o /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/html_dashboard/IssueMedicine
+#%%
+# issue test html dashboard
+/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmeter -n -t \
+    /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_tests/IssueTest.jmx \
+    -JcsvFilePath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/IssueTest.csv \
+    -JgraphFolderPath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/graph_results/IssueTest \
+    -l /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/IssueTest.csv \
+    -e -o /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/html_dashboard/IssueTest
+#%%
+# generate bill html dashboard
+/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmeter -n -t \
+    /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_tests/GenerateBill.jmx \
+    -JcsvFilePath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/GenerateBill.csv \
+    -JgraphFolderPath=/home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/graph_results/GenerateBill \
+    -l /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/tree_results/GenerateBill.csv \
+    -e -o /home/pradeep/jmeter_install2/apache-jmeter-5.2.1/bin/jmx_results/html_dashboard/GenerateBill

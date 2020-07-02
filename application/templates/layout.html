@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SIGMA-Health-Care-Services</title>
+    <title>SIGMA-Health-Care</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}" />
 
@@ -17,7 +17,7 @@
                 <a class="navbar-brand" href="{{url_for('index')}}">
                     <img src="{{ url_for('static',filename='images/logo.png')}}" width="75" height="75"
                         class="d-inline-block align-middle" alt="" loading="lazy">
-                    Sigma Health Care Services
+                    Sigma Health Care 
                 </a>
                 {% if session['username'] %}
                 <h4 class="text-right vertical-middle">Welcome, {{ session['username'] }}</h4>

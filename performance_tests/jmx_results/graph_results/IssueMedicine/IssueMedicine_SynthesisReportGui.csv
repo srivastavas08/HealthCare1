@@ -1,0 +1,21 @@
+Label,# Samples,Average,Min,Max,90% Line,Std. Dev.,Error %,Throughput,Received KB/sec,Avg. Bytes
+http://localhost:5000/search_patient_pharmacy,100,572,76,1731,1278,405.24,0.00%,3.4,571.19,171368.4
+http://localhost:5000/search_patient_pharmacy-0,100,4,1,28,6,3.03,0.00%,3.4,1.39,412.0
+http://localhost:5000/search_patient_pharmacy-1,100,3,1,7,6,1.72,0.00%,3.4,22.28,6615.0
+http://localhost:5000/search_patient_pharmacy-2,100,475,60,1682,761,345.23,0.00%,3.4,269.54,80582.0
+http://localhost:5000/search_patient_pharmacy-3,100,7,2,33,12,4.33,0.00%,3.5,2.29,679.0
+http://localhost:5000/search_patient_pharmacy-4,100,7,2,28,13,4.38,0.00%,3.5,16.76,4967.0
+http://localhost:5000/search_patient_pharmacy-5,100,396,62,1638,517,269.96,0.00%,3.4,122.29,36571.9
+http://localhost:5000/search_patient_pharmacy-6,100,51,7,356,66,35.13,0.00%,3.5,37.30,11071.0
+http://localhost:5000/search_patient_pharmacy-7,100,397,63,1367,547,239.41,0.00%,3.4,101.90,30470.5
+http://localhost:5000/assign_medicines/100000004,98,396,76,1345,660,280.55,0.00%,2.3,19.57,8692.4
+http://localhost:5000/assign_medicines/100000004-0,98,4,1,12,6,2.21,0.00%,2.3,0.93,412.0
+http://localhost:5000/assign_medicines/100000004-1,98,4,1,15,6,2.09,0.00%,2.3,15.00,6615.0
+http://localhost:5000/assign_medicines/100000004-2,98,299,62,1299,295,166.63,0.00%,2.3,0.72,319.0
+http://localhost:5000/assign_medicines/100000004-3,97,7,2,22,11,3.66,0.00%,2.3,0.51,223.0
+http://localhost:5000/assign_medicines/100000004-4,97,6,2,18,11,3.43,0.00%,2.3,0.52,225.0
+http://localhost:5000/assign_medicines/100000004-5,97,331,59,1295,305,221.24,0.00%,2.3,0.66,291.3
+http://localhost:5000/assign_medicines/100000004-6,97,43,9,67,54,10.00,0.00%,2.3,0.66,288.0
+http://localhost:5000/assign_medicines/100000004-7,97,339,62,1329,306,229.19,0.00%,2.3,0.73,319.0
+Test,47,1927,1157,4611,2516,680.50,0.00%,1.8,637.01,360121.3
+TOTAL,1824,231,1,4611,521,401.51,0.00%,39.3,1112.66,29003.1
