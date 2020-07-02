@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "5ef65b61435997c8a18add26"
+  },
+  "medicine_id": 2001,
+  "medicine_name": "ALPRAZOLAM 0.5MG",
+  "medicine_qty": 938,
+  "medicine_price": 30.5
+},{
+  "_id": {
+    "$oid": "5ef65efc8c66bc246433720d"
+  },
+  "medicine_id": 2002,
+  "medicine_name": "AMETHOCAINE",
+  "medicine_qty": 990,
+  "medicine_price": 49.5
+},{
+  "_id": {
+    "$oid": "5ef65efc8c66bc246433720e"
+  },
+  "medicine_id": 2003,
+  "medicine_name": "AMLODIPINE 10MG",
+  "medicine_qty": 1000,
+  "medicine_price": 540
+},{
+  "_id": {
+    "$oid": "5ef65efc8c66bc246433720f"
+  },
+  "medicine_id": 2004,
+  "medicine_name": "RAMIPRIL 10MG",
+  "medicine_qty": 1000,
+  "medicine_price": 150
+},{
+  "_id": {
+    "$oid": "5ef65efc8c66bc2464337210"
+  },
+  "medicine_id": 2005,
+  "medicine_name": "TENOFOVIR 300MG",
+  "medicine_qty": 923,
+  "medicine_price": 75
+},{
+  "_id": {
+    "$oid": "5ef65ff08c66bc2464337211"
+  },
+  "medicine_id": 2006,
+  "medicine_name": "Saridon",
+  "medicine_qty": 895,
+  "medicine_price": 63
+},{
+  "_id": {
+    "$oid": "5ef65ff08c66bc2464337212"
+  },
+  "medicine_id": 2007,
+  "medicine_name": "Zentac",
+  "medicine_qty": 920,
+  "medicine_price": 44
+},{
+  "_id": {
+    "$oid": "5ef65ff08c66bc2464337213"
+  },
+  "medicine_id": 2008,
+  "medicine_name": "Histac",
+  "medicine_qty": 1000,
+  "medicine_price": 15
+},{
+  "_id": {
+    "$oid": "5ef65ff08c66bc2464337214"
+  },
+  "medicine_id": 2009,
+  "medicine_name": "calpol",
+  "medicine_qty": 995,
+  "medicine_price": 2
+},{
+  "_id": {
+    "$oid": "5ef65ff08c66bc2464337215"
+  },
+  "medicine_id": 2010,
+  "medicine_name": "Vicks",
+  "medicine_qty": 1000,
+  "medicine_price": 24
+}]

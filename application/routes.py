@@ -43,10 +43,10 @@ def login():
                 session['user_name'] = user.user_name
                 return redirect('/index')
             else:
-                flash("Sorry! incorrect username or password", "danger")
+                flash("Sorry! Incorrect Username or Password", "danger")
         return render_template("login.html", title="Login", form=form, login=True)
     except:
-        flash("Sorry Something went wrong", "danger")
+        flash("Sorry Something Went Wrong", "danger")
         return redirect(url_for('login'))
 
 
@@ -73,7 +73,7 @@ def register():
                         first_name=first_name, last_name=last_name)
             user.set_password(password)
             user.save()
-            flash("You are successfully registered!", "success")
+            flash("You are Successfully Registered!", "success")
             return redirect(url_for('index'))
         return render_template("register.html", title="Register", form=form, register=True)
     except:
@@ -98,36 +98,39 @@ def createpatient():
 
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles!", "danger")
         return redirect(url_for('index'))
 
+    try:
     # Taking Input from Patient form
-    form = Patient()
-    if form.validate_on_submit():
-        # Generating 9 digit unique patient id
-        patient_id = NewPatient.objects.count() + 100000001 + generate_unique()
-        patient_id += 1
+        form = Patient()
+        if form.validate_on_submit():
+            # Generating 9 digit unique patient id
+            patient_id = NewPatient.objects.count() + 100000001 + generate_unique()
+            patient_id += 1
 
-        name = form.name.data
-        age = form.age.data
-        aadhar = form.aadhar.data
-        address = form.address.data
-        state = form.state.data
-        city = form.city.data
-        bedtype = request.form.get('bedtype')
-        now_date = insert_now_time()
-        dam = request.form['dam']
+            name = form.name.data
+            age = form.age.data
+            aadhar = form.aadhar.data
+            address = form.address.data
+            state = form.state.data
+            city = form.city.data
+            bedtype = request.form.get('bedtype')
+            now_date = insert_now_time()
+            dam = request.form['dam']
 
-        status = 'Active'
+            status = 'Active'
 
-        newpatient = NewPatient(aadhar=aadhar, patient_id=patient_id, bedtype=bedtype, name=name, age=age, address=address,
-                                state=state, city=city, dam=dam, status=status)
-        newpatient.save()
+            newpatient = NewPatient(aadhar=aadhar, patient_id=patient_id, bedtype=bedtype, name=name, age=age, address=address,
+                                    state=state, city=city, dam=dam, status=status)
+            newpatient.save()
 
-        flash("Patient record creation initiated successfully", "success")
-        return redirect(url_for('index'))
-    return render_template('create_patient.html', title="Admit New Patient", form=form, creatpatient=True)
-
+            flash("Patient Record Creation Initiated Successfully", "success")
+            return redirect(url_for('index'))
+        return render_template('create_patient.html', title="Admit New Patient", form=form, creatpatient=True)
+    except:
+        flash("One Or More Field Is Missing!", "danger")
+        return redirect(url_for('createpatient'))
 
 # UpdatePatient
 @app.route('/update_patient', methods=['GET', 'POST'])
@@ -140,12 +143,12 @@ def UpdatePatient(pid=None):
     # To validate session only for executive
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles", "danger")
         return redirect(url_for('index'))
 
     if request.method == 'GET':
         if (pid == None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return render_template('display_searched_patient.html')
         else:
             # Helper class is used to ead data from database
@@ -157,18 +160,34 @@ def UpdatePatient(pid=None):
     if request.method == 'POST':
         pid = request.form['PID']
         if (pid == None or pid is None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return render_template('display_searched_patient.html')
         helper_class = HelperCustomer()
         target_customer_object = helper_class.get_customer_for_update(pid)
 
         jdata = create_customer_account_dict(target_customer_object)
         if(len(target_customer_object) > 0 and not None):
+
             Name = request.form['custName']
+            if(Name is None or len(Name) <= 0):
+                Name = jdata['Name']
+
             Address = request.form['custAddress']
+            if(Address is None or len(Address) <= 0):
+                Address = jdata['Address']
+
             bedtype = request.form.get('bedtype')
+            if(bedtype is None or len(bedtype) <= 0):
+                bedtype = jdata['BedType'] 
+
             Age = request.form['custAge']
+            if(Age is None or len(Age) <= 0):
+                Age = jdata['Age']
+
             old_date = request.form['dam']
+            if(old_date is None or len(old_date) <= 0):
+                old_date = jdata['dam'] 
+            print(Name,Address,bedtype,Age,old_date)
 
             try:
                 target_customer_object.update(
@@ -181,7 +200,7 @@ def UpdatePatient(pid=None):
                 )
                 target_customer_object.save()
             except:
-                flash("Sorry! something went wrong", "danger")
+                flash("Sorry! Something Went Wrong", "danger")
                 return render_template('update_patient.html', data=jdata)
         flash("update successful", "success")
         return render_template('update_patient.html', data=jdata)
@@ -195,7 +214,7 @@ def view_record():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles", "danger")
         return redirect(url_for('index'))
     if request.method == "GET":
         record = []
@@ -213,11 +232,11 @@ def DeletePatient(pid):
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return render_template('display_searched_patient.html')
         else:
             helper_class = HelperCustomer()
@@ -227,7 +246,7 @@ def DeletePatient(pid):
             return render_template('delete_customer.html', data=jdata)
     if request.method == 'POST':
         if (pid == None or pid is None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return render_template('delete_customer.html', data=jdata)
         helper_class = HelperCustomer()
         target_customer_object = helper_class.get_customer_for_update(pid)
@@ -249,7 +268,7 @@ def search_patient():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles !", "danger")
         return redirect(url_for('index'))
     try:
         if request.method == 'GET':
@@ -278,18 +297,18 @@ def assign_medicines(pid=None):
     # To Validate session only for executive and pharmacist
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"you cannot access pharmacist roles", "danger")
+        flash(f"You Can't Access Pharmacist Roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
             try:
                 pid = request.args['pid']
             except:
-                flash("enter patient id", "danger")
+                flash("Enter Patient ID", "danger")
                 return redirect(url_for('search_patient_pharmacy'))
 
         if (pid == None or pid is None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return redirect(url_for('search_patient_pharmacy'))
         if (pid is not None):
             helper_class = HelperCustomer()
@@ -309,7 +328,7 @@ def assign_medicines(pid=None):
     try:
         if request.method == 'POST':
             if (pid == None):
-                flash("no patient id found", "danger")
+                flash("No Patient ID Found !", "danger")
                 return redirect(url_for('search_patient_pharmacy'))
 
             medicine_id = request.form.get('medicine_id', type=int)
@@ -325,7 +344,7 @@ def assign_medicines(pid=None):
 
             medicine_available = int(med_object.medicine_qty)
             if(medicine_available - medicine_qty <= 0):
-                flash("medicine not available in sufficient quantity", "danger")
+                flash("Medicine Not Available In sufficient Quantity !", "danger")
                 return redirect(url_for('assign_medicines', pid=pid))
             else:
                 new_qty = medicine_available - medicine_qty
@@ -344,7 +363,7 @@ def assign_medicines(pid=None):
                     issue_object.save()
                     flash("Medicine Issued to Patient successful", "success")
                 except:
-                    flash("update not successful", "danger")
+                    flash("Update Not Successful!", "danger")
                     return redirect(url_for('assign_medicines', pid=pid))
                 issue_object = PatientPharmacy.objects.filter(patient_id=pid).all()
 
@@ -369,7 +388,7 @@ def viewPharmacy():
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"you cannot access pharmacist roles", "danger")
+        flash(f"You Can't Access Pharmacist Roles", "danger")
         return redirect(url_for('index'))
        
     if request.method == "GET":
@@ -404,7 +423,7 @@ def search_patient_pharmacy():
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"you cannot access pharmacist roles", "danger")
+        flash(f"You Can't Access Pharmacist Roles", "danger")
         return redirect(url_for('index'))
     try:    
         if request.method == 'GET':
@@ -431,7 +450,7 @@ def search_patient_diagnosis():
     #To validate session only for executive and diagnostic
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"you cannot access diagnostic roles", "danger")
+        flash(f"You Can't Access Diagnostic Roles", "danger")
         return redirect(url_for('index'))
     try:
         if request.method == 'GET':
@@ -459,18 +478,18 @@ def refer_test(pid=None):
         return redirect(url_for('index'))
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"you cannot access diagnostic roles", "danger")
+        flash(f"You Can't Access Diagnostic Roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
             try:
                 pid = request.args['pid']
             except:
-                flash("enter patient id", "danger")
+                flash("Enter Patient ID", "danger")
                 return redirect(url_for('search_patient_diagnosis'))
 
         if (pid == None or pid is None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return redirect(url_for('search_patient_diagnosis'))
         if (pid is not None):
             helper_class = HelperCustomer()
@@ -492,7 +511,7 @@ def refer_test(pid=None):
         if request.method == 'POST':
 
             if (pid == None):
-                flash("no patient id found", "danger")
+                flash("No Patient ID Found !", "danger")
                 return redirect(url_for('search_patient_diagnosis'))
 
             test_id = request.form.get('test_id', type=int)
@@ -520,7 +539,7 @@ def refer_test(pid=None):
                 issue_object.save()
                 flash("Test reffered to Patient successful", "success")
             except:
-                flash("update not successful", "danger")
+                flash("Update Not Successful!", "danger")
                 return redirect(url_for('refer_test', pid=pid))
             issue_object = PatientDiagnosis.objects.filter(patient_id=pid).all()
 
@@ -545,7 +564,7 @@ def TestAvailable():
         return redirect(url_for('index'))
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"you cannot access diagnostic roles", "danger")
+        flash(f"You Can't Access Diagnostic Roles", "danger")
         return redirect(url_for('index'))
     if request.method == "GET":
         record = []
@@ -579,7 +598,7 @@ def BillGeneration_customer_screen():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles !", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('bill.html')
@@ -602,17 +621,17 @@ def BillGeneration(pid=None):
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"you cannot access executive roles", "danger")
+        flash(f"You Can't Access Executive Roles !", "danger")
     if request.method == 'GET':
         if (pid == None or pid is None):
             try:
                 pid = request.args['pid']
             except:
-                flash("enter patient id", "danger")
+                flash("Enter Patient ID", "danger")
                 return redirect(url_for('BillGeneration_customer_search'))
 
         if (pid == None or pid is None):
-            flash("enter patient id", "danger")
+            flash("Enter Patient ID", "danger")
             return redirect(url_for('BillGeneration_customer_search'))
         if (pid is not None):
             helper_class = HelperCustomer()
@@ -641,7 +660,7 @@ def BillGeneration(pid=None):
 
             total_admission_bill = get_total_admission_bill(jdata)
             if(total_admission_bill['Total_Bill'] <= 0):
-                flash("error generating admission bill", "danger")
+                flash("Error Generating Admission Bill", "danger")
                 return redirect(url_for('search_patient'))
 
             total_pharmacy_bill = get_total_pharmacy_bill(pid)
@@ -649,23 +668,23 @@ def BillGeneration(pid=None):
                 total_pharmacy_bill['Total_Bill'] = 0
                 try:
                     if(total_pharmacy_bill['Total_Bill'] < 0):
-                        flash("error generating pharmacy bill", "danger")
+                        flash("Error Generating Pharmacy Bill", "danger")
                 except:
-                    flash("error generating pharmacy bill", "danger")
+                    flash("Error Generating pharmacy bill", "danger")
 
             total_diagnosis_bill = get_total_diagnosis_bill(pid)
             if('Total_Bill' not in total_diagnosis_bill):
                 total_diagnosis_bill['Total_Bill'] = 0
                 try:
                     if(total_diagnosis_bill['Total_Bill'] < 0):
-                        flash("error generating diagnosis bill", "danger")
+                        flash("Error Generating diagnosis bill", "danger")
                 except:
-                    flash("error generating diagnosis bill", "danger")
+                    flash("Error Generating diagnosis bill", "danger")
 
             grand_total_bill = total_admission_bill['Total_Bill'] + \
                 total_pharmacy_bill['Total_Bill'] + \
                 total_diagnosis_bill['Total_Bill']
-
+            flash("Bill Generated Successfully", "success")
             return render_template('generate_bill.html', data=jdata, issue_diagnosis=issue_diagnosis,
                                    issue_pharmacy=issue_pharmacy, pharmacy_bill=total_pharmacy_bill, diagnosis_bill=total_diagnosis_bill,
                                    admission_bill=total_admission_bill, grand_bill=grand_total_bill, now_date=now_date,
