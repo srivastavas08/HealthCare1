@@ -4,37 +4,29 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SIGMA-Health-Care-Services</title>
+    <title>SIGMA-Health-Care</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}" />
 
 </head>
 
 <body>
-
     <div class="container-fluid bg-light">
         <div class="container">
             <div class="navbar navbar-light bg-light">
                 <a class="navbar-brand" href="{{url_for('index')}}">
                     <img src="{{ url_for('static',filename='images/logo.png')}}" width="75" height="75"
                         class="d-inline-block align-middle" alt="" loading="lazy">
-                        Sigma Health Care Services
+                    Sigma Health Care 
                 </a>
                 {% if session['username'] %}
                 <h4 class="text-right vertical-middle">Welcome, {{ session['username'] }}</h4>
                 {% endif %}
             </div>
-            <!--<div class="text-center">
-            <img src="{{ url_for('static',filename='images/logo.png')}}">
-        </div>-->
         </div>
     </div>
 
-
-
     {% include "includes/nav.html" %}
-
-
 
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -50,8 +42,6 @@
         {% endblock %}
         {% block body %}
         {% endblock %}
-
-
     </div>
     {% include "includes/_footer.html" %}
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

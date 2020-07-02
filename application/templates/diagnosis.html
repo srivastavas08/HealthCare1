@@ -3,7 +3,7 @@
 {% block body %}
 <div class="row justify-content-center mb-3">
   <div class="col-md-6">
-    <h2 class="text-center mt-5">Search Medicine Records</h2>
+    <h2 class="text-center mt-5">Search Diagnostics Records</h2>
     <form action="" method="POST">
       <div class="form-row my-5">
         <div class="form-group col-md-12">
@@ -24,7 +24,7 @@
   </div>
 </div>
 <div class="container">
-  <table class="table table-hover table-striped table-bordered">
+  <table class="table table-hover table-striped table-bordered table-responsive">
     {% if test_dict %}
     <thead>
       <tr class="text-dark bg-warning">
@@ -62,7 +62,7 @@
 
 
 <div class="container">
-  <table class="table table-hover table-striped table-bordered">
+  <table class="table table-hover table-striped table-bordered table-responsive">
     {% if data %}
     <thead>
       <tr class="text-dark bg-warning">

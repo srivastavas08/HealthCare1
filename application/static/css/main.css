@@ -39,19 +39,45 @@ div.col-md-6.d-flex.mt-2.cont-right{
     color :red;
 }
 
-/*
-.user {
-    float: right;
-    position: absolute;
-    font-size: 25px;
-    right: 10em;
-    top: 2em;
-}
-*/
-
 .image-banner{
     height: auto;
     width: 90%;
     margin: auto;
 
+}
+
+/*---------------Password Validation-----------------*/
+/* The message box is shown when the user clicks on the password field */
+#message {
+    display: none;
+    background: #f1f1f1;
+    position: relative;
+    padding: 10px;
+}
+
+#message p {
+    padding: 0px 15px;
+    font-size: 13px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+    color: #4CAF50;
+}
+
+.valid:before {
+    position: relative;
+    left: -15px;
+    content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+    color: #f74040;
+}
+
+.invalid:before {
+    position: relative;
+    left: -15px;
+    content: "✖";
 }

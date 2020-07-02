@@ -6,9 +6,10 @@ import datetime
 
 class User(db.Document):
     user_id = db.IntField(unique=True)
+    user_name = db.StringField(max_length=30, unique=True)
     first_name = db.StringField(max_length=50)
     last_name = db.StringField(max_length=50)
-    email = db.StringField(max_length=30, unique=True)
+    email = db.StringField(max_length=30)
     password = db.StringField()
 
     #For Generating password Hash
@@ -34,14 +35,14 @@ class NewPatient(db.Document):
 
 #For Available Medicines
 class MasterPharmacy(db.Document):
-    medicine_id = db.IntField(max_length=4)
+    medicine_id = db.IntField(max_length=4, unique=True)
     medicine_name = db.StringField()
     medicine_qty = db.IntField()
     medicine_price = db.FloatField()
 
 #For Available Diagnosis
 class MasterDiagnosis(db.Document):
-    test_id = db.IntField(max_length=4)
+    test_id = db.IntField(max_length=4, unique=True)
     test_name = db.StringField()
     test_price = db.FloatField()
 

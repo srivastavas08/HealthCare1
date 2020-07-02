@@ -2,51 +2,177 @@
 
 {% block content %}
 
-<div class="container">
-    <form name="login" action="" method="post" novalidate>
-        <fieldset class="form-group">
-            <legend>{{title}}</legend>
+<div class="row justify-content-center mb-3">
+    <div class="col-md-6">
+        <form name="login" action="" method="post" novalidate>
+            <h1 class="mt-5 mb-4 text-left">{{title}}</h1>
             {{ form.hidden_tag() }}
-            <p> {{ form.email.label }}</br>
-                {{ form.email }}
-                {% for error in form.email.errors %}
-                <span class="error-message">{{ error }}</span>
-                {% endfor %}
-            </p>
+            <div class="form-row">
 
-            <p> {{ form.password.label }}</br>
-                {{ form.password }}
-                {% for error in form.password.errors %}
-                <span class="error-message">{{ error }}</span>
-                {% endfor %}
-            </p>
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4 col-form-label">
+                        {{ form.user_name.label }}<text class="text-danger">*</text>
+                    </div>
+                    <div class="col-sm-8">{{ form.user_name(class="form-control") }}</div>
+                    {% for error in form.user_name.errors %}
+                    <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-            <p> {{ form.password_confirm.label }}</br>
-                {{ form.password_confirm }}
-                {% for error in form.password_confirm.errors %}
-                <span class="error-message">{{ error }}</span>
-                {% endfor %}
-            </p>
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4 col-form-label">
+                        {{ form.email.label }}<text class="text-danger">*</text>
+                    </div>
+                    <div class="col-sm-8">
+                        <select id="email" name="email" class="form-control" required value={{ form.email }}>
+                            <option disabled>Designation</option>
+                            <option>Executive</option>
+                            <option>Pharmacist</option>
+                            <option>Diagnostic</option>
+                        </select>
+                    </div>
+                    {% for error in form.email.errors %}
+                    <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-            <p> {{ form.first_name.label }}</br>
-                {{ form.first_name }}
-                {% for error in form.first_name.errors %}
-                <span class="error-message">{{ error }}</span>
-                {% endfor %}
-            </p>
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4 col-form-label">
+                        {{ form.password.label }}<text class="text-danger">*</text>
+                    </div>
+                    <div class="col-sm-8">
+                        {{ form.password(id="password", class="form-control", pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z 0-9]).{10,20}") }}
+                    </div>
+                    {% for error in form.password.errors %}
+                    <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-            <p> {{ form.last_name.label }}</br>
-                {{ form.last_name }}
-                {% for error in form.last_name.errors %}
-                <span class="error-message">{{ error }}</span>
-                {% endfor %}
-            </p>
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4">
+                    </div>
+                    <div id="message" class="col-sm-8">
+                        <p>Password must contain the following:</p>
+                        <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                        <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                        <p id="number" class="invalid">A <b>number</b></p>
+                        <p id="length" class="invalid">Min <b>10  characters</b> and Max <b>20 characters</b></p>
+                        <p id="special" class="invalid">Atleast <b>one special </b>character</p>
+                    </div>
+                </div>
+                
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4 col-form-label">
+                        {{ form.password_confirm.label }}<text class="text-danger">*</text>
+                    </div>
+                    <div class="col-sm-8">{{ form.password_confirm(class="form-control") }}</div>
+                    {% for error in form.password_confirm.errors %}
+                    <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4 col-form-label">
+                        {{ form.first_name.label }}<text class="text-danger">*</text>
+                    </div>
+                    <div class="col-sm-8">{{ form.first_name(class="form-control") }}</div>
+                    {% for error in form.first_name.errors %}
+                    <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-            <p>
-                {{ form.submit() }}
-            </p>
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-4 col-form-label">
+                        {{ form.last_name.label }}<text class="text-danger">*</text>
+                    </div>
+                    <div class="col-sm-8">{{ form.last_name(class="form-control") }}</div>
+                    {% for error in form.last_name.errors %}
+                    <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        </fieldset>
-    </form>
+                <div class="col-md-4 text-left mx-auto mt-3 mb-5">
+                    {{ form.submit(class="btn btn-warning text-dark mr-0") }}
+                </div>
+
+                <div class="col-md-8 text-left mx-auto mt-3 mb-5">
+                    <input type="reset" value="Reset" class="btn btn-dark text-warning px-5">
+                </div>
+
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    var myInput = document.getElementById("password");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+    var special = document.getElementById("special");
+
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+        document.getElementById("message").style.display = "block";
+    }
+
+    // When the user clicks outside of the password field, hide the message box
+    myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+    }
+
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function () {
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if (myInput.value.match(lowerCaseLetters)) {
+            letter.classList.remove("invalid");
+            letter.classList.add("valid");
+        } else {
+            letter.classList.remove("valid");
+            letter.classList.add("invalid");
+        }
+
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if (myInput.value.match(upperCaseLetters)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+        } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+        }
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(numbers)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+        } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+        }
+
+        // Validate special character
+        var specials = /[^A-Za-z 0-9]/g;
+        if (myInput.value.match(specials)) {
+            special.classList.remove("invalid");
+            special.classList.add("valid");
+        } else {
+            special.classList.remove("valid");
+            special.classList.add("invalid");
+        }
+
+        // Validate length
+        if (myInput.value.length >= 10 && myInput.value.length <= 20) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+        } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+        }
+    }
+</script>
+
 {% endblock %}

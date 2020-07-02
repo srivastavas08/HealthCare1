@@ -12,7 +12,6 @@ from application.models import MasterDiagnosis, MasterPharmacy, PatientPharmacy,
 
 # INDEX
 
-
 @app.route("/")
 @app.route("/index")
 @app.route("/home")
@@ -28,22 +27,27 @@ def login():
     if session.get('username'):
         return redirect(url_for('index'))
     # Login form to take input data
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
+    try:    
+        form = LoginForm()
+        if form.validate_on_submit():
+            user_name = form.user_name.data
+            password = form.password.data
 
-        user = User.objects(email=email).first()
+            user = User.objects(user_name=user_name).first()
 
-        if user and user.get_password(password):
-            flash(f"{user.first_name}, You are successfully logged in", "success")
-            session['user_id'] = user.user_id
-            session['username'] = user.first_name
-            session['email'] = user.email
-            return redirect('/index')
-        else:
-            flash("Sorry! something went wrong", "danger")
-    return render_template("login.html", title="Login", form=form, login=True)
+            if user and user.get_password(password):
+                flash(f"{user.first_name}, You are successfully logged in", "success")
+                session['user_id'] = user.user_id
+                session['username'] = user.first_name
+                session['email'] = user.email
+                session['user_name'] = user.user_name
+                return redirect('/index')
+            else:
+                flash("Sorry! incorrect username or password", "danger")
+        return render_template("login.html", title="Login", form=form, login=True)
+    except:
+        flash("Sorry Something went wrong", "danger")
+        return redirect(url_for('login'))
 
 
 # Register new exective or pharmacist or diagnostic
@@ -53,24 +57,28 @@ def register():
     if session.get('username'):
         return redirect(url_for('index'))
     # Register Form kept only for personal use to register new executive, pharmacist or diagnostic
-    form = RegisterForm()
-    if form.validate_on_submit():
-        # for creating unique user id
-        user_id = User.objects.count()
-        user_id += 1
+    try:    
+        form = RegisterForm()
+        if form.validate_on_submit():
+            # for creating unique user id
+            user_id = User.objects.count() + generate_unique()
+            user_id += 1
+            user_name = form.user_name.data
+            email = form.email.data
+            password = form.password.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
 
-        email = form.email.data
-        password = form.password.data
-        first_name = form.first_name.data
-        last_name = form.last_name.data
-
-        user = User(user_id=user_id, email=email,
-                    first_name=first_name, last_name=last_name)
-        user.set_password(password)
-        user.save()
-        flash("You are successfully registered!", "success")
-        return redirect(url_for('index'))
-    return render_template("register.html", title="Register", form=form, register=True)
+            user = User(user_id=user_id, user_name=user_name, email=email,
+                        first_name=first_name, last_name=last_name)
+            user.set_password(password)
+            user.save()
+            flash("You are successfully registered!", "success")
+            return redirect(url_for('index'))
+        return render_template("register.html", title="Register", form=form, register=True)
+    except:
+        flash("Sorry Something went wrong", "danger")
+        return redirect(url_for('register'))
 
 
 # Logout
@@ -90,14 +98,14 @@ def createpatient():
 
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
 
     # Taking Input from Patient form
     form = Patient()
     if form.validate_on_submit():
         # Generating 9 digit unique patient id
-        patient_id = NewPatient.objects.count() + 100000001
+        patient_id = NewPatient.objects.count() + 100000001 + generate_unique()
         patient_id += 1
 
         name = form.name.data
@@ -132,7 +140,7 @@ def UpdatePatient(pid=None):
     # To validate session only for executive
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
 
     if request.method == 'GET':
@@ -187,14 +195,13 @@ def view_record():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     if request.method == "GET":
         record = []
         for x in NewPatient.objects():
             tmp = create_customer_account_dict(x)
             record.append(tmp)
-        print(record)
     return render_template('view_record.html', data=record)
 
 
@@ -206,7 +213,7 @@ def DeletePatient(pid):
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None):
@@ -242,7 +249,7 @@ def search_patient():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     try:
         if request.method == 'GET':
@@ -271,7 +278,7 @@ def assign_medicines(pid=None):
     # To Validate session only for executive and pharmacist
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"unprivilaged access as pharmacist", "danger")
+        flash(f"you cannot access pharmacist roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
@@ -362,7 +369,7 @@ def viewPharmacy():
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"unprivilaged access as pharmacist", "danger")
+        flash(f"you cannot access pharmacist roles", "danger")
         return redirect(url_for('index'))
        
     if request.method == "GET":
@@ -370,20 +377,22 @@ def viewPharmacy():
         for x in MasterPharmacy.objects():
             tmp = create_medicine_dict(x)
             record.append(tmp)
-            return render_template('view_pharmacy.html', data=record)
-    
-    if request.method == 'POST':
-        medicine_id = request.form.get('medicine_id', type=int)
-        record = []
-        for x in MasterPharmacy.objects():
-            tmp = create_medicine_dict(x)
-            record.append(tmp)
+        return render_template('view_pharmacy.html', data=record)
+    try:
+        if request.method == 'POST':
+            medicine_id = request.form.get('medicine_id', type=int)
+            record = []
+            for x in MasterPharmacy.objects():
+                tmp = create_medicine_dict(x)
+                record.append(tmp)
 
-        med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
-        med_dict = create_medicine_dict(med_object)
-        if(len(med_object) > 0 and not None):
-            print('inside post render')
-            return render_template('view_pharmacy.html', med_dict=med_dict, data=record)
+            med_object = MasterPharmacy.objects(medicine_id=medicine_id).get()
+            med_dict = create_medicine_dict(med_object)
+            if(len(med_object) > 0 and not None):
+                return render_template('view_pharmacy.html', med_dict=med_dict, data=record)
+    except:
+        flash(f"Invalid Medicine Id", "danger")
+        return redirect(url_for('viewPharmacy'))
     
     return render_template('view_pharmacy.html')
     
@@ -395,7 +404,7 @@ def search_patient_pharmacy():
         return redirect(url_for('index'))
     pharmacist_flag = check_if_pharmacist(session.get('email'))
     if(pharmacist_flag != 1):
-        flash(f"unprivilaged access as pharmacist", "danger")
+        flash(f"you cannot access pharmacist roles", "danger")
         return redirect(url_for('index'))
     try:    
         if request.method == 'GET':
@@ -422,7 +431,7 @@ def search_patient_diagnosis():
     #To validate session only for executive and diagnostic
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"unprivilaged access as diagnostic", "danger")
+        flash(f"you cannot access diagnostic roles", "danger")
         return redirect(url_for('index'))
     try:
         if request.method == 'GET':
@@ -450,7 +459,7 @@ def refer_test(pid=None):
         return redirect(url_for('index'))
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"unprivilaged access as diagnostic", "danger")
+        flash(f"you cannot access diagnostic roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         if (pid == None or pid is None):
@@ -536,14 +545,13 @@ def TestAvailable():
         return redirect(url_for('index'))
     diagnostic_flag = check_if_diagnostic(session.get('email'))
     if(diagnostic_flag != 1):
-        flash(f"unprivilaged access as diagnostic", "danger")
+        flash(f"you cannot access diagnostic roles", "danger")
         return redirect(url_for('index'))
     if request.method == "GET":
         record = []
         for x in MasterDiagnosis.objects():
             tmp = create_diag_dict(x)
             record.append(tmp)
-        print(record)
         return render_template('diagnosis.html', data=record)
     
     try:
@@ -571,7 +579,7 @@ def BillGeneration_customer_screen():
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
         return redirect(url_for('index'))
     if request.method == 'GET':
         return render_template('bill.html')
@@ -594,7 +602,7 @@ def BillGeneration(pid=None):
         return redirect(url_for('index'))
     executive_flag = check_if_executive(session.get('email'))
     if(executive_flag != 1):
-        flash(f"unprivilaged access as executive", "danger")
+        flash(f"you cannot access executive roles", "danger")
     if request.method == 'GET':
         if (pid == None or pid is None):
             try:
@@ -677,13 +685,7 @@ def BillGeneration(pid=None):
 def check_if_executive(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    if(email == 'executive'):
-        is_login_flag = 1
-        return is_login_flag
-    word = email.split('@')[1]
-    word = word.split('.')[0]
-    if (email == 'executive' or word == 'executive'):
-        # print('YES')
+    if (email == 'executive'):
         is_login_flag = 1
     return is_login_flag
 
@@ -693,13 +695,7 @@ def check_if_executive(email):
 def check_if_pharmacist(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    if(email == 'executive'):
-        is_login_flag = 1
-        return is_login_flag
-    word = email.split('@')[1]
-    word = word.split('.')[0]
-    if (word == 'pharmacist' or email == 'executive' or word == 'executive'):
-        # print('YES')
+    if (email == 'pharmacist' or email == 'executive'):
         is_login_flag = 1
     return is_login_flag
 
@@ -709,13 +705,7 @@ def check_if_pharmacist(email):
 def check_if_diagnostic(email):
     is_login_flag = 0
     email = str(email).strip().lower()
-    if(email == 'executive'):
-        is_login_flag = 1
-        return is_login_flag
-    word = email.split('@')[1]
-    word = word.split('.')[0]
-    if (word == 'diagnostic' or email == 'executive' or word == 'executive'):
-        # print('YES')
+    if (email == 'diagnostic' or email == 'executive'):
         is_login_flag = 1
     return is_login_flag
 
@@ -1027,3 +1017,7 @@ def check_bedtype(bedtype):
     return bed_price
 
 ##############################################################################
+
+if __name__ == '__main__':
+    app.run()
+    
