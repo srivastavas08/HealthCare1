@@ -42,3 +42,4 @@ class Patient(FlaskForm):
     bedtype = StringField("Bed Type", validators=[DataRequired()])
     city = StringField("City", validators=[DataRequired(), Length(min=2, max=12)])
     submit = SubmitField("Submit")
+
