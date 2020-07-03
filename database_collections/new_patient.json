@@ -1,0 +1,83 @@
+[{
+  "_id": {
+    "$oid": "5efc2e02015e5aae2af00d43"
+  },
+  "patient_id": 100000072,
+  "name": "Ambresh Yadav",
+  "age": 54,
+  "aadhar": 741852963852,
+  "address": "Gandhi Marg",
+  "state": "UP",
+  "city": "Lucknow",
+  "dam": {
+    "$date": "2020-06-14T00:00:00Z"
+  },
+  "status": "Active",
+  "bedtype": "Semi Sharing",
+  "msg": "Assigned medicines"
+},{
+  "_id": {
+    "$oid": "5efc2e37015e5aae2af00d44"
+  },
+  "patient_id": 100000049,
+  "name": "Pawan Pandey",
+  "age": 85,
+  "aadhar": 741852963963,
+  "address": "Nehru Palace",
+  "state": "Delhi",
+  "city": "Delhi",
+  "dam": {
+    "$date": "2020-06-28T00:00:00Z"
+  },
+  "status": "Active",
+  "bedtype": "Single Room"
+},{
+  "_id": {
+    "$oid": "5efc386e6be25c903939ea85"
+  },
+  "patient_id": 100000085,
+  "name": "Rahul Awasthi",
+  "age": 54,
+  "aadhar": 789456123789,
+  "address": "Sultanpur",
+  "state": "South Delhi",
+  "city": "South Delhi",
+  "dam": {
+    "$date": "2020-06-19T00:00:00Z"
+  },
+  "status": "Active",
+  "bedtype": "Single Room"
+},{
+  "_id": {
+    "$oid": "5efdd6f325b5d16d2a4c14d0"
+  },
+  "patient_id": 100000068,
+  "name": "Raman Pandey",
+  "age": 45,
+  "aadhar": 741258963327,
+  "address": "Ghitorni",
+  "state": "Delhi",
+  "city": "South Delhi",
+  "dam": {
+    "$date": "2020-06-26T00:00:00Z"
+  },
+  "status": "Active",
+  "bedtype": "Single Room",
+  "msg": "Assigned medicines"
+},{
+  "_id": {
+    "$oid": "5efde2c725b5d16d2a4c14d2"
+  },
+  "patient_id": 100000057,
+  "name": "puja",
+  "age": 25,
+  "aadhar": 123456789101,
+  "address": "pune",
+  "state": "maharashtra",
+  "city": "pune",
+  "dam": {
+    "$date": "2020-07-01T00:00:00Z"
+  },
+  "status": "Active",
+  "bedtype": "General Ward"
+}]
