@@ -31,7 +31,7 @@
           <label for="customername" class="col-sm-4 col-form-label">New Name: <text class="text-danger">*</text></label>
           <div class="col-sm-8">
             <input id="customername" type="text" name="custName" onkeypress="return /^[a-zA-Z\s]+$/i.test(event.key)"
-              class="form-control" required value={{request.form.custName}}>
+              class="form-control"  value={{request.form.custName}}>
           </div>
         </div>
 
@@ -47,7 +47,7 @@
           <label for="customerage" class="col-sm-4 col-form-label">New Age: <text class="text-danger">*</text></label>
           <div class="col-sm-8">
             <input id="customerage" type="number" name="custAge" onkeypress="return /[0-9]/i.test(event.key)"
-              class="form-control" required value={{request.form.custAge}}>
+              class="form-control"  value={{request.form.custAge}}>
           </div>
         </div>
         <div class="form-group row col-md-12">
@@ -62,7 +62,7 @@
           <label for="bedtype" class="col-sm-4 col-form-label">Updated Bed Type: <text
               class="text-danger">*</text></label>
           <div class="col-sm-8">
-            <select id="bedtype" name="bedtype" class="form-control" required>
+            <select id="bedtype" name="bedtype" class="form-control" >
               <option disabled>Bed type</option>
               <option>General Ward</option>
               <option>Semi Sharing</option>
@@ -81,7 +81,7 @@
           <label for="customeraddress" class="col-sm-4 col-form-label">New Address: <text
               class="text-danger">*</text></label>
           <div class="col-sm-8">
-            <input id="customeraddress" type="text" name="custAddress" class="form-control" required
+            <input id="customeraddress" type="text" name="custAddress" class="form-control" 
               value={{request.form.custAddress}}>
           </div>
         </div>
@@ -101,7 +101,7 @@
             <!-- <script>
           datePickerId.min = new Date().toISOString().split("T")[0];
         </script> -->
-            <input id="datePickerId" type="date" name="dam" class="form-control" required value={{request.form.dam}}>
+            <input id="datePickerId" type="date" name="dam" class="form-control"  value={{request.form.dam}}>
           </div>
         </div>
 
@@ -110,13 +110,13 @@
         </div>
         <div class=" col-md-6 mx-auto my-3">
           <button type="submit" class="btn btn-warning ml-1">Confirm Update</button>
-          <button type="submit" class="btn btn-danger mx-3">Reset</button>
+          <button type="reset"  class="btn btn-danger mx-3">Reset</button>
         </div>
       </div>
     </form>
   </div>
 </div>
-</div>
+</div>              
 <div>
 
   <p>

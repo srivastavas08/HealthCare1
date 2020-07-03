@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "flot.tooltip",
   "version": "0.7.1",
@@ -10,4 +11,18 @@
     "examples",
     "js/old"
   ]
+=======
+{
+  "name": "flot.tooltip",
+  "version": "0.7.1",
+  "main": "js/jquery.flot.tooltip.js",
+  "ignore": [
+    ".gitignore",
+    "Gruntfile.js",
+    "README.md",
+    "package.json",
+    "examples",
+    "js/old"
+  ]
+>>>>>>> c7fdb0cd86dd150d4a51d49a9980e7d4e2245e1d
 }
